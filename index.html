@@ -8,14 +8,7 @@
     <link rel="stylesheet" type="text/css" href="./css/onsen-css-components.min.css">
   </head>
   <body>
-    <div class="container">
-      <nav class="nav nav-pills nav-fill">
-        <a class="nav-item nav-link active" href="#">Active</a>
-        <a class="nav-item nav-link" href="#">Link</a>
-        <a class="nav-item nav-link" href="#">Link</a>
-        <a class="nav-item nav-link disabled" href="#">Disabled</a>
-      </nav>
-
+    <main role="main" class="container">
       <center>
         <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
           <circle class="progress-circular__background progress-circular--material__background"/>
@@ -27,23 +20,31 @@
 
         <h1>Unable to connect! :(</h1>
 
-        <button class="button">Retry</button>
-        <button class="button btn-secondary">Offline Mode</button>
+        <button type="button" class="btn btn-primary">Retry</button>
+        <button type="button" class="btn btn-light">Offline Mode</button>
         <br>
 
-        <!-- All of the Node.js APIs are available in this renderer process. -->
-        We are using Node.js <script>document.write(process.versions.node)</script>,
-        Chromium <script>document.write(process.versions.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>.
       </center>
+    </main>
 
-      <script>
-        // You can also require other files to run in this process
-        require('./renderer.js')
-      </script>
+    <footer class="footer fixed-bottom">
+      <div class="container">
+        <center>
+          <span class="text-muted">
+            You are using Node.js <script>document.write(process.versions.node)</script>,
+            Chromium <script>document.write(process.versions.chrome)</script>,
+            and Electron <script>document.write(process.versions.electron)</script>.
+          </span>
+        </center>
+      </div>
+    </footer>
 
-      <script type="text/javascript" src="./js/onsenui.min.js"></script>
-      <script type="text/javascript" src="./js/angular.min.js"></script>
-    </div>
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+
+    <script type="text/javascript" src="./js/onsenui.min.js"></script>
+    <script type="text/javascript" src="./js/angular.min.js"></script>
   </body>
 </html>
