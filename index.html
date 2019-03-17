@@ -1,44 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
     <meta charset="UTF-8">
     <title>Cure</title>
+    <base href="/">
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="./css/onsenui.css">
     <link rel="stylesheet" type="text/css" href="./css/onsen-css-components.min.css">
   </head>
-  <body>
-    <main role="main" class="container">
-      <center>
-        <br><br>
-        <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
-          <circle class="progress-circular__background progress-circular--material__background"/>
-          <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary"/>
-          <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary"/>
-        </svg>
+  <body ng-app="cure">
+    <main ng-controller="cureController" role="main" class="container">
 
-        <br><br>
-
-        <h1>Unable to connect! :(</h1>
-
-        <button type="button" class="btn btn-primary">Retry</button>
-        <button type="button" class="btn btn-light">Offline Mode</button>
-        <br>
-
-      </center>
+      <pt-header></pt-header>
+      <div ng-view></div>
+      <pt-footer></pt-footer>
     </main>
-
-    <footer class="footer fixed-bottom">
-      <div class="container">
-        <center>
-          <span class="text-muted">
-            You are using Node.js <script>document.write(process.versions.node)</script>,
-            Chromium <script>document.write(process.versions.chrome)</script>,
-            and Electron <script>document.write(process.versions.electron)</script>.
-          </span>
-        </center>
-      </div>
-    </footer>
 
     <script>
       // You can also require other files to run in this process
@@ -47,5 +23,10 @@
 
     <script type="text/javascript" src="./js/onsenui.min.js"></script>
     <script type="text/javascript" src="./js/angular.min.js"></script>
+    <script type="text/javascript" src="./js/app.js"></script>
+
+    <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-cookies.js"></script>
+    <script src="js/ptModule.js"></script-->
   </body>
 </html>
