@@ -15,17 +15,33 @@
         <a class="nav-item nav-link" href="#">Link</a>
         <a class="nav-item nav-link disabled" href="#">Disabled</a>
       </nav>
-      <h1>Hello World!</h1>
-      <!-- All of the Node.js APIs are available in this renderer process. -->
-      We are using Node.js <script>document.write(process.versions.node)</script>,
-      Chromium <script>document.write(process.versions.chrome)</script>,
-      and Electron <script>document.write(process.versions.electron)</script>.
+
+      <center>
+        <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+          <circle class="progress-circular__background progress-circular--material__background"/>
+          <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary"/>
+          <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary"/>
+        </svg>
+
+        <br><br>
+
+        <h1>Unable to connect! :(</h1>
+
+        <button class="button">Retry</button>
+        <button class="button">Offline Mode</button>
+        <br>
+
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        We are using Node.js <script>document.write(process.versions.node)</script>,
+        Chromium <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>.
+      </center>
 
       <script>
         // You can also require other files to run in this process
         require('./renderer.js')
       </script>
-      
+
       <script type="text/javascript" src="./js/onsenui.min.js"></script>
       <script type="text/javascript" src="./js/angular.min.js"></script>
     </div>
