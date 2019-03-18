@@ -3,28 +3,28 @@ var app = angular.module('cure', ['ngRoute', 'ngCookies']);
 app.config(function($routeProvider, $locationProvider) {
 	$routeProvider
 	.when("/", {
-		templateUrl: "html/load.html"
+		templateUrl: "./html/load.html"
 	})
 	.when("/home", {
-		templateUrl: "html/main.html"
+		templateUrl: "./html/main.html"
 	})
 	.when("/load", {
-		templateUrl: "html/load.html"
+		templateUrl: "./html/load.html"
 	});
 
 	$locationProvider.html5Mode(true);
 });
 
 app.controller("cureController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
-	$scope.Loading = true;
+	$scope.Service.Loading = true;
 
 	$http.get("http://www.google.com")
 	.then(function(response) {
-		$scope.Loading = false;
-		$scope.LoadSuccesss = true;
+		$scope.Service.Loading = false;
+		$scope.Service.LoadSuccesss = true;
 	}, function(response) {
-		$scope.Loading = false;
-		$scope.LoadSuccesss = false;
+		$scope.Service.Loading = false;
+		$scope.Service.LoadSuccesss = false;
 	})
 
 	$scope.ChangeView = function(view) {
@@ -49,18 +49,18 @@ app.controller("cureController", ['$scope', '$http', '$cookies', '$location', fu
 
 app.directive('cureHeader', function() {
 	return{
-		templateUrl: 'html/header.html',
+		templateUrl: './html/header.html',
 	};
 })
 .directive('cureFooter', function() {
 	return {
-		templateUrl: 'html/footer.html',
+		templateUrl: './html/footer.html',
 	};
 })
 .directive('cureContent', function() {
 	return {
 		templateUrl: function(elem, attr) {
-			return "html/" + attr.ptPage + ".html";
+			return "./html/" + attr.ptPage + ".html";
 		}
 	};
 });
