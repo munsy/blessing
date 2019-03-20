@@ -1,5 +1,6 @@
 var app = angular.module('cure', ['ngRoute', 'ngCookies']);
 
+/*
 app.config(function($routeProvider, $locationProvider) {
 	$routeProvider
 	.when("/", {
@@ -14,6 +15,7 @@ app.config(function($routeProvider, $locationProvider) {
 
 	$locationProvider.html5Mode(true);
 });
+*/
 
 app.controller("cureController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
 	$scope.Service.Loading = true;
@@ -29,21 +31,6 @@ app.controller("cureController", ['$scope', '$http', '$cookies', '$location', fu
 
 	$scope.ChangeView = function(view) {
 	 	$location.path(view);
-	};
-
-	$scope.LoadStats = function() {
-		$http.get("/api/v1/stats/disk/storage")
-		.then(function(response) {
-			for(var i = 0; i < response.data.members.length; i++) {
-				response.data.members[i].character.class = ItoClasses(response.data.members[i].character.class);
-				response.data.members[i].character.race = ItoRaces(response.data.members[i].character.race);
-				response.data.members[i].rank = ItoRanks(response.data.members[i].rank);
-			}
-			$scope.Guild = response.data;
-			console.log($scope.Guild);
-		}, function (response) {
-			console.log(response.data);
-		});
 	};
 }]);
 
