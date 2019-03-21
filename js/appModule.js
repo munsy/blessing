@@ -1,22 +1,5 @@
 var app = angular.module('cure', ['ngRoute', 'ngCookies']);
 
-/*
-app.config(function($routeProvider, $locationProvider) {
-	$routeProvider
-	.when("/", {
-		templateUrl: "./html/load.html"
-	})
-	.when("/home", {
-		templateUrl: "./html/main.html"
-	})
-	.when("/load", {
-		templateUrl: "./html/load.html"
-	});
-
-	$locationProvider.html5Mode(true);
-});
-*/
-
 app.controller("cureController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
 	$scope.Service.Loading = true;
 
