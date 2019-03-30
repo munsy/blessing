@@ -9,7 +9,7 @@ app.controller("cureController", ['$scope', '$http', '$cookies', '$location', fu
 		$scope.Service.LoadSuccesss = true;
 	}, function(response) {
 		$scope.Service.Loading = false;
-		$scope.Service.LoadSuccesss = false;
+		$scope.Service.LoadSuccesss = false; 
 	})
 
 	$scope.ChangeView = function(view) {
