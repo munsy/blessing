@@ -3,26 +3,30 @@ var app = angular.module('cure', ['ngRoute', 'ngCookies']);
 app.config(function($routeProvider, $locationProvider) {
         $routeProvider
         .when("/", {
-                templateUrl: "html/load.html"
-        })
-        .when("/load", {
-                templateUrl: "html/load.html"
+            templateUrl: "html/load.html"
         });
 
-        //$locationProvider.html5Mode(true);
+        $routeProvider.otherwise({
+		    redirectTo: '/'
+		});
+
+        $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('');
 });
 
 app.controller("cureController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
+	$scope.Service = {};
+
 	$scope.Service.Loading = true;
+	$scope.Service.LoadSucceeded = false;
 
 	$http.get("http://www.google.com")
 	.then(function(response) {
 		$scope.Service.Loading = false;
-		$scope.Service.LoadSuccesss = true;
+		$scope.Service.LoadSucceeded = true;
 	}, function(response) {
 		$scope.Service.Loading = false;
-		$scope.Service.LoadSuccesss = false; 
+		$scope.Service.LoadSucceeded = false; 
 	})
 
 	$scope.ChangeView = function(view) {
@@ -43,7 +47,7 @@ app.directive('cureHeader', function() {
 .directive('cureContent', function() {
 	return {
 		templateUrl: function(elem, attr) {
-			return "./html/" + attr.ptPage + ".html";
+			return "./html/" + attr.appPage + ".html";
 		}
 	};
 });

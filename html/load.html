@@ -1,17 +1,17 @@
 <center>
   <br><br>
+
   <div ng-show="Service.Loading">
+    <h1>Loading...</h1>
+    <br><br>
     <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
       <circle class="progress-circular__background progress-circular--material__background"/>
       <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary"/>
       <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary"/>
     </svg>
-    <h1>Loading...</h1>
   </div>
 
-  <br><br>
-
-  <div ng-show="!Service.Loading && !Service.LoadSuccesss">
+  <div ng-show="!Service.Loading && !Service.LoadSucceeded">
     <h1>Unable to connect! :(</h1>
 
     <button type="button" class="btn btn-primary">Retry</button>
@@ -19,7 +19,7 @@
     <br>
   </div>
 
-  <div ng-show="!Service.Loading && Service.LoadSuccesss">
+  <div ng-show="!Service.Loading && Service.LoadSucceeded">
     <h1>Loaded!</h1>
     <br>
   </div>
