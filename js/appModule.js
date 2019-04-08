@@ -25,8 +25,8 @@ app.controller("cureController", ['$scope', '$http', '$cookies', '$location', fu
 		$scope.Service.Loading = false;
 		$scope.Service.LoadSucceeded = true;
 
-		$scope.Service.Response = response;
-		console.log(response)
+		$scope.Service.Response = response.data;
+		console.log(response.data)
 	}, function(response) {
 		$scope.Service.Loading = false;
 		$scope.Service.LoadSucceeded = false; 
