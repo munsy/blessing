@@ -57,3 +57,36 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+var exp = require('express');
+var find = require('find');
+
+var http = require('http');
+var cors = require('cors');
+
+var cp = require('cookie-parser');
+var bp = require('body-parser');
+
+var web = exp();
+
+web.use(bp.json());
+web.use(bp.urlencoded({ extended: false }));
+web.use(cp());
+web.use(cors());
+
+web.post('/search', function(req, resp) {
+  find.file(__dirname, function(files) {
+    resp.send(files);
+  });
+});
+
+web.use(function(req, resp, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+web.set('port', 8080);
+
+var server = http.createServer(web);
+
+server.listen(8080);
