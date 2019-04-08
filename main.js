@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Turn off the menu.
   mainWindow.setMenu(null)
@@ -73,13 +73,13 @@ web.use(bp.urlencoded({ extended: false }));
 web.use(cp());
 web.use(cors());
 
-web.post('/search', function(req, resp) {
+web.get('/search', function(request, response) {
   find.file(__dirname, function(files) {
-    resp.send(files);
+    response.send(files);
   });
 });
 
-web.use(function(req, resp, next) {
+web.use(function(request, response, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
