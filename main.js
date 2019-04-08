@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Turn off the menu.
   mainWindow.setMenu(null)
@@ -76,14 +76,18 @@ web.use(cors());
 web.get('/search', function(request, response) {
   var actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
  
+  var filesArr = {};
+
   find.file(/\.html$/, actPathDefault, function(files) {
-    response.send(files);
+    filesArr = files;
   })
   .error(function(err) {
-    //var e = new Error('Not Found');
-    //e.status = 404;
-    response.write('not found');
+    var e = new Error('Not Found');
+    e.status = 404;
+    response.statusCode = 404;
   });
+  
+  response.send(filesArr);
 });
 
 web.use(function(request, response, next) {
