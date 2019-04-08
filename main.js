@@ -80,14 +80,16 @@ web.get('/search', function(request, response) {
 
   find.file(/\.html$/, actPathDefault, function(files) {
     filesArr = files;
+    response.send(filesArr);
+    return;
   })
   .error(function(err) {
     var e = new Error('Not Found');
     e.status = 404;
     response.statusCode = 404;
+    response.end();
   });
   
-  response.send(filesArr);
 });
 
 web.use(function(request, response, next) {
