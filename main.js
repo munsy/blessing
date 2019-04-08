@@ -74,15 +74,21 @@ web.use(cp());
 web.use(cors());
 
 web.get('/search', function(request, response) {
-  find.file(__dirname, function(files) {
+  var actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
+ 
+  find.file(/\.html$/, actPathDefault, function(files) {
     response.send(files);
+  })
+  .error(function(err) {
+    //var e = new Error('Not Found');
+    //e.status = 404;
+    response.write('not found');
   });
 });
 
 web.use(function(request, response, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
 });
 
 web.set('port', 8080);
