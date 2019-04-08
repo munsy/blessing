@@ -10,9 +10,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Convenience to throw an Error with 'unimplemented' as the message.
- */
 export function unimplemented() {
     throw new Error('unimplemented');
 }
@@ -22,12 +19,9 @@ export function unimplemented() {
 export var BaseError = (function (_super) {
     __extends(BaseError, _super);
     function BaseError(message) {
-        _super.call(this, message);
         // Errors don't use current this, instead they create a new instance.
         // We have to do forward all of our api to the nativeInstance.
-        // TODO(bradfordcsmith): Remove this hack when
-        //     google/closure-compiler/issues/2102 is fixed.
-        var nativeError = new Error(message);
+        var nativeError = _super.call(this, message);
         this._nativeError = nativeError;
     }
     Object.defineProperty(BaseError.prototype, "message", {

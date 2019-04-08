@@ -15,12 +15,5 @@
  *
  * @stable
  */
-export var /** @type {?} */ Type = Function;
-/**
- * @param {?} v
- * @return {?}
- */
-export function isType(v) {
-    return typeof v === 'function';
-}
+export var Type = Function;
 //# sourceMappingURL=type.js.map

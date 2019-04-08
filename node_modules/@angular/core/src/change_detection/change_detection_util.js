@@ -8,14 +8,9 @@
 import { areIterablesEqual, isListLikeIterable } from '../facade/collection';
 import { isPrimitive, looseIdentical } from '../facade/lang';
 export { looseIdentical } from '../facade/lang';
-export var /** @type {?} */ UNINITIALIZED = {
+export var UNINITIALIZED = {
     toString: function () { return 'CD_INIT_VALUE'; }
 };
-/**
- * @param {?} a
- * @param {?} b
- * @return {?}
- */
 export function devModeEqual(a, b) {
     if (isListLikeIterable(a) && isListLikeIterable(b)) {
         return areIterablesEqual(a, b, devModeEqual);
@@ -28,7 +23,7 @@ export function devModeEqual(a, b) {
     }
 }
 /**
- * Indicates that the result of a {\@link Pipe} transformation has changed even though the
+ * Indicates that the result of a {@link Pipe} transformation has changed even though the
  * reference
  * has not changed.
  *
@@ -44,26 +39,15 @@ export function devModeEqual(a, b) {
  *    return WrappedValue.wrap(this._latestValue); // this will force update
  *  }
  * ```
- * \@stable
+ * @stable
  */
 export var WrappedValue = (function () {
-    /**
-     * @param {?} wrapped
-     */
     function WrappedValue(wrapped) {
         this.wrapped = wrapped;
     }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
     WrappedValue.wrap = function (value) { return new WrappedValue(value); };
     return WrappedValue;
 }());
-function WrappedValue_tsickle_Closure_declarations() {
-    /** @type {?} */
-    WrappedValue.prototype.wrapped;
-}
 /**
  * Helper class for unwrapping WrappedValue s
  */
@@ -71,10 +55,6 @@ export var ValueUnwrapper = (function () {
     function ValueUnwrapper() {
         this.hasWrappedValue = false;
     }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
     ValueUnwrapper.prototype.unwrap = function (value) {
         if (value instanceof WrappedValue) {
             this.hasWrappedValue = true;
@@ -82,40 +62,22 @@ export var ValueUnwrapper = (function () {
         }
         return value;
     };
-    /**
-     * @return {?}
-     */
     ValueUnwrapper.prototype.reset = function () { this.hasWrappedValue = false; };
     return ValueUnwrapper;
 }());
-function ValueUnwrapper_tsickle_Closure_declarations() {
-    /** @type {?} */
-    ValueUnwrapper.prototype.hasWrappedValue;
-}
 /**
  * Represents a basic change from a previous to a new value.
- * \@stable
+ * @stable
  */
 export var SimpleChange = (function () {
-    /**
-     * @param {?} previousValue
-     * @param {?} currentValue
-     */
     function SimpleChange(previousValue, currentValue) {
         this.previousValue = previousValue;
         this.currentValue = currentValue;
     }
     /**
      * Check whether the new value is the first value assigned.
-     * @return {?}
      */
     SimpleChange.prototype.isFirstChange = function () { return this.previousValue === UNINITIALIZED; };
     return SimpleChange;
 }());
-function SimpleChange_tsickle_Closure_declarations() {
-    /** @type {?} */
-    SimpleChange.prototype.previousValue;
-    /** @type {?} */
-    SimpleChange.prototype.currentValue;
-}
 //# sourceMappingURL=change_detection_util.js.map

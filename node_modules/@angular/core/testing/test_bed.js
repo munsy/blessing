@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injector, NgModule, NgZone, OpaqueToken, ReflectiveInjector } from '@angular/core';
+import { Injector, NgModule, NgZone, OpaqueToken } from '@angular/core';
 import { AsyncTestCompleter } from './async_test_completer';
 import { ComponentFixture } from './component_fixture';
 import { stringify } from './facade/lang';
@@ -222,7 +222,7 @@ export var TestBed = (function () {
             }
             catch (e) {
                 if (e.compType) {
-                    throw new Error(("This test module uses the component " + stringify(e.compType) + " which is using a \"templateUrl\" or \"styleUrls\", but they were never compiled. ") +
+                    throw new Error(("This test module uses the component " + stringify(e.compType) + " which is using a \"templateUrl\", but they were never compiled. ") +
                         "Please call \"TestBed.compileComponents\" before your test.");
                 }
                 else {
@@ -230,9 +230,8 @@ export var TestBed = (function () {
                 }
             }
         }
-        var ngZone = new NgZone({ enableLongStackTrace: true });
-        var ngZoneInjector = ReflectiveInjector.resolveAndCreate([{ provide: NgZone, useValue: ngZone }], this.platform.injector);
-        this._moduleRef = this._moduleWithComponentFactories.ngModuleFactory.create(ngZoneInjector);
+        this._moduleRef =
+            this._moduleWithComponentFactories.ngModuleFactory.create(this.platform.injector);
         this._instantiated = true;
     };
     TestBed.prototype._createCompilerAndModule = function () {
@@ -248,7 +247,7 @@ export var TestBed = (function () {
                 { type: NgModule, args: [{ providers: providers, declarations: declarations, imports: imports, schemas: schemas },] },
             ];
             /** @nocollapse */
-            DynamicTestModule.ctorParameters = function () { return []; };
+            DynamicTestModule.ctorParameters = [];
             return DynamicTestModule;
         }());
         var compilerFactory = this.platform.injector.get(TestingCompilerFactory);
@@ -277,11 +276,11 @@ export var TestBed = (function () {
         var result = this._moduleRef.injector.get(token, UNDEFINED);
         return result === UNDEFINED ? this._compiler.injector.get(token, notFoundValue) : result;
     };
-    TestBed.prototype.execute = function (tokens, fn, context) {
+    TestBed.prototype.execute = function (tokens, fn) {
         var _this = this;
         this._initIfNeeded();
         var params = tokens.map(function (t) { return _this.get(t); });
-        return fn.apply(context, params);
+        return fn.apply(void 0, params);
     };
     TestBed.prototype.overrideModule = function (ngModule, override) {
         this._assertNotInstantiated('overrideModule', 'override module metadata');
@@ -356,21 +355,19 @@ export function getTestBed() {
 export function inject(tokens, fn) {
     var testBed = getTestBed();
     if (tokens.indexOf(AsyncTestCompleter) >= 0) {
-        // Not using an arrow function to preserve context passed from call site
         return function () {
-            var _this = this;
             // Return an async test method that returns a Promise if AsyncTestCompleter is one of
-            // the injected tokens.
+            // the
+            // injected tokens.
             return testBed.compileComponents().then(function () {
                 var completer = testBed.get(AsyncTestCompleter);
-                testBed.execute(tokens, fn, _this);
+                testBed.execute(tokens, fn);
                 return completer.promise;
             });
         };
     }
     else {
-        // Not using an arrow function to preserve context passed from call site
-        return function () { return testBed.execute(tokens, fn, this); };
+        return function () { return testBed.execute(tokens, fn); };
     }
 }
 /**
@@ -387,11 +384,10 @@ export var InjectSetupWrapper = (function () {
         }
     };
     InjectSetupWrapper.prototype.inject = function (tokens, fn) {
-        var self = this;
-        // Not using an arrow function to preserve context passed from call site
+        var _this = this;
         return function () {
-            self._addModule();
-            return inject(tokens, fn).call(this);
+            _this._addModule();
+            return inject(tokens, fn)();
         };
     };
     return InjectSetupWrapper;
@@ -399,13 +395,12 @@ export var InjectSetupWrapper = (function () {
 export function withModule(moduleDef, fn) {
     if (fn === void 0) { fn = null; }
     if (fn) {
-        // Not using an arrow function to preserve context passed from call site
         return function () {
             var testBed = getTestBed();
             if (moduleDef) {
                 testBed.configureTestingModule(moduleDef);
             }
-            return fn.apply(this);
+            return fn();
         };
     }
     return new InjectSetupWrapper(function () { return moduleDef; });

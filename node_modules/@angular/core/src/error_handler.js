@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * \@whatItDoes Provides a hook for centralized exception handling.
+ * @whatItDoes Provides a hook for centralized exception handling.
  *
- * \@description
+ * @description
  *
  * The default implementation of `ErrorHandler` prints error messages to the `console`. To
  * intercept error handling, write a custom exception handler that replaces this default as
@@ -23,18 +23,15 @@
  *   }
  * }
  *
- * \@NgModule({
+ * @NgModule({
  *   providers: [{provide: ErrorHandler, useClass: MyErrorHandler}]
  * })
  * class MyModule {}
  * ```
  *
- * \@stable
+ * @stable
  */
 export var ErrorHandler = (function () {
-    /**
-     * @param {?=} rethrowError
-     */
     function ErrorHandler(rethrowError) {
         if (rethrowError === void 0) { rethrowError = true; }
         /**
@@ -43,14 +40,10 @@ export var ErrorHandler = (function () {
         this._console = console;
         this.rethrowError = rethrowError;
     }
-    /**
-     * @param {?} error
-     * @return {?}
-     */
     ErrorHandler.prototype.handleError = function (error) {
-        var /** @type {?} */ originalError = this._findOriginalError(error);
-        var /** @type {?} */ originalStack = this._findOriginalStack(error);
-        var /** @type {?} */ context = this._findContext(error);
+        var originalError = this._findOriginalError(error);
+        var originalStack = this._findOriginalStack(error);
+        var context = this._findContext(error);
         this._console.error("EXCEPTION: " + this._extractMessage(error));
         if (originalError) {
             this._console.error("ORIGINAL EXCEPTION: " + this._extractMessage(originalError));
@@ -68,50 +61,34 @@ export var ErrorHandler = (function () {
         if (this.rethrowError)
             throw error;
     };
-    /**
-     * \@internal
-     * @param {?} error
-     * @return {?}
-     */
+    /** @internal */
     ErrorHandler.prototype._extractMessage = function (error) {
         return error instanceof Error ? error.message : error.toString();
     };
-    /**
-     * \@internal
-     * @param {?} error
-     * @return {?}
-     */
+    /** @internal */
     ErrorHandler.prototype._findContext = function (error) {
         if (error) {
             return error.context ? error.context :
-                this._findContext(((error)).originalError);
+                this._findContext(error.originalError);
         }
         return null;
     };
-    /**
-     * \@internal
-     * @param {?} error
-     * @return {?}
-     */
+    /** @internal */
     ErrorHandler.prototype._findOriginalError = function (error) {
-        var /** @type {?} */ e = ((error)).originalError;
-        while (e && ((e)).originalError) {
-            e = ((e)).originalError;
+        var e = error.originalError;
+        while (e && e.originalError) {
+            e = e.originalError;
         }
         return e;
     };
-    /**
-     * \@internal
-     * @param {?} error
-     * @return {?}
-     */
+    /** @internal */
     ErrorHandler.prototype._findOriginalStack = function (error) {
         if (!(error instanceof Error))
             return null;
-        var /** @type {?} */ e = error;
-        var /** @type {?} */ stack = e.stack;
-        while (e instanceof Error && ((e)).originalError) {
-            e = ((e)).originalError;
+        var e = error;
+        var stack = e.stack;
+        while (e instanceof Error && e.originalError) {
+            e = e.originalError;
             if (e instanceof Error && e.stack) {
                 stack = e.stack;
             }
@@ -120,16 +97,4 @@ export var ErrorHandler = (function () {
     };
     return ErrorHandler;
 }());
-function ErrorHandler_tsickle_Closure_declarations() {
-    /**
-     * \@internal
-     * @type {?}
-     */
-    ErrorHandler.prototype._console;
-    /**
-     * \@internal
-     * @type {?}
-     */
-    ErrorHandler.prototype.rethrowError;
-}
 //# sourceMappingURL=error_handler.js.map
