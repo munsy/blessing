@@ -4,6 +4,9 @@ app.config(function($routeProvider, $locationProvider) {
         $routeProvider
         .when("/", {
             templateUrl: "html/load.html"
+        })
+        .when("/retry", {
+            templateUrl: "html/load.html"
         });
 
         $routeProvider.otherwise({
