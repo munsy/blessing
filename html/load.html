@@ -1,34 +1,35 @@
 <center>
   <br><br>
+  <div ng-controller="loadController">
+    <div ng-show="Service.Loading">
+      <h1>Loading...</h1>
+      <br><br>
+      <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+        <circle class="progress-circular__background progress-circular--material__background" />
+        <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
+        <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
+      </svg>
+    </div>
 
-  <div ng-show="Service.Loading">
-    <h1>Loading...</h1>
-    <br><br>
-    <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
-      <circle class="progress-circular__background progress-circular--material__background" />
-      <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
-      <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
-    </svg>
-  </div>
+    <div ng-show="!Service.Loading && !Service.LoadSucceeded">
+      <h1>ACT Not Found</h1>
+      It looks like ACT isn't installed on your computer.<br />
+      <br />
+      <button type="submit" formaction="/retry" class="btn btn-primary">Retry</button>
+      <button type="submit" formaction="/findact" class="btn btn-primary">Manually Locate ACT</button>
+      <button type="submit" formaction="/install" class="btn btn-primary">Install Act</button>
+      <br>
+    </div>
 
-  <div ng-show="!Service.Loading && !Service.LoadSucceeded">
-    <h1>ACT Not Found</h1>
-    It looks like ACT isn't installed on your computer.<br />
-    <br />
-    <button type="submit" formaction="/retry" class="btn btn-primary">Retry</button>
-    <button type="submit" formaction="/findact" class="btn btn-primary">Manually Locate ACT</button>
-    <button type="submit" formaction="/install" class="btn btn-primary">Install Act</button>
-    <br>
-  </div>
-
-  <div ng-show="!Service.Loading && Service.LoadSucceeded">
-    <h1>Loaded!</h1>
-    <br>
-    The following addons were found:<br>
-    <br><br>
-    <textarea ng-model="Service.Response" class="form-control" placeholder="File Contents..." rows="10"></textarea>
-    <br />
-    <button class="btn btn-success">Create File</button>
-    <button class="btn btn-primary">Open File</button>
+    <div ng-show="!Service.Loading && Service.LoadSucceeded">
+      <h1>Loaded!</h1>
+      <br>
+      The following addons were found:<br>
+      <br><br>
+      <textarea ng-model="Service.Response" class="form-control" placeholder="File Contents..." rows="10"></textarea>
+      <br />
+      <button class="btn btn-success">Create File</button>
+      <button class="btn btn-primary">Open File</button>
+    </div>
   </div>
 </center>
