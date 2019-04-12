@@ -18,23 +18,6 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 app.controller("cureController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
-	/*
-	$scope.Service = {};
-	$scope.Service.Response = {}
-	$scope.Service.Loading = true;
-	$scope.Service.LoadSucceeded = false;
-
-	$http.get("http://localhost:8080/search")
-	.then(function(response) {
-		$scope.Service.Loading = false;
-		$scope.Service.LoadSucceeded = true;
-
-		$scope.Service.Response = response.data.length;
-	}, function(response) {
-		$scope.Service.Loading = false;
-		$scope.Service.LoadSucceeded = false; 
-	});
-	*/
 	$scope.ChangeView = function(view) {
 	 	$location.path(view);
 	};
@@ -46,11 +29,11 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 	$scope.Service.Loading = true;
 	$scope.Service.LoadSucceeded = false;
 
+
 	$http.get("http://localhost:8080/search")
 	.then(function(response) {
 		$scope.Service.Loading = false;
 		$scope.Service.LoadSucceeded = true;
-
 		$scope.Service.Response = response.data.length;
 	}, function(response) {
 		$scope.Service.Loading = false;
@@ -58,7 +41,22 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 	});
 
 	$scope.ChangeView = function(view) {
+		$scope.Service.Loading = true;
+		$scope.Service.LoadSucceeded = false;
+
 	 	$location.path(view);
+		
+		if(view == "install") {
+			http.get("http://localhost:8080/install")
+			.then(function(response) {
+				$scope.Service.Loading = false;
+				$scope.Service.LoadSucceeded = true;
+				$scope.Service.Response = response.data;
+			}, function(response) {
+				$scope.Service.Loading = false;
+				$scope.Service.LoadSucceeded = false; 
+			});
+		}
 	};
 }]);
 
