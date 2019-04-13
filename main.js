@@ -59,6 +59,7 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 var express = require('express');
 var find = require('find');
+var ncp = require('ncp').ncp;
 
 var http = require('http');
 var cors = require('cors');
@@ -72,10 +73,10 @@ web.use(bp.json());
 web.use(bp.urlencoded({ extended: false }));
 web.use(cp());
 web.use(cors());
+  
+var actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
 
 web.get('/search', function(request, response) {
-  var actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
- 
   var filesArr = {};
 
   find.file(/\.html$/, actPathDefault, function(files) {
@@ -88,6 +89,29 @@ web.get('/search', function(request, response) {
     e.status = 404;
     response.statusCode = 404;
     response.end();
+  });
+});
+
+web.get('/install', function(request, response) {
+  var filesArr = {};
+
+  find.file(/\.html$/, actPathDefault, function(files) {
+    filesArr = files;
+    response.send(filesArr);
+    return;
+  })
+  .error(function(err) {
+    var e = new Error('Not Found');
+    e.status = 404;
+    response.statusCode = 404;
+    response.end();
+  });
+  
+  ncp(source, destination, function (err) {
+    if (err) {
+      return console.error(err);
+    }
+    console.log('done!');
   });
   
 });

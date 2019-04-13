@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "cure",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Addon and dependency manager for Final Fantasy: A Realm Reborn.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -25,6 +25,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "~4.16.4",
-    "find": "^0.3.0"
+    "find": "^0.3.0",
+    "ncp": "^2.0.0"
   }
 }
