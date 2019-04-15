@@ -60,6 +60,7 @@ app.on('activate', function () {
 var express = require('express');
 var find = require('find');
 var ncp = require('ncp').ncp;
+var fs = require('fs');
 
 var http = require('http');
 var cors = require('cors');
@@ -107,9 +108,17 @@ web.get('/install', function(request, response) {
     response.end();
   });
   
+  const file = fs.createWriteStream("act.zip");
+  const request = http.get("https://advancedcombattracker.com/includes/page-download.php?id=57", function(response) {
+    response.pipe(file);
+  });
+
   ncp(source, destination, function (err) {
     if (err) {
-      return console.error(err);
+      var e = new Error('Not Found');
+      e.status = 404;
+      response.statusCode = 404;
+      response.end();
     }
     console.log('done!');
   });
