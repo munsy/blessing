@@ -94,20 +94,6 @@ web.get('/search', function(request, response) {
 });
 
 web.get('/install', function(request, response) {
-  var filesArr = {};
-
-  find.file(/\.html$/, actPathDefault, function(files) {
-    filesArr = files;
-    response.send(filesArr);
-    return;
-  })
-  .error(function(err) {
-    var e = new Error('Not Found');
-    e.status = 404;
-    response.statusCode = 404;
-    response.end();
-  });
-  
   const file = fs.createWriteStream("act.zip");
   const request = http.get("https://advancedcombattracker.com/includes/page-download.php?id=57", function(response) {
     response.pipe(file);
