@@ -131,9 +131,6 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 	};
 }]);
 
-
-
-
 app.directive('cureHeader', function() {
 	return {
 		templateUrl: './html/header.html',
