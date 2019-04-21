@@ -4,40 +4,31 @@
     <div ng-show="Install.Act">
       <h1>Install Act</h1>
       <br>
-      <div class="input-group">
-        <label class="input-group-btn">
-          <span class="btn btn-primary">
-            Browse&hellip; 
-            <input type="file" style="display: none;" multiple>
-          </span>
-        </label>
-        <input type="text" class="form-control" readonly>
-      </div>
+      <button type="submit" ng-click="InstallAct()" class="btn btn-primary">Install</button><br>
+      <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+        <circle class="progress-circular__background progress-circular--material__background" />
+        <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
+        <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
+      </svg>
+      <br>
+      <div ng-bind="Install.Progress.Current"></div><br>
+      <div ng-bind="Install.Progress.Total"></div><br>
     </div>
     <div ng-show="Install.Addon">
       <h1>Install An Addon</h1>
-      <br><br>
-      <div class="input-group">
-        <label class="input-group-btn">
-          <span class="btn btn-primary">
-            Browse&hellip; 
-            <input type="file" style="display: none;" multiple>
-          </span>
-        </label>
-        <input type="text" class="form-control" readonly>
-      </div>
+      <br>
+      <br>
+      <button type="submit" ng-click="InstallAct()" class="btn btn-primary">Install</button><br>
+      <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+        <circle class="progress-circular__background progress-circular--material__background" />
+        <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
+        <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
+      </svg>
+      <br>
+      <div ng-bind="Install.Progress.Current"></div>
+      <div ng-bind="Install.Progress.Total"></div><br>
     </div>
     <br>
-    <div class="progress">
-      <div class="progress-bar progress-bar-striped progress-bar-animated" 
-           role="progressbar" 
-           aria-valuenow="75" 
-           aria-valuemin="0" 
-           aria-valuemax="100" 
-           style="width: 75%">
-      </div>
-    </div>
-    <br>
-    <button type="submit" ng-click="ChangeView('load')" class="btn btn-primary">Back</button>
+    <button type="submit" ng-click="ChangeView('/')" class="btn btn-primary">Back</button>
   </div>
 </center>
