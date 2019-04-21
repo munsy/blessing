@@ -12,12 +12,13 @@
     </div>
 
     <div ng-show="!Service.Loading && !Service.LoadSucceeded">
-      <h1>ACT Not Found</h1>
+      <h1>Loaded!</h1>
+      <h1>ACT Not Found! :(</h1>
       It looks like ACT isn't installed on your computer.<br />
       <br />
-      <button type="submit" formaction="/retry" class="btn btn-primary">Retry</button>
-      <button type="submit" formaction="/findact" class="btn btn-primary">Manually Locate ACT</button>
-      <button type="submit" formaction="/installact" class="btn btn-primary">Install Act</button>
+      <button type="submit" ng-click="ChangeView('retry')" class="btn btn-primary">Retry</button>
+      <button type="submit" ng-click="ChangeView('find/act')" class="btn btn-primary">Manually Locate ACT</button>
+      <button type="submit" ng-click="ChangeView('install/act')" class="btn btn-primary">Install Act</button>
       <br>
     </div>
 
@@ -26,10 +27,9 @@
       <br>
       The following addons were found:<br>
       <br><br>
+      <button type="submit" ng-click="ChangeView('find')" class="btn btn-primary">Install New Addon</button>
+      <br>
       <textarea ng-model="Service.Response" class="form-control" placeholder="File Contents..." rows="10"></textarea>
-      <br />
-      <button class="btn btn-success">Create File</button>
-      <button class="btn btn-primary">Open File</button>
     </div>
   </div>
 </center>

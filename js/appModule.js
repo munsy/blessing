@@ -6,7 +6,19 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: "html/load.html"
         })
         .when("/retry", {
-            templateUrl: "html/load.html"
+            templateUrl: "./html/load.html"
+        })
+        .when("/find/act", {
+            templateUrl: "./html/find/find.html"
+        })
+        .when("/find/act", {
+            templateUrl: "./html/find/find.html"
+        })
+        .when("/install/act", {
+        	templateUrl: "./html/install/install.html"
+        })
+        .when("/install/act", {
+            templateUrl: "./html/install/install.html"
         });
 
         $routeProvider.otherwise({
@@ -23,12 +35,67 @@ app.controller("cureController", ['$scope', '$http', '$cookies', '$location', fu
 	};
 }]);
 
+app.controller("findController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
+	$scope.Find = {};
+	$scope.Find.Act = false;
+	$scope.Find.Addon = false;
+
+	if($location.path() == "/find/act") {
+		$scope.Find.Act = true;
+		$scope.Find.Addon = false;
+	} else if($location.path() == "/find/addon") {
+		$scope.Find.Act = false;
+		$scope.Find.Addon = true;
+	}
+
+	$scope.ChangeView = function(view) {
+		if(view == "find/act") {
+			$scope.Find.Act = true;
+			$scope.Find.Addon = false;
+		} else if(view == "find/addon") {
+			$scope.Find.Act = false;
+			$scope.Find.Addon = true;
+		}
+
+	 	$location.path(view);
+	};
+}]);
+
+app.controller("installController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
+	$scope.Install = {};
+	$scope.Install.Act = false;
+	$scope.Install.Addon = false;
+
+	console.log("NOW IN: " + $location.path());
+
+	if($location.path() == "/install/act") {
+
+		console.log('ye');
+		$scope.Install.Act = true;
+		$scope.Install.Addon = false;
+	} else if($location.path() == "/install/addon") {
+		$scope.Install.Act = false;
+		$scope.Install.Addon = true;
+	}
+
+	$scope.ChangeView = function(view) {
+		if(view == "install/act") {
+			$scope.Install.Act = true;
+			$scope.Install.Addon = false;
+		} else if(view == "install/addon") {
+			$scope.Install.Act = false;
+			$scope.Install.Addon = true;
+		}
+
+	 	$location.path(view);
+	};
+}]);
+
 app.controller("loadController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
 	$scope.Service = {};
 	$scope.Service.Response = {}
 	$scope.Service.Loading = true;
 	$scope.Service.LoadSucceeded = false;
-
 
 	$http.get("http://localhost:8080/search")
 	.then(function(response) {
@@ -44,8 +111,6 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 		$scope.Service.Loading = true;
 		$scope.Service.LoadSucceeded = false;
 
-	 	$location.path(view);
-		
 		if(view == "install") {
 			http.get("http://localhost:8080/install")
 			.then(function(response) {
@@ -57,8 +122,16 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 				$scope.Service.LoadSucceeded = false; 
 			});
 		}
+
+		$scope.Service.Loading = false;
+	 	
+	 	console.log("switching from: " + $location.path());
+	 	console.log($location.path(view));
+	 	console.log("switched to: " + $location.path());
 	};
 }]);
+
+
 
 
 app.directive('cureHeader', function() {

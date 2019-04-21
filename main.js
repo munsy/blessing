@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Turn off the menu.
   mainWindow.setMenu(null)
@@ -57,6 +57,20 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+const { ipcMain } = require('electron')
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log(arg) // prints "ping"
+  event.sender.send('asynchronous-reply', 'pong-server-asynch')
+})
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  console.log(arg) // prints "ping"
+  event.returnValue = 'pong-server-synch'
+})
+
+/////////////////////////////////
+
 var express = require('express');
 var find = require('find');
 var ncp = require('ncp').ncp;

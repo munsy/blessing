@@ -1,0 +1,33 @@
+<center>
+  <br><br>
+    installController
+  <div ng-controller="installController">
+    <div ng-show="Install.Act">
+      <h1>Install Act</h1>
+      <br><br>
+      <div class="input-group">
+        <label class="input-group-btn">
+          <span class="btn btn-primary">
+            Browse&hellip; 
+            <input type="file" style="display: none;" multiple>
+          </span>
+        </label>
+        <input type="text" class="form-control" readonly>
+      </div>
+    </div>
+
+    <div ng-show="Install.Addon">
+      <h1>Install An Addon</h1>
+      <br><br>
+      <div class="input-group">
+        <label class="input-group-btn">
+          <span class="btn btn-primary">
+            Browse&hellip; 
+            <input type="file" style="display: none;" multiple>
+          </span>
+        </label>
+        <input type="text" class="form-control" readonly>
+      </div>
+    </div>
+  </div>
+</center>
