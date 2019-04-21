@@ -1,19 +1,31 @@
-var express = require('express');
-var find = require('find');
-var ncp = require('ncp').ncp;
-var fs = require('fs');
-var http = require('http');
-var cors = require('cors');
-var cp = require('cookie-parser');
-var bp = require('body-parser');
-var web = express();
+const { ipcMain } = require('electron')
+
+const find = require('find');
+const ncp = require('ncp').ncp;
+const fs = require('fs');
+const http = require('http');
+const cors = require('cors');
+const cp = require('cookie-parser');
+const bp = require('body-parser');
+const express = require('express');
+const web = express();
+
+let actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log(arg) // prints "ping"
+  event.sender.send('asynchronous-reply', 'pong-server-asynch')
+})
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  console.log(arg) // prints "ping"
+  event.returnValue = 'pong-server-synch'
+})
 
 web.use(bp.json());
 web.use(bp.urlencoded({ extended: false }));
 web.use(cp());
-web.use(cors());
-  
-var actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker"
+web.use(cors());  
 
 web.get('/search', function(request, response) {
   var filesArr = {};
