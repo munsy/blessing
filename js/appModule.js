@@ -40,8 +40,6 @@ app.controller("findController", ['$scope', '$http', '$cookies', '$location', fu
 	$scope.Find.Act = false;
 	$scope.Find.Addon = false;
 
-	console.log("NOW IN: " + $location.path());
-
 	if($location.path() == "/find/act") {
 		$scope.Find.Act = true;
 		$scope.Find.Addon = false;
@@ -70,9 +68,6 @@ app.controller("installController", ['$scope', '$http', '$cookies', '$location',
 	$scope.Install = {};
 	$scope.Install.Act = false;
 	$scope.Install.Addon = false;
-
-
-	console.log("NOW IN: " + $location.path());
 
 	if($location.path() == "/install/act") {
 		$scope.Install.Act = true;
@@ -131,10 +126,8 @@ app.controller("loadController", ['$scope', '$http', '$cookies', '$location', fu
 		}
 
 		$scope.Service.Loading = false;
-	 	
-	 	console.log("switching from: " + $location.path());
-	 	console.log($location.path(view));
-	 	console.log("switched to: " + $location.path());
+		
+		$location.path(view);
 	};
 }]);
 
