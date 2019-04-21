@@ -3,29 +3,35 @@ angular.module('cure').controller("findController", ['$scope', '$http', '$cookie
 	$scope.Find.Act = false;
 	$scope.Find.Addon = false;
 
-	if($location.path() == "/find/act") {
-		$scope.Find.Act = true;
-		$scope.Find.Addon = false;
-	} else if($location.path() == "/find/addon") {
-		$scope.Find.Act = false;
-		$scope.Find.Addon = true;
-	} else {
+	const clear = function() {
 		$scope.Find.Act = false;
 		$scope.Find.Addon = false;
 	}
 
-	$scope.ChangeView = function(view) {
-		if(view == "find/act") {
-			$scope.Find.Act = true;
-			$scope.Find.Addon = false;
-		} else if(view == "find/addon") {
-			$scope.Find.Act = false;
-			$scope.Find.Addon = true;
-		} else {
-			$scope.Find.Act = false;
-			$scope.Find.Addon = false;
+	const findAct = function() {
+		if($location.path() != "/find/act") {
+			return;
 		}
-
-	 	$location.path(view);
+		$scope.Find.Act = true;
+		$scope.Find.Addon = false;
 	};
+
+	const findAddon = function() {
+		if($location.path() != "/find/addon") {
+			return;
+		}
+		$scope.Find.Act = true;
+		$scope.Find.Addon = false;
+	};
+
+	$scope.ChangeView = function(view) {
+		$location.path(view);
+		clear();
+		findAct();
+		findAddon();
+	};
+
+	clear();
+	findAct();
+	findAddon();
 }]);

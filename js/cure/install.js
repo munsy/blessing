@@ -3,26 +3,35 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.Install.Act = false;
 	$scope.Install.Addon = false;
 
-	if($location.path() == "/install/act") {
-		$scope.Install.Act = true;
-		$scope.Install.Addon = false;
-	} else if($location.path() == "/install/addon") {
-		$scope.Install.Act = false;
-		$scope.Install.Addon = true;
-	} else {
+	const clear = function() {
 		$scope.Install.Act = false;
 		$scope.Install.Addon = false;
 	}
 
-	$scope.ChangeView = function(view) {
-		if(view == "install/act") {
-			$scope.Install.Act = true;
-			$scope.Install.Addon = false;
-		} else if(view == "install/addon") {
-			$scope.Install.Act = false;
-			$scope.Install.Addon = true;
+	const installAct = function() {
+		if($location.path() != "/install/act") {
+			return;
 		}
-
-	 	$location.path(view);
+		$scope.Install.Act = true;
+		$scope.Install.Addon = false;
 	};
+
+	const installAddon = function() {
+		if($location.path() != "/install/addon") {
+			return;
+		}
+		$scope.Install.Act = true;
+		$scope.Install.Addon = false;
+	};
+
+	$scope.ChangeView = function(view) {
+		$location.path(view);
+		clear();
+		installAct();
+		installAddon();
+	};
+
+	clear();
+	installAct();
+	installAddon();
 }]);
