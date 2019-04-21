@@ -4,21 +4,28 @@
     <div ng-show="Install.Act">
       <h1>Install Act</h1>
       <br>
-      <button type="submit" ng-click="InstallAct()" class="btn btn-primary">Install</button><br>
-      <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
-        <circle class="progress-circular__background progress-circular--material__background" />
-        <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
-        <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
-      </svg>
-      <br>
-      <div ng-bind="Install.Progress.Current"></div><br>
-      <div ng-bind="Install.Progress.Total"></div><br>
+      <button type="submit" ng-click="StartInstall('act')" class="btn btn-primary">Install</button><br>
+      <div ng-show="Install.Installing && !Install.Complete">
+        <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+          <circle class="progress-circular__background progress-circular--material__background" />
+          <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
+          <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
+        </svg>
+        <br>
+        <div ng-bind="Install.Progress.Current"></div>
+        <div ng-bind="Install.Progress.Total"></div>
+      </div>
+      <div ng-show="!Install.Installing && Install.Complete">
+        <h3>Installation Complete!</h3>
+        <div ng-bind="Install.Progress.Current"></div>
+        <div ng-bind="Install.Progress.Total"></div>
+      </div>
     </div>
     <div ng-show="Install.Addon">
       <h1>Install An Addon</h1>
       <br>
       <br>
-      <button type="submit" ng-click="InstallAct()" class="btn btn-primary">Install</button><br>
+      <button type="submit" ng-click="StartInstall('addon')" class="btn btn-primary">Install</button><br>
       <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
         <circle class="progress-circular__background progress-circular--material__background" />
         <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />

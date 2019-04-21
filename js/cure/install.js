@@ -18,29 +18,8 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		$scope.Install.Act = false;
 		$scope.Install.Addon = false;
 		$scope.Install.Installing = false;
+		$scope.Install.Complete = true;
 		$scope.Install.ChooseLocation = false;
-	}
-
-	const installAct = function() {
-		if($location.path() != "/install/act") {
-			return;
-		}
-					
-		$scope.Install.Installing = true;
-
-		while($scope.Install.Installing) {		
-			$http.get("http://localhost:8080/install/act/progress")
-			.then(function(response) {
-				$scope.Install.Progress.Current = response.data.Current;
-				$scope.Install.Progress.Total = response.data.Total;
-				if($scope.Install.Progress.Total == 100) {
-					$scope.Install.Installing = false;
-				}
-			}, function(response) {
-				$scope.Install.Data = response.data;
-				$scope.Install.Installing = false;
-			});
-		}
 	}
 
 	const installActView = function() {
@@ -78,8 +57,42 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		installAddon();
 	}
 
-	$scope.InstallAct = function() {
-		getProgress();
+	$scope.StartInstall = function(progName) {
+		if($location.path() != "/install/" + progName) {
+			return;
+		}
+		if($scope.Install.Installing) {
+			return;
+		}
+
+		$scope.Install.Complete = false;
+
+		$http.get("http://localhost:8080/install/" + progName + "/start")
+		.then(function(response) {
+			$scope.Install.Progress.Current = response.data.Current;
+			$scope.Install.Progress.Total = response.data.Total;
+			$scope.Install.Installing = response.data.Installing;
+		}, function(response) {
+			$scope.Install.Data = response.data;
+		});
+
+		while($scope.Install.Installing) {		
+			$http.get("http://localhost:8080/install/" + progName + "/progress")
+			.then(function(response) {
+				$scope.Install.Progress.Current = response.data.Current;
+				$scope.Install.Progress.Total = response.data.Total;
+				$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
+
+				if($scope.Install.Progress.Total == 100) {
+					$scope.Install.Installing = false;
+				}
+			}, function(response) {
+				$scope.Install.Data = response.data;
+				$scope.Install.Installing = false;
+			});
+		}
+		
+		$scope.Install.Complete = true;
 	}
 
 	clear();

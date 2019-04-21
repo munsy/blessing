@@ -7,6 +7,7 @@ const cp = require('cookie-parser');
 const bp = require('body-parser');
 const express = require('express');
 const web = express();
+const yauzl = require("yauzl");
 
 class Cure {
   constructor(httpPort) {
@@ -21,6 +22,17 @@ class Cure {
     this.Data.cureTemp = this.Data.curePathDefault + "\\.temp";
     this.Data.actPathDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker";
     this.Data.actDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
+
+    this.Data.Install = {};
+    this.Data.Install.Error = false;
+    this.Data.Install.Act = false;
+    this.Data.Install.Addon = false;
+    this.Data.Install.Installing = false;
+  
+    this.Data.Install.Progress = {};
+    this.Data.Install.Progress.CurrentFile = "";
+    this.Data.Install.Progress.Current = 0;
+    this.Data.Install.Progress.Total = 0;
 
     web.use(bp.json());
     web.use(bp.urlencoded({ extended: false }));
@@ -42,7 +54,7 @@ class Cure {
       });
     });
     
-    web.get('/install/act', function(request, response) {
+    web.get('/install/act/start', function(request, response) {
       if (!fs.existsSync(this.Data.cureTemp)) {
         fs.mkdirSync(this.Data.cureTemp);
       }
@@ -55,6 +67,8 @@ class Cure {
       const request = http.get(this.Data.actDownloadURL, function(response) {
         response.pipe(file);
       });
+
+
       ncp(source, destination, function (err) {
         if (err) {
           let e = new Error('Not Found');
@@ -63,6 +77,10 @@ class Cure {
           response.end();
         }
       });
+    });
+
+    web.get('/install/act/progress', function(request, response) {
+      response.send()
     });
     
     web.use(function(request, response, next) {
