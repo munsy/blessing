@@ -12,14 +12,17 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.Install.Progress.Total = 0;
 
 	const clear = function() {
-		$scope.Install.Progress.CurrentFile = "";
-		$scope.Install.Progress.Current = 0;
-		$scope.Install.Progress.Total = 0;
 		$scope.Install.Act = false;
 		$scope.Install.Addon = false;
 		$scope.Install.Installing = false;
 		$scope.Install.Complete = true;
 		$scope.Install.ChooseLocation = false;
+	}
+
+	const reset = function() {
+		$scope.Install.Progress.CurrentFile = "";
+		$scope.Install.Progress.Current = 0;
+		$scope.Install.Progress.Total = 0;
 	}
 
 	const installActView = function() {
@@ -67,6 +70,8 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 		$scope.Install.Complete = false;
 
+		reset();
+
 		$http.get("http://localhost:8080/install/" + progName + "/start")
 		.then(function(response) {
 			$scope.Install.Progress.Current = response.data.Current;
@@ -91,7 +96,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 				$scope.Install.Installing = false;
 			});
 		}
-		
+
 		$scope.Install.Complete = true;
 	}
 

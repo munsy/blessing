@@ -12,7 +12,7 @@ const yauzl = require("yauzl");
 class CureData {
   constructor() {
     this.Path = {};
-    this.Path.CureDefault = "C:\\Program Files (x86)\\Cure";
+    this.Path.CureDefault = process.env.APPDATA + "\\cure";
     this.Path.CureTemp = this.Path.CureDefault + "\\.temp";
     this.Path.ActDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker";
     this.Path.Act = this.Path.ActDefault;
@@ -200,8 +200,8 @@ class Cure {
       }
   
       const file = fs.createWriteStream(Data.Path.CureTemp + "\\act.zip");
-      const request = http.get(Data.Path.ActDownloadURL, function(response) {
-        response.pipe(file);
+      const req = http.get(Data.Path.ActDownloadURL, function(resp) {
+        resp.pipe(file);
       });
 
       var err = {};
