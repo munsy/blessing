@@ -45,16 +45,16 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.ChangeView = function(view) {
 		$location.path(view);
 		clear();
-		installAct();
-		installAddon();
+		installActView();
+		installAddonView();
 	};
 
 	$scope.Retry = function(view) {
 		$scope.Install.Error = false;
 		$location.path(view)
 		clear();
-		installAct();
-		installAddon();
+		installActView();
+		installAddonView();
 	}
 
 	$scope.StartInstall = function(progName) {
