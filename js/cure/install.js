@@ -5,6 +5,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.Install.Addon = false;
 	$scope.Install.Installing = false;
 	$scope.Install.ChooseLocation = false;
+	$scope.Install.ActInstallLocation = "";
 
 	$scope.Install.Progress = {};
 	$scope.Install.Progress.CurrentFile = "";
@@ -15,7 +16,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		$scope.Install.Act = false;
 		$scope.Install.Addon = false;
 		$scope.Install.Installing = false;
-		$scope.Install.Complete = true;
+		$scope.Install.Complete = false;
 		$scope.Install.ChooseLocation = false;
 	}
 
@@ -31,8 +32,6 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		}
 		$scope.Install.Act = true;
 		$scope.Install.Addon = false;
-		$scope.Install.Installing = false;
-		$scope.Install.ChooseLocation = true;
 	};
 
 	const installAddonView = function() {
@@ -69,6 +68,8 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		}
 
 		$scope.Install.Complete = false;
+		$scope.Install.Act = false;
+		$scope.Install.Addon = false;
 
 		reset();
 

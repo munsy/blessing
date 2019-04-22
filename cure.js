@@ -208,11 +208,11 @@ class Cure {
 
       var err = {};
 
-      handleZipFile(err, file);
+      handleZipFile(Data, err, file);
 
       var f = "";
       // ncp(source, destination, function(err) {});
-      ncp(Data.Path.CureTemp + f, Data.Path.ActPath, function (err) {
+      ncp(Data.Path.CureTemp + "\\" + f, Data.Path.ActPath, function (err) {
         if (err) {
           let e = new Error('Not Found');
           e.status = 404;
