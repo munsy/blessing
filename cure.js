@@ -12,16 +12,11 @@ const yauzl = require("yauzl");
 class CureData {
   constructor() {
     this.Path = {};
-    this.Path.CureDefault = "";
     this.Path.CureDefault = "C:\\Program Files (x86)\\Cure";
-    this.Path.CureTemp = "";
-    this.Path.ActDefault = ""
-    this.Path.ActDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker";
-    this.Path.Act = "";
-    this.Path.ActDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
-    
     this.Path.CureTemp = this.Path.CureDefault + "\\.temp";
+    this.Path.ActDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker";
     this.Path.Act = this.Path.ActDefault;
+    this.Path.ActDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
 
     this.Install = {};
     this.Install.ErrData = {}
