@@ -2,6 +2,7 @@ const find = require('find');
 const ncp = require('ncp').ncp;
 const fs = require('fs');
 const http = require('http');
+const https = require('https');
 const cors = require('cors');
 const cp = require('cookie-parser');
 const bp = require('body-parser');
@@ -190,19 +191,20 @@ class Cure {
     
     web.get('/install/act/start', function(request, response) {
       Data.Install.Installing = true;
-      
+      response.send(Data.Install);
+
       if (!fs.existsSync(Data.Path.CureTemp)) {
         fs.mkdirSync(Data.Path.CureTemp);
       }
   
+      const file = fs.createWriteStream(Data.Path.CureTemp + "\\act.zip");
+      const req = https.get(Data.Path.ActDownloadURL, function(resp) {
+        resp.pipe(file);
+      });
+
       if (!fs.existsSync(Data.Path.ActDefault)) {
         fs.mkdirSync(Data.Path.ActDefault);
       }
-  
-      const file = fs.createWriteStream(Data.Path.CureTemp + "\\act.zip");
-      const req = http.get(Data.Path.ActDownloadURL, function(resp) {
-        resp.pipe(file);
-      });
 
       var err = {};
 
@@ -221,7 +223,7 @@ class Cure {
 
       Data.Install.Installing = false;
 
-      response.send(Data.Install);
+      //response.send(Data.Install);
     });
 
     web.get('/install/act/progress', function(request, response) {
