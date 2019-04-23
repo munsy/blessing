@@ -222,14 +222,14 @@ class Cure {
           response.statusCode = 404;
           response.end();
         } 
-        files.forEach(function (file) {
-          console.log(file);
-          console.log(Data.Path.CureTemp + "\\" + file);
+        for(var i = 0; i < files.length; i++) {
+          console.log(files[i]);
+          console.log(Data.Path.CureTemp + "\\" + files[i]);
           // Do whatever you want to do with the file
-          if(file === "act.zip") {
+          if(files[i] === "act.zip") {
             continue;
           }
-          ncp(Data.Path.CureTemp + "\\" + file, Data.Path.ActPath, function (err) {
+          ncp(Data.Path.CureTemp + "\\" + files[i], Data.Path.ActPath, function (err) {
             if (err) {
               let e = new Error('Not Found');
               e.status = 404;
@@ -237,7 +237,7 @@ class Cure {
               response.end();
             }
           }); 
-        });
+        }
       });
 
       Data.Install.Installing = false;
