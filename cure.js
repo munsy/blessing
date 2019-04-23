@@ -14,8 +14,10 @@ class CureData {
   constructor() {
     this.Path = {};
     this.Path.CureDefault = process.env.APPDATA + "\\cure";
+    this.Path.CureTemp = "";
     this.Path.CureTemp = this.Path.CureDefault + "\\.temp";
     this.Path.ActDefault = "C:\\Advanced Combat Tracker";
+    this.Path.Act = "";
     this.Path.Act = this.Path.ActDefault;
     this.Path.ActZip = this.Path.CureTemp + "\\act.zip"
     this.Path.ActDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
@@ -211,15 +213,31 @@ class Cure {
 
       handleZipFile(Data, err, file);
 
-      var f = "";
-      // ncp(source, destination, function(err) {});
-      ncp(Data.Path.CureTemp + "\\" + f, Data.Path.ActPath, function (err) {
+      console.log("Data.Path.CureTemp: " + Data.Path.CureTemp);
+
+      fs.readdir(Data.Path.CureTemp, function (err, files) {
         if (err) {
           let e = new Error('Not Found');
           e.status = 404;
           response.statusCode = 404;
           response.end();
-        }
+        } 
+        files.forEach(function (file) {
+          console.log(file);
+          console.log(Data.Path.CureTemp + "\\" + file);
+          // Do whatever you want to do with the file
+          if(file === "act.zip") {
+            continue;
+          }
+          ncp(Data.Path.CureTemp + "\\" + file, Data.Path.ActPath, function (err) {
+            if (err) {
+              let e = new Error('Not Found');
+              e.status = 404;
+              response.statusCode = 404;
+              response.end();
+            }
+          }); 
+        });
       });
 
       Data.Install.Installing = false;

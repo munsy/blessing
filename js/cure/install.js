@@ -17,7 +17,6 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		$scope.Install.Addon = false;
 		$scope.Install.Installing = false;
 		$scope.Install.Complete = false;
-		$scope.Install.ChooseLocation = false;
 	}
 
 	const reset = function() {
