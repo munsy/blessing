@@ -15,8 +15,9 @@ class CureData {
     this.Path = {};
     this.Path.CureDefault = process.env.APPDATA + "\\cure";
     this.Path.CureTemp = this.Path.CureDefault + "\\.temp";
-    this.Path.ActDefault = "C:\\Program Files (x86)\\Advanced Combat Tracker";
+    this.Path.ActDefault = "C:\\Advanced Combat Tracker";
     this.Path.Act = this.Path.ActDefault;
+    this.Path.ActZip = this.Path.CureTemp + "\\act.zip"
     this.Path.ActDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
 
     this.Install = {};
@@ -197,7 +198,7 @@ class Cure {
         fs.mkdirSync(Data.Path.CureTemp);
       }
   
-      const file = fs.createWriteStream(Data.Path.CureTemp + "\\act.zip");
+      const file = fs.createWriteStream(Data.Path.ActZip);
       const req = https.get(Data.Path.ActDownloadURL, function(resp) {
         resp.pipe(file);
       });
