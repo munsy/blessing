@@ -241,8 +241,6 @@ class Cure {
       });
 
       Data.Install.Installing = false;
-
-      //response.send(Data.Install);
     });
 
     web.get('/install/act/progress', function(request, response) {

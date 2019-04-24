@@ -60,9 +60,11 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 	$scope.StartInstall = function(progName) {
 		if($location.path() != "/install/" + progName) {
+			console.log("return 1");
 			return;
 		}
 		if($scope.Install.Installing) {
+			console.log("return 2");
 			return;
 		}
 
@@ -74,28 +76,30 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 		$http.get("http://localhost:8080/install/" + progName + "/start")
 		.then(function(response) {
+			$scope.Install.Installing = response.data.Installing;
 			$scope.Install.Progress.Current = response.data.Current;
 			$scope.Install.Progress.Total = response.data.Total;
-			$scope.Install.Installing = response.data.Installing;
+			$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
 		}, function(response) {
 			$scope.Install.Data = response.data;
 		});
+	}
 
-		while($scope.Install.Installing) {		
-			$http.get("http://localhost:8080/install/" + progName + "/progress")
-			.then(function(response) {
-				$scope.Install.Progress.Current = response.data.Current;
-				$scope.Install.Progress.Total = response.data.Total;
-				$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
-
-				if($scope.Install.Progress.Total == 100) {
-					$scope.Install.Installing = false;
-				}
-			}, function(response) {
-				$scope.Install.Data = response.data;
-				$scope.Install.Installing = false;
-			});
+	$scope.CheckInstall = function(progName) {
+		if(!$scope.Install.Installing) {
+			return false;
 		}
+
+		$http.get("http://localhost:8080/install/" + progName + "/progress")
+		.then(function(response) {
+			$scope.Install.Installing = response.data.Installing;
+			$scope.Install.Progress.Current = response.data.Current;
+			$scope.Install.Progress.Total = response.data.Total;
+			$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
+		}, function(response) {
+			$scope.Install.Data = response.data;
+			$scope.Install.Installing = false;
+		});
 
 		$scope.Install.Complete = true;
 	}
