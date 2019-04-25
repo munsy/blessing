@@ -48,6 +48,13 @@ class Cure {
 
     var Data = new CureData();
 
+    ipcMain.on('install-act', (event, arg) => {
+      if(arg === 'start') {
+        event.returnValue = 'pong';
+      }
+    });
+    ipcRenderer.sendSync('install-act', 'status');
+
     function mkdirp(dir, cb) {
       if (dir === ".") return cb();
       fs.stat(dir, function(err) {

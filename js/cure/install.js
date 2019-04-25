@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron');
+
 angular.module('cure').controller("installController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
 	$scope.Install = {};
 	$scope.Install.Error = false;
@@ -60,11 +62,9 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 	$scope.StartInstall = function(progName) {
 		if($location.path() != "/install/" + progName) {
-			console.log("return 1");
 			return;
 		}
 		if($scope.Install.Installing) {
-			console.log("return 2");
 			return;
 		}
 
@@ -73,6 +73,8 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		$scope.Install.Addon = false;
 
 		reset();
+
+		ipcRenderer.sendSync('install-act', 'status');
 
 		$http.get("http://localhost:8080/install/" + progName + "/start")
 		.then(function(response) {
@@ -83,26 +85,30 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		}, function(response) {
 			$scope.Install.Data = response.data;
 		});
-	}
 
-	$scope.CheckInstall = function(progName) {
-		if(!$scope.Install.Installing) {
-			return false;
+		while($scope.Install.Installing) {
+			ipcRenderer.sendSync('install-act', 'status');
 		}
-
-		$http.get("http://localhost:8080/install/" + progName + "/progress")
-		.then(function(response) {
-			$scope.Install.Installing = response.data.Installing;
-			$scope.Install.Progress.Current = response.data.Current;
-			$scope.Install.Progress.Total = response.data.Total;
-			$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
-		}, function(response) {
-			$scope.Install.Data = response.data;
-			$scope.Install.Installing = false;
-		});
-
-		$scope.Install.Complete = true;
 	}
+
+	//$scope.CheckInstall = function(progName) {
+	//	if(!$scope.Install.Installing) {
+	//		return false;
+	//	}
+
+	//	$http.get("http://localhost:8080/install/" + progName + "/progress")
+	//	.then(function(response) {
+	//		$scope.Install.Installing = response.data.Installing;
+	//		$scope.Install.Progress.Current = response.data.Current;
+	//		$scope.Install.Progress.Total = response.data.Total;
+	//		$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
+	//	}, function(response) {
+	//		$scope.Install.Data = response.data;
+	//		$scope.Install.Installing = false;
+	//	});
+
+	//	$scope.Install.Complete = true;
+	//}
 
 	clear();
 	installActView();
