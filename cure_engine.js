@@ -48,13 +48,6 @@ class Cure {
 
     var Data = new CureData();
 
-    ipcMain.on('install-act', (event, arg) => {
-      if(arg === 'start') {
-        event.returnValue = 'pong';
-      }
-    });
-    ipcRenderer.sendSync('install-act', 'status');
-
     function mkdirp(dir, cb) {
       if (dir === ".") return cb();
       fs.stat(dir, function(err) {
@@ -69,7 +62,7 @@ class Cure {
     }
 
     function handleZipFile(Data, err, zipfile) {
-      if (err){
+      if (err) {
         Data.Install.Installing = false;
         Data.Install.Error = true;
         Data.Install.ErrData = err;
