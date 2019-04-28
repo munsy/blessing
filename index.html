@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="./css/onsenui.css">
     <link rel="stylesheet" type="text/css" href="./css/onsen-css-components.min.css">
   </head>
-  <body ng-app="cure">
+  <body ng-app="cure" ng-cloak>
     <div ng-controller="cureController" role="main" class="container">
       <cure-header></cure-header>
       <div ng-view></div>
@@ -25,4 +25,5 @@
     <script type="text/javascript" src="./js/cure/ui/load.js"></script>
     <script>require('./renderer.js');</script>
   </body>
+  <noscript>You must have JavaScript enabled to use this application.</noscript>
 </html>

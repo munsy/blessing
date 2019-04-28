@@ -1,4 +1,6 @@
-const data = require('./data');
+const paths = require('./paths');
+const installer = require('./installer');
+const err = require('./error');
 const find = require('find');
 const fs = require('fs');
 const https = require('https');
@@ -7,30 +9,34 @@ const yauzl = require('yauzl');
 
 class Cure {
   constructor() {
-    this.Data = new data();
+    this.Paths = new paths();
+    this.Installer = new installer();
+    this.Error = new err();
+  }
+
+  IsInstalled(path) {
+    return fs.existsSync(path);
   }
 
   InstallAct() {
-    this.Data.Install.Installing = true;
-    response.send(this.Data.Install);
-
-    if (!fs.existsSync(this.Data.Path.CureTemp)) {
-      fs.mkdirSync(this.Data.Path.CureTemp);
+    if (!fs.existsSync(this.Paths.CureTemp)) {
+      fs.mkdirSync(this.Paths.CureTemp);
     }
 
-    const file = fs.createWriteStream(this.Data.Path.ActZip);
-    const req = https.get(this.Data.Path.ActDownloadURL, function(resp) {
+    const file = fs.createWriteStream(this.Paths.ActZip);
+    const req = https.get(this.Paths.ActDownloadURL, function(resp) {
       resp.pipe(file);
     });
 
-    if (!fs.existsSync(this.Data.Path.ActDefault)) {
-      fs.mkdirSync(this.Data.Path.ActDefault);
+    if (!fs.existsSync(this.Paths.ActDefault)) {
+      fs.mkdirSync(this.Paths.ActDefault);
     }
 
     var err = {};
-    handleZipFile(this.Data, err, file);
+    Unzip(this.Data, err, file);
 
-    fs.readdir(this.Data.Path.CureTemp, function (err, files) {
+    fs.readdir(this.Paths.CureTemp, function (err, files) {
+      // FIX
       if (err) {
         let e = new Error('Not Found');
         e.status = 404;
@@ -39,12 +45,13 @@ class Cure {
       } 
       for(var i = 0; i < files.length; i++) {
         console.log(files[i]);
-        console.log(this.Data.Path.CureTemp + "\\" + files[i]);
-        // Do whatever you want to do with the file
+        console.log(this.Paths.CureTemp + "\\" + files[i]);
+        
         if(files[i] === "act.zip") {
           continue;
         }
-        ncp(this.Data.Path.CureTemp + "\\" + files[i], this.Data.Path.ActPath, function (err) {
+        ncp(this.Paths.CureTemp + "\\" + files[i], this.Paths.ActPath, function (err) {
+          // FIX
           if (err) {
             let e = new Error('Not Found');
             e.status = 404;
@@ -58,38 +65,35 @@ class Cure {
     this.Data.Install.Installing = false;
   }
 
-  Unzip() {
-    function mkdirp(dir, cb) {
-      if (dir === ".") { 
-        return cb(); 
-      }
+  MkDirP(dir, cb) {
+    if("." === dir) return cb();
 
-      fs.stat(dir, function(err) {
-        if (err == null) {
-          return cb();
-        }
+    fs.stat(dir, function(err) {
+      if (null == err) return cb();
 
-        var parent = path.dirname(dir);
-        mkdirp(parent, function() {
-          process.stdout.write(dir.replace(/\/$/, "") + "/\n");
-          fs.mkdir(dir, cb);
-        });
+      var parent = path.dirname(dir);
+      
+      MkDirP(parent, () => {
+        process.stdout.write(dir.replace(/\/$/, "") + "/\n");
+        fs.mkdir(dir, cb);
       });
-    }
+    });
+  }
 
+  Unzip(zipfile) {
     function handleZipFile(Data, err, zipfile) {
       if (err) {
         this.Data.Install.Installing = false;
         this.Data.Install.Error = true;
         this.Data.Install.ErrData = err;
-        return
+        return;
       }
 
       // track when we've closed all our file handles
       var handleCount = 0;
 
       function incrementHandleCount() {
-        this.Data.Install.Progress.TotalFiles++;
+        //this.Data.Install.Progress.TotalFiles++;
         handleCount++;
       }
       
@@ -117,7 +121,7 @@ class Cure {
               this.Data.Install.Installing = false;
               this.Data.Install.Error = true;
               this.Data.Install.ErrData = err;
-              return
+              return;
             }
             zipfile.readEntry();
           });
@@ -125,11 +129,11 @@ class Cure {
           // ensure parent directory exists
           mkdirp(path.dirname(entry.fileName), function() {
             zipfile.openReadStream(entry, function(err, readStream) {
-              if (err){
+              if (err) {
                 this.Data.Install.Installing = false;
                 this.Data.Install.Error = true;
                 this.Data.Install.ErrData = err;
-                return
+                return;
               }
               // report progress through large files
               var byteCount = 0;
