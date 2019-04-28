@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Turn off the menu.
   mainWindow.setMenu(null)
@@ -61,14 +61,15 @@ const Cure = require('./js/cure/engine/cure');
 const cure = new Cure();
 
 ipcMain.on('find-act', (event, data) => {
-  event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act));
+  event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act()));
 });
 
 ipcMain.on('install-act', (event, data) => {
   if(event === 'start') {
     cure.Installer.Installing = true;
     event.sender.send('install-start-reply', cure.Installer);
-  } else if(event === 'stop') {
+
+  } else if(event === 'cancel') {
     cure.Installer.Installing = false;
     event.sender.send('install-stop-reply', cure.Installer);
   } else if(event === 'status') {
