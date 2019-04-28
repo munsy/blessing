@@ -1,7 +1,7 @@
 <center>
   <br><br>
   <div ng-controller="loadController">
-    <div ng-show="Service.Loading">
+    <div ng-show="Loading">
       <h1>Loading...</h1>
       <br><br>
       <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
@@ -11,7 +11,7 @@
       </svg>
     </div>
 
-    <div ng-show="!Service.Loading && !Service.LoadSucceeded">
+    <div ng-show="!Loading && !LoadSucceeded">
       <h1>ACT Not Found! :(</h1>
       It looks like ACT isn't installed on your computer.<br />
       <br />
@@ -21,14 +21,14 @@
       <br>
     </div>
 
-    <div ng-show="!Service.Loading && Service.LoadSucceeded">
+    <div ng-show="!Loading && LoadSucceeded">
       <h1>Loaded!</h1>
       <br>
       The following addons were found:<br>
       <br><br>
       <button type="submit" ng-click="ChangeView('find')" class="btn btn-primary">Install New Addon</button>
       <br>
-      <textarea ng-model="Service.Response" class="form-control" placeholder="File Contents..." rows="10"></textarea>
+      asdfas
     </div>
   </div>
 </center>
