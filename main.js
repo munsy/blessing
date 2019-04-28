@@ -61,10 +61,13 @@ const Cure = require('./cure_engine');
 const cure = new Cure(8080);
 //cure.Listen();
 
-ipcMain.on('count', (event, data) => {
-  console.log('event:\n' + event + '\ndata:\n' + data);
-  //do child process or other data manipulation and name it manData
-  data++;
+let count = 0;
 
-  event.sender.send('countReply', data);
+ipcMain.on('count', (event, data) => {
+  while(count < 100) {
+    count++;
+    event.sender.send('countReply', count);    
+  }
+
+  count = 0;
 });

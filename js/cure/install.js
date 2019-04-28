@@ -14,14 +14,24 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 	$scope.Count = 0;
 
-	ipc.on('countReply', (event, data) => { 
-		console.log('event:\n' + event + '\ndata:\n' + data);
+	ipc.on('countReply', (event, data) => {
 		$scope.Count = data;
+		$scope.$apply();
+	});
+
+	ipc.on('install-status', (event, data) => {
+		if(data.Installing) {
+			$scope.Install.Progress.Current = data.Current;
+			$scope.Install.Progress.Total = data.Total;
+			$scope.Install.Progress.CurrentFile = data.CurrentFile;
+		}
+		$scope.Install.Installing = data.Installing;
+		$scope.$apply();
 	});
 
 	$scope.PlusPlus = function() {
-		ipc.send('count', $scope.Count);
-	}
+		ipc.send('count');
+	};
 
 	const clear = function() {
 		$scope.Install.Act = false;
@@ -83,41 +93,8 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 		reset();
 
-		ipcRenderer.sendSync('install-act', 'status');
-
-		$http.get("http://localhost:8080/install/" + progName + "/start")
-		.then(function(response) {
-			$scope.Install.Installing = response.data.Installing;
-			$scope.Install.Progress.Current = response.data.Current;
-			$scope.Install.Progress.Total = response.data.Total;
-			$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
-		}, function(response) {
-			$scope.Install.Data = response.data;
-		});
-
-		while($scope.Install.Installing) {
-			ipcRenderer.sendSync('install-act', 'status');
-		}
+		ipc.send('install-' + progName, 'start');
 	};
-
-	//$scope.CheckInstall = function(progName) {
-	//	if(!$scope.Install.Installing) {
-	//		return false;
-	//	}
-
-	//	$http.get("http://localhost:8080/install/" + progName + "/progress")
-	//	.then(function(response) {
-	//		$scope.Install.Installing = response.data.Installing;
-	//		$scope.Install.Progress.Current = response.data.Current;
-	//		$scope.Install.Progress.Total = response.data.Total;
-	//		$scope.Install.Progress.CurrentFile = response.data.CurrentFile;
-	//	}, function(response) {
-	//		$scope.Install.Data = response.data;
-	//		$scope.Install.Installing = false;
-	//	});
-
-	//	$scope.Install.Complete = true;
-	//}
 
 	clear();
 	installActView();

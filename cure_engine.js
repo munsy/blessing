@@ -1,13 +1,7 @@
 const find = require('find');
 const ncp = require('ncp').ncp;
 const fs = require('fs');
-const http = require('http');
 const https = require('https');
-const cors = require('cors');
-const cp = require('cookie-parser');
-const bp = require('body-parser');
-const express = require('express');
-const web = express();
 const yauzl = require("yauzl");
 
 class CureData {
@@ -40,11 +34,66 @@ class CureData {
 class Cure {
   constructor() {
     this.Data = new CureData();
+  }
 
+  InstallAct() {
+    this.Data.Install.Installing = true;
+    response.send(this.Data.Install);
+
+    if (!fs.existsSync(this.Data.Path.CureTemp)) {
+      fs.mkdirSync(this.Data.Path.CureTemp);
+    }
+
+    const file = fs.createWriteStream(this.Data.Path.ActZip);
+    const req = https.get(this.Data.Path.ActDownloadURL, function(resp) {
+      resp.pipe(file);
+    });
+
+    if (!fs.existsSync(this.Data.Path.ActDefault)) {
+      fs.mkdirSync(this.Data.Path.ActDefault);
+    }
+
+    var err = {};
+    handleZipFile(this.Data, err, file);
+
+    fs.readdir(this.Data.Path.CureTemp, function (err, files) {
+        if (err) {
+          let e = new Error('Not Found');
+          e.status = 404;
+          response.statusCode = 404;
+          response.end();
+        } 
+        for(var i = 0; i < files.length; i++) {
+          console.log(files[i]);
+          console.log(this.Data.Path.CureTemp + "\\" + files[i]);
+          // Do whatever you want to do with the file
+          if(files[i] === "act.zip") {
+            continue;
+          }
+          ncp(this.Data.Path.CureTemp + "\\" + files[i], this.Data.Path.ActPath, function (err) {
+            if (err) {
+              let e = new Error('Not Found');
+              e.status = 404;
+              response.statusCode = 404;
+              response.end();
+            }
+          }); 
+        }
+      });
+
+      this.Data.Install.Installing = false;
+    }
+
+  Unzip() {
     function mkdirp(dir, cb) {
-      if (dir === ".") return cb();
+      if (dir === ".") { 
+        return cb(); 
+      }
+
       fs.stat(dir, function(err) {
-        if (err == null) return cb(); // already exists
+        if (err == null) {
+          return cb();
+        }
 
         var parent = path.dirname(dir);
         mkdirp(parent, function() {
@@ -166,94 +215,5 @@ class Cure {
     }
   }
 }
-  // web.use(bp.json());
-  // web.use(bp.urlencoded({ extended: false }));
-  // web.use(cp());
-  // web.use(cors());
-    
-  // web.get('/search', function(request, response) {
-  //   let filesArr = {};
-  //   find.file(/\.html$/, Data.Path.Act, function(files) {
-  //     filesArr = files;
-  //     response.send(filesArr);
-  //     return;
-  //   })
-  //   .error(function(err) {
-  //     let e = new Error('Not Found');
-  //     e.status = 404;
-  //     response.statusCode = 404;
-  //     response.end();
-  //   });
-  // });
-  // 
-  // web.get('/install/act/start', function(request, response) {
-  //   Data.Install.Installing = true;
-  //   response.send(Data.Install);
-
-  //   if (!fs.existsSync(Data.Path.CureTemp)) {
-  //     fs.mkdirSync(Data.Path.CureTemp);
-  //   }
-  
-  //   const file = fs.createWriteStream(Data.Path.ActZip);
-  //   const req = https.get(Data.Path.ActDownloadURL, function(resp) {
-  //     resp.pipe(file);
-  //   });
-
-  //   if (!fs.existsSync(Data.Path.ActDefault)) {
-  //     fs.mkdirSync(Data.Path.ActDefault);
-  //   }
-
-  //   var err = {};
-
-  //   handleZipFile(Data, err, file);
-
-  //   console.log("Data.Path.CureTemp: " + Data.Path.CureTemp);
-
-  //   fs.readdir(Data.Path.CureTemp, function (err, files) {
-  //     if (err) {
-  //       let e = new Error('Not Found');
-  //       e.status = 404;
-  //       response.statusCode = 404;
-  //       response.end();
-  //     } 
-  //     for(var i = 0; i < files.length; i++) {
-  //       console.log(files[i]);
-  //       console.log(Data.Path.CureTemp + "\\" + files[i]);
-  //       // Do whatever you want to do with the file
-  //       if(files[i] === "act.zip") {
-  //         continue;
-  //       }
-  //       ncp(Data.Path.CureTemp + "\\" + files[i], Data.Path.ActPath, function (err) {
-  //         if (err) {
-  //           let e = new Error('Not Found');
-  //           e.status = 404;
-  //           response.statusCode = 404;
-  //           response.end();
-  //         }
-  //       }); 
-  //     }
-  //   });
-
-  //   Data.Install.Installing = false;
-  // });
-
-  //  web.get('/install/act/progress', function(request, response) {
-  //    response.send(Data.Install);
-  //  });
-  //  
-  //  web.use(function(request, response, next) {
-  //    let err = new Error('Not Found');
-  //    err.status = 404;
-  //  });
-  //  
-  //  web.set('port', this.Engine.Http.port);
-    
-  //  this.Engine.Http.server = http.createServer(web);
-  // }
-
-  // Listen() {
-  //   this.Engine.Http.server.listen(this.Engine.Http.port);
-  // }
-  // }
 
 module.exports = Cure;
