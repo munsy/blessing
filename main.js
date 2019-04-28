@@ -57,18 +57,17 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-const Cure = require('./cure_engine');
+const Cure = require('./js/cure/engine/cure');
 const cure = new Cure(8080);
-//cure.Listen();
 
 let count = 0;
 
 ipcMain.on('install-act', (event, data) => {
   if(event === 'start') {
     cure.Install.Start();
-    event.sender.send('install-status-reply', cure.Install.Status); 
+    event.sender.send('install-status-reply', cure.Data.Install.Status); 
   }
   if(event === 'status') {
-    event.sender.send('install-status-reply', cure.Install.Status);    
+    event.sender.send('install-status-reply', cure.Data.Install.Status);    
   }
 });

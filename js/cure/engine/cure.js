@@ -1,39 +1,13 @@
+const data = require('./data');
 const find = require('find');
-const ncp = require('ncp').ncp;
 const fs = require('fs');
 const https = require('https');
-const yauzl = require("yauzl");
-
-class CureData {
-  constructor() {
-    this.Path = {};
-    this.Path.CureDefault = process.env.APPDATA + "\\cure";
-    this.Path.CureTemp = "";
-    this.Path.CureTemp = this.Path.CureDefault + "\\.temp";
-    this.Path.ActDefault = "C:\\Advanced Combat Tracker";
-    this.Path.Act = "";
-    this.Path.Act = this.Path.ActDefault;
-    this.Path.ActZip = this.Path.CureTemp + "\\act.zip"
-    this.Path.ActDownloadURL = "https://advancedcombattracker.com/includes/page-download.php?id=57"
-
-    this.Install = {};
-    this.Install.ErrData = {}
-    this.Install.Error = false;
-    this.Install.Act = false;
-    this.Install.Addon = false;
-    this.Install.Installing = false;
-  
-    this.Install.Progress = {};
-    this.Install.Progress.CurrentFile = "";
-    this.Install.Progress.TotalFiles = 0;
-    this.Install.Progress.Current = 0;
-    this.Install.Progress.Total = 0;
-  }
-}
+const ncp = require('ncp').ncp;
+const yauzl = require('yauzl');
 
 class Cure {
   constructor() {
-    this.Data = new CureData();
+    this.Data = new data();
   }
 
   InstallAct() {
@@ -57,32 +31,32 @@ class Cure {
     handleZipFile(this.Data, err, file);
 
     fs.readdir(this.Data.Path.CureTemp, function (err, files) {
-        if (err) {
-          let e = new Error('Not Found');
-          e.status = 404;
-          response.statusCode = 404;
-          response.end();
-        } 
-        for(var i = 0; i < files.length; i++) {
-          console.log(files[i]);
-          console.log(this.Data.Path.CureTemp + "\\" + files[i]);
-          // Do whatever you want to do with the file
-          if(files[i] === "act.zip") {
-            continue;
-          }
-          ncp(this.Data.Path.CureTemp + "\\" + files[i], this.Data.Path.ActPath, function (err) {
-            if (err) {
-              let e = new Error('Not Found');
-              e.status = 404;
-              response.statusCode = 404;
-              response.end();
-            }
-          }); 
+      if (err) {
+        let e = new Error('Not Found');
+        e.status = 404;
+        response.statusCode = 404;
+        response.end();
+      } 
+      for(var i = 0; i < files.length; i++) {
+        console.log(files[i]);
+        console.log(this.Data.Path.CureTemp + "\\" + files[i]);
+        // Do whatever you want to do with the file
+        if(files[i] === "act.zip") {
+          continue;
         }
-      });
+        ncp(this.Data.Path.CureTemp + "\\" + files[i], this.Data.Path.ActPath, function (err) {
+          if (err) {
+            let e = new Error('Not Found');
+            e.status = 404;
+            response.statusCode = 404;
+            response.end();
+          }
+        }); 
+      }
+    });
 
-      this.Data.Install.Installing = false;
-    }
+    this.Data.Install.Installing = false;
+  }
 
   Unzip() {
     function mkdirp(dir, cb) {
@@ -105,9 +79,9 @@ class Cure {
 
     function handleZipFile(Data, err, zipfile) {
       if (err) {
-        Data.Install.Installing = false;
-        Data.Install.Error = true;
-        Data.Install.ErrData = err;
+        this.Data.Install.Installing = false;
+        this.Data.Install.Error = true;
+        this.Data.Install.ErrData = err;
         return
       }
 
@@ -115,7 +89,7 @@ class Cure {
       var handleCount = 0;
 
       function incrementHandleCount() {
-        Data.Install.Progress.TotalFiles++;
+        this.Data.Install.Progress.TotalFiles++;
         handleCount++;
       }
       
@@ -135,14 +109,14 @@ class Cure {
       zipfile.readEntry();
       
       zipfile.on("entry", function(entry) {
-        Data.Install.Progress.CurrentFile = entry.fileName;
+        this.Data.Install.Progress.CurrentFile = entry.fileName;
         if (/\/$/.test(entry.fileName)) {
           // directory file names end with '/'
           mkdirp(entry.fileName, function() {
             if (err){
-              Data.Install.Installing = false;
-              Data.Install.Error = true;
-              Data.Install.ErrData = err;
+              this.Data.Install.Installing = false;
+              this.Data.Install.Error = true;
+              this.Data.Install.ErrData = err;
               return
             }
             zipfile.readEntry();
@@ -152,9 +126,9 @@ class Cure {
           mkdirp(path.dirname(entry.fileName), function() {
             zipfile.openReadStream(entry, function(err, readStream) {
               if (err){
-                Data.Install.Installing = false;
-                Data.Install.Error = true;
-                Data.Install.ErrData = err;
+                this.Data.Install.Installing = false;
+                this.Data.Install.Error = true;
+                this.Data.Install.ErrData = err;
                 return
               }
               // report progress through large files
