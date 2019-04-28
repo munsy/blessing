@@ -15,7 +15,9 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.Count = 0;
 
 	ipc.on('install-status-reply', (event, data) => {
-		if(data.Installing) {
+		if(data) {
+			console.log('reply:');
+			console.log(data);
 			$scope.Install.Progress.Current = data.Current;
 			$scope.Install.Progress.Total = data.Total;
 			$scope.Install.Progress.CurrentFile = data.CurrentFile;
@@ -72,9 +74,11 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 	$scope.StartInstall = function(progName) {
 		if($location.path() != "/install/" + progName) {
+			console.log('bad path');
 			return;
 		}
 		if($scope.Install.Installing) {
+			console.log('already installing');
 			return;
 		}
 
@@ -84,7 +88,10 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 		reset();
 
+		console.log('starting');
+		$scope.Install.Installing = true;
 		ipc.send('install-' + progName, 'start');
+		console.log('started');
 	};
 
 	clear();

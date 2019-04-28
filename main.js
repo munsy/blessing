@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Turn off the menu.
   mainWindow.setMenu(null)
@@ -64,15 +64,29 @@ ipcMain.on('find-act', (event, data) => {
   event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act()));
 });
 
-ipcMain.on('install-act', (event, data) => {
-  if(event === 'start') {
-    cure.Installer.Installing = true;
-    event.sender.send('install-start-reply', cure.Installer);
+ipcMain.on('find-fxiv-parsing-plugin', (event, data) => {
+  event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act()));
+});
 
-  } else if(event === 'cancel') {
+ipcMain.on('install-act', (event, data) => {
+  if(data === 'start') {
+    cure.Installer.Installing = true;
+
+    cure.Installer.CurrentMessage = "Downloading ACT";
+    event.sender.send('install-start-reply', cure.Installer);
+    cure.DownloadAct(event);
+
+    cure.Installer.CurrentMessage = "Installing ACT";
+    event.sender.send('install-status-reply', cure.Installer);
+    cure.InstallAct(event);
+
+    cure.Installer.CurrentMessage = "Install Complete";
     cure.Installer.Installing = false;
-    event.sender.send('install-stop-reply', cure.Installer);
-  } else if(event === 'status') {
+    event.sender.send('install-status-reply', cure.Installer);
+  } else if(data === 'cancel') {
+    cure.Installer.Installing = false;
+    event.sender.send('install-cancel-reply', cure.Installer);
+  } else if(data === 'status') {
     event.sender.send('install-status-reply', cure.Installer);
   } else {
     event.sender.send('install-error-reply', cure.Error);

@@ -6,11 +6,15 @@ class CureInstaller {
     this.Addon = false;
     this.Installing = false;
   
-    this.Progress = {};
-    this.Progress.CurrentFile = "";
-    this.Progress.TotalFiles = 0;
-    this.Progress.Current = 0;
-    this.Progress.Total = 0;
+    this.Status = {};
+    this.Status.Step = 0;
+    this.Status.CurrentMessage = "";
+
+    this.Status.Progress = {};
+    this.Status.Progress.CurrentFile = "";
+    this.Status.Progress.TotalFiles = 0;
+    this.Status.Progress.Current = 0;
+    this.Status.Progress.Total = 0;
   }
 }
 

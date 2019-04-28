@@ -18,16 +18,18 @@ class Cure {
     return fs.existsSync(path);
   }
 
-  InstallAct() {
+  DownloadAct() {
     if (!fs.existsSync(this.Paths.CureTemp)) {
       fs.mkdirSync(this.Paths.CureTemp);
     }
-
+    console.log(this.Paths.ActZip);
     const file = fs.createWriteStream(this.Paths.ActZip);
     const req = https.get(this.Paths.ActDownloadURL, function(resp) {
       resp.pipe(file);
     });
+  }
 
+  InstallAct(event) {
     if (!fs.existsSync(this.Paths.ActDefault)) {
       fs.mkdirSync(this.Paths.ActDefault);
     }
@@ -36,17 +38,13 @@ class Cure {
     Unzip(this.Data, err, file);
 
     fs.readdir(this.Paths.CureTemp, function (err, files) {
-      // FIX
       if (err) {
-        let e = new Error('Not Found');
-        e.status = 404;
-        response.statusCode = 404;
-        response.end();
-      } 
+        cb();
+      }
       for(var i = 0; i < files.length; i++) {
         console.log(files[i]);
         console.log(this.Paths.CureTemp + "\\" + files[i]);
-        
+
         if(files[i] === "act.zip") {
           continue;
         }
@@ -61,8 +59,6 @@ class Cure {
         }); 
       }
     });
-
-    this.Data.Install.Installing = false;
   }
 
   MkDirP(dir, cb) {
@@ -80,12 +76,10 @@ class Cure {
     });
   }
 
-  Unzip(zipfile) {
-    function handleZipFile(Data, err, zipfile) {
+  Unzip(zipfile, cb) {
+    function handleZipFile(zipfile, err) {
       if (err) {
-        this.Data.Install.Installing = false;
-        this.Data.Install.Error = true;
-        this.Data.Install.ErrData = err;
+        cb();
         return;
       }
 
@@ -113,14 +107,11 @@ class Cure {
       zipfile.readEntry();
       
       zipfile.on("entry", function(entry) {
-        this.Data.Install.Progress.CurrentFile = entry.fileName;
         if (/\/$/.test(entry.fileName)) {
           // directory file names end with '/'
           mkdirp(entry.fileName, function() {
             if (err){
-              this.Data.Install.Installing = false;
-              this.Data.Install.Error = true;
-              this.Data.Install.ErrData = err;
+              cb();
               return;
             }
             zipfile.readEntry();
@@ -130,9 +121,7 @@ class Cure {
           mkdirp(path.dirname(entry.fileName), function() {
             zipfile.openReadStream(entry, function(err, readStream) {
               if (err) {
-                this.Data.Install.Installing = false;
-                this.Data.Install.Error = true;
-                this.Data.Install.ErrData = err;
+                cb();
                 return;
               }
               // report progress through large files
