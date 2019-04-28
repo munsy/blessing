@@ -14,12 +14,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 
 	$scope.Count = 0;
 
-	ipc.on('countReply', (event, data) => {
-		$scope.Count = data;
-		$scope.$apply();
-	});
-
-	ipc.on('install-status', (event, data) => {
+	ipc.on('install-status-reply', (event, data) => {
 		if(data.Installing) {
 			$scope.Install.Progress.Current = data.Current;
 			$scope.Install.Progress.Total = data.Total;
@@ -28,10 +23,6 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		$scope.Install.Installing = data.Installing;
 		$scope.$apply();
 	});
-
-	$scope.PlusPlus = function() {
-		ipc.send('count');
-	};
 
 	const clear = function() {
 		$scope.Install.Act = false;

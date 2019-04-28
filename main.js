@@ -63,11 +63,8 @@ const cure = new Cure(8080);
 
 let count = 0;
 
-ipcMain.on('count', (event, data) => {
-  while(count < 100) {
-    count++;
-    event.sender.send('countReply', count);    
+ipcMain.on('install-act', (event, data) => {
+  if(event === 'status') {
+    event.sender.send('install-status-reply', count);    
   }
-
-  count = 0;
 });
