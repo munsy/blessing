@@ -57,12 +57,14 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-ipcMain.on('getFiles', (event, arg) => {
-  const files = fs.readdirSync(__dirname)
-  win.webContents.send('getFilesResponse', files)
-})
-
 const Cure = require('./cure_engine');
 const cure = new Cure(8080);
-cure.Listen();
+//cure.Listen();
+
+ipcMain.on('count', (event, data) => {
+  console.log('event:\n' + event + '\ndata:\n' + data);
+  //do child process or other data manipulation and name it manData
+  data++;
+
+  event.sender.send('countReply', data);
+});

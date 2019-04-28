@@ -1,5 +1,3 @@
-const { ipcRenderer } = require('electron');
-
 angular.module('cure').controller("installController", ['$scope', '$http', '$cookies', '$location', function($scope, $http, $cookies, $location) {
 	$scope.Install = {};
 	$scope.Install.Error = false;
@@ -14,18 +12,29 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 	$scope.Install.Progress.Current = 0;
 	$scope.Install.Progress.Total = 0;
 
+	$scope.Count = 0;
+
+	ipc.on('countReply', (event, data) => { 
+		console.log('event:\n' + event + '\ndata:\n' + data);
+		$scope.Count = data;
+	});
+
+	$scope.PlusPlus = function() {
+		ipc.send('count', $scope.Count);
+	}
+
 	const clear = function() {
 		$scope.Install.Act = false;
 		$scope.Install.Addon = false;
 		$scope.Install.Installing = false;
 		$scope.Install.Complete = false;
-	}
+	};
 
 	const reset = function() {
 		$scope.Install.Progress.CurrentFile = "";
 		$scope.Install.Progress.Current = 0;
 		$scope.Install.Progress.Total = 0;
-	}
+	};
 
 	const installActView = function() {
 		if($location.path() != "/install/act") {
@@ -58,7 +67,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		clear();
 		installActView();
 		installAddonView();
-	}
+	};
 
 	$scope.StartInstall = function(progName) {
 		if($location.path() != "/install/" + progName) {
@@ -89,7 +98,7 @@ angular.module('cure').controller("installController", ['$scope', '$http', '$coo
 		while($scope.Install.Installing) {
 			ipcRenderer.sendSync('install-act', 'status');
 		}
-	}
+	};
 
 	//$scope.CheckInstall = function(progName) {
 	//	if(!$scope.Install.Installing) {

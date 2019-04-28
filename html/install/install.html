@@ -19,6 +19,8 @@
         <br>
         <div ng-show="Install.Act && !Install.Installing && !Install.Complete">
           <button type="submit" ng-click="StartInstall('act')" class="btn btn-primary">Start Install</button><br>
+          <button type="submit" ng-click="PlusPlus()" class="btn btn-primary">Plus Plus</button><br>
+          <div ng-bind="Count"></div><br>
         </div>
         <div ng-show="Install.Addon && !Install.Installing && !Install.Complete">
           <button type="submit" ng-click="StartInstall('addon')" class="btn btn-primary">Start Install</button><br>

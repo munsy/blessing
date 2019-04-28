@@ -1,3 +1,5 @@
+const ipc = require('electron').ipcRenderer;
+
 var app = angular.module('cure', ['ngRoute', 'ngCookies']);
 
 app.config(function($routeProvider, $locationProvider) {
