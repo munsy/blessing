@@ -64,7 +64,11 @@ const cure = new Cure(8080);
 let count = 0;
 
 ipcMain.on('install-act', (event, data) => {
+  if(event === 'start') {
+    cure.Install.Start();
+    event.sender.send('install-status-reply', cure.Install.Status); 
+  }
   if(event === 'status') {
-    event.sender.send('install-status-reply', count);    
+    event.sender.send('install-status-reply', cure.Install.Status);    
   }
 });
