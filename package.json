@@ -17,11 +17,11 @@
   "author": "Munsy",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.0.7"
+    "electron": "^4.1.5"
   },
   "dependencies": {
     "@angular/cli": "^7.3.8",
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "~4.16.4",
