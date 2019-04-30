@@ -57,43 +57,6 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-<<<<<<< HEAD
-const Cure = require('./js/cure/engine/cure');
-const cure = new Cure();
-
-ipcMain.on('find-act', (event, data) => {
-  event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act()));
-});
-
-ipcMain.on('find-fxiv-parsing-plugin', (event, data) => {
-  event.sender.send('find-act-reply', cure.IsInstalled(cure.Paths.Act()));
-});
-
-ipcMain.on('install-act', (event, data) => {
-  if(data === 'start') {
-    cure.Installer.Installing = true;
-
-    cure.Installer.CurrentMessage = "Downloading ACT";
-    event.sender.send('install-start-reply', cure.Installer);
-    cure.DownloadAct(event);
-
-    cure.Installer.CurrentMessage = "Installing ACT";
-    event.sender.send('install-status-reply', cure.Installer);
-    cure.InstallAct(event);
-
-    cure.Installer.CurrentMessage = "Install Complete";
-    cure.Installer.Installing = false;
-    event.sender.send('install-status-reply', cure.Installer);
-  } else if(data === 'cancel') {
-    cure.Installer.Installing = false;
-    event.sender.send('install-cancel-reply', cure.Installer);
-  } else if(data === 'status') {
-    event.sender.send('install-status-reply', cure.Installer);
-  } else {
-    event.sender.send('install-error-reply', cure.Error);
-  }
-});
-=======
 //
 // const Cure = require('./js/cure/engine/cure');
 // const cure = new Cure();
@@ -130,4 +93,4 @@ ipcMain.on('install-act', (event, data) => {
 //     event.sender.send('install-error-reply', cure.Error);
 //   }
 // });
->>>>>>> master
+
