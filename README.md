@@ -1,6 +1,6 @@
-# Cure7
+# Cure
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+Addon and dependency manager for Final Fantasy XIV: A Realm Reborn.
 
 ## Development server
 
