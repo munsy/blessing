@@ -1,0 +1,47 @@
+<div *ngIf="!actInstalled">
+  It looks like ACT isn't installed.<br />
+  <br />
+  <button type="submit" class="btn btn-outline-primary">Manually Locate ACT</button>
+  &nbsp;&nbsp;
+  <button type="submit" class="btn btn-outline-primary">Install Act</button>
+  <br>
+</div>
+<div *ngIf="actInstalled" class="bg-white">
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-outline-primary">Refresh</button>
+      &nbsp;
+      <button type="submit" class="btn btn-outline-primary">Update All</button>
+      &nbsp;
+      <button type="submit" class="btn btn-outline-primary">Delete</button>
+    </div>
+    <div class="col" align="right">
+      {{ installLocation }} &nbsp;
+      <button type="submit" class="btn btn-outline-primary">Change Location</button>
+    </div>
+  </div>
+  <div class="row bg-light">
+    <div class="col">&nbsp;</div>
+  </div>
+  <div class="row bg-light">
+    <div class="col">&nbsp;</div>
+    <div class="col">Addon</div>
+    <div class="col">Status</div>
+    <div class="col">Latest Version</div>
+    <div class="col">Game Version</div>
+    <div class="col">Author</div>
+  </div>
+  <div *ngFor="let addon of addons">
+    <div class="row">
+      <div class="col">{{ addon.icon }}</div>
+      <div class="col">{{ addon.addonName }}</div>
+      <div class="col" *ngIf="addon.needsUpdate && !addon.recentlyUpdated"><button type="submit" class="btn btn-outline-info">Update</button></div>
+      <div class="col" *ngIf="!addon.needsUpdate && addon.recentlyUpdated">Recently Updated</div>
+      <div class="col" *ngIf="!addon.needsUpdate && !addon.recentlyUpdated">Up to Date</div>
+      <div class="col" *ngIf="addon.needsUpdate && addon.recentlyUpdated">Error</div>
+      <div class="col">{{ addon.latestVersion }}</div>
+      <div class="col">{{ addon.gameVersion }}</div>
+      <div class="col">{{ addon.author }}</div>
+    </div>
+  </div>
+</div>

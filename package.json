@@ -12,7 +12,8 @@
     "angular 7",
     "electron",
     "typescript",
-    "sass"
+    "sass",
+    "cure"
   ],
   "main": "main.js",
   "private": true,

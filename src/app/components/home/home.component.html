@@ -1,21 +1,14 @@
 <div class="container">
   <div>
-    <h1>{{ 'PAGES.TITLE' | translate }}</h1>
-    <div *ngIf="!actFound">
-      <h1>ACT Not Found! :(</h1>
-      It looks like ACT isn't installed on your computer.<br />
-      <br />
-      <button type="submit" class="btn btn-primary">Manually Locate ACT</button>
-      <button type="submit" class="btn btn-primary">Install Act</button>
+    <div *ngIf="!online">
+      <h1>Unable to connect.</h1>
+      <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
+      &nbsp;&nbsp;
+      <button type="submit" (click)="''" class="btn btn-outline-primary">Offline Mode</button>
       <br>
     </div>
-    <div *ngIf="actFound">
-      <h1>Loaded!</h1>
-      <br>
-      The following addons were found:<br>
-      <br><br>
-      <button type="submit" class="btn btn-primary">Install New Addon</button>
-      <br>
+    <div *ngIf="online">
+      <app-installed></app-installed>
     </div>
   </div>
 </div>
