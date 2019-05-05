@@ -1,5 +1,34 @@
 <div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
+  <div>
+    <div>
+      <h1>
+	  {{ 'PAGES.HOME.TITLE' | translate }}
+	  </h1>
+      <h1>Loading...</h1>
+      <svg class="progress-circular progress-circular--material progress-circular--indeterminate">
+        <circle class="progress-circular__background progress-circular--material__background" />
+        <circle class="progress-circular__primary progress-circular--material__primary progress-circular--indeterminate__primary" />
+        <circle class="progress-circular__secondary progress-circular--material__secondary progress-circular--indeterminate__secondary" />
+      </svg>
+    </div>
+
+    <div>
+      <h1>ACT Not Found! :(</h1>
+      It looks like ACT isn't installed on your computer.<br />
+      <br />
+      <button type="submit" class="btn btn-primary">Retry</button>
+      <button type="submit" class="btn btn-primary">Manually Locate ACT</button>
+      <button type="submit" class="btn btn-primary">Install Act</button>
+      <br>
+    </div>
+
+    <div>
+      <h1>Loaded!</h1>
+      <br>
+      The following addons were found:<br>
+      <br><br>
+      <button type="submit" class="btn btn-primary">Install New Addon</button>
+      <br>
+    </div>
+  </div>
 </div>
