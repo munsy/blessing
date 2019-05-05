@@ -1,23 +1,26 @@
 <div *ngIf="!actInstalled">
-  It looks like ACT isn't installed.<br />
-  <br />
-  <button type="submit" class="btn btn-outline-primary">Manually Locate ACT</button>
-  &nbsp;&nbsp;
-  <button type="submit" class="btn btn-outline-primary">Install Act</button>
-  <br>
+  <div class="row bg-light">
+    <div class="col" align="center">
+      It looks like ACT isn't installed.
+    </div>
+  </div>
+  <div class="row bg-light" align="center">
+    <div class="col">&nbsp;</div>
+    <div class="col">&nbsp;</div>
+    <div class="col"><button type="submit" class="btn btn-outline-primary">Manually Locate ACT</button></div>
+    <div class="col"><button type="submit" class="btn btn-outline-primary">Install Act</button></div>
+    <div class="col">&nbsp;</div>
+    <div class="col">&nbsp;</div>
+  </div>
 </div>
 <div *ngIf="actInstalled" class="bg-white">
   <div class="row">
     <div class="col">
-      <button type="submit" class="btn btn-outline-primary">Refresh</button>
+      <button type="submit" (click)="''" class="btn btn-outline-primary">Refresh</button>
       &nbsp;
-      <button type="submit" class="btn btn-outline-primary">Update All</button>
+      <button type="submit" (click)="updateAll()" class="btn btn-outline-primary">Update All</button>
       &nbsp;
       <button type="submit" class="btn btn-outline-primary">Delete</button>
-    </div>
-    <div class="col" align="right">
-      {{ installLocation }} &nbsp;
-      <button type="submit" class="btn btn-outline-primary">Change Location</button>
     </div>
   </div>
   <div class="row bg-light">
