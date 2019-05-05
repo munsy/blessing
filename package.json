@@ -1,11 +1,11 @@
 {
-  "name": "angular-electron",
+  "name": "cure",
   "version": "5.1.0",
-  "description": "Angular 7 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "description": "Addon and dependency manager for Final Fantasy: A Realm Reborn.",
+  "homepage": "https://github.com/nomaddevs/cure",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Munsy",
+    "email": "bigheinousanus@gmail.com"
   },
   "keywords": [
     "angular",
