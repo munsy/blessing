@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Addon } from '../../addon';
 
 @Component({
-  selector: 'app-installed',
-  templateUrl: './installed.component.html',
-  styleUrls: ['./installed.component.scss']
+  selector: 'app-addons',
+  templateUrl: './addons.component.html',
+  styleUrls: ['./addons.component.scss']
 })
-export class InstalledComponent implements OnInit {
+export class AddonsComponent implements OnInit {
   public addons: Array<Addon>;
   public actInstalled = true
   public installLocation = "C:\\Users\\Munsy\\Cure\\ACT"

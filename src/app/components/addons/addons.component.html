@@ -1,0 +1,50 @@
+<div *ngIf="!actInstalled">
+  <div class="row bg-light">
+    <div class="col" align="center">
+      It looks like ACT isn't installed.
+    </div>
+  </div>
+  <div class="row bg-light" align="center">
+    <div class="col">&nbsp;</div>
+    <div class="col">&nbsp;</div>
+    <div class="col"><button type="submit" class="btn btn-outline-primary">Manually Locate ACT</button></div>
+    <div class="col"><button type="submit" class="btn btn-outline-primary">Install Act</button></div>
+    <div class="col">&nbsp;</div>
+    <div class="col">&nbsp;</div>
+  </div>
+</div>
+<div *ngIf="actInstalled" class="bg-white">
+  <div class="row bg-white border border-light">
+    <div class="col">
+      <button type="submit" routerLink="/addons" class="btn btn-outline-primary">Refresh</button>
+      &nbsp;
+      <button type="submit" (click)="updateAll()" class="btn btn-outline-primary">Update All</button>
+      &nbsp;
+      <button type="submit" (click)="deleteAddon()" class="btn btn-outline-primary">Delete</button>
+    </div>
+  </div>
+  <div class="row bg-light border border-light">
+    <div class="col">&nbsp;</div>
+  </div>
+  <div class="row bg-white border border-light">
+    <div class="col-md-2 bg-white border border-light">&nbsp;</div>
+    <div class="col-md-2 bg-white border border-light">Addon</div>
+    <div class="col-md-2 bg-white border border-light">Status</div>
+    <div class="col-md-2 bg-white border border-light">Latest Version</div>
+    <div class="col-md-2 bg-white border border-light">Game Version</div>
+    <div class="col-md-2 bg-white border border-light">Author</div>
+  </div>
+  <div *ngFor="let addon of addons">
+    <div class="row border border-light">
+      <div class="col-md-2 bg-white">{{ addon.icon }}</div>
+      <div class="col-md-2 bg-white">{{ addon.addonName }}</div>
+      <div class="col-md-2 bg-white" *ngIf="addon.needsUpdate && !addon.recentlyUpdated"><button type="submit" class="btn btn-outline-info p-1">Update</button></div>
+      <div class="col-md-2 bg-white" *ngIf="!addon.needsUpdate && addon.recentlyUpdated">Recently Updated</div>
+      <div class="col-md-2 bg-white" *ngIf="!addon.needsUpdate && !addon.recentlyUpdated">Up to Date</div>
+      <div class="col-md-2 bg-white" *ngIf="addon.needsUpdate && addon.recentlyUpdated">Error</div>
+      <div class="col-md-2 bg-white">{{ addon.latestVersion }}</div>
+      <div class="col-md-2 bg-white">{{ addon.gameVersion }}</div>
+      <div class="col-md-2 bg-white">{{ addon.author }}</div>
+    </div>
+  </div>
+</div>

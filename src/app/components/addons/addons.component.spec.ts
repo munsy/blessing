@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InstalledComponent } from './installed.component';
+import { AddonsComponent } from './addons.component';
 import { TranslateModule } from '@ngx-translate/core';
 
-describe('InstalledComponent', () => {
-  let component: InstalledComponent;
-  let fixture: ComponentFixture<InstalledComponent>;
+describe('AddonsComponent', () => {
+  let component: AddonsComponent;
+  let fixture: ComponentFixture<AddonsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InstalledComponent ],
+      declarations: [ AddonsComponent ],
       imports: [
         TranslateModule.forRoot()
       ]
@@ -18,7 +18,7 @@ describe('InstalledComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InstalledComponent);
+    fixture = TestBed.createComponent(AddonsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

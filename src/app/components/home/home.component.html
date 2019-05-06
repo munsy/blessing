@@ -1,14 +1,12 @@
-<div class="container">
-  <div>
-    <div *ngIf="!online">
-      <h1>Unable to connect.</h1>
-      <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
-      &nbsp;&nbsp;
-      <button type="submit" (click)="''" class="btn btn-outline-primary">Offline Mode</button>
-      <br>
-    </div>
-    <div *ngIf="online">
-      <app-installed></app-installed>
-    </div>
+<div>
+  <div *ngIf="!online">
+    <h1>Unable to connect.</h1>
+    <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
+    &nbsp;&nbsp;
+    <button type="submit" (click)="''" class="btn btn-outline-primary">Offline Mode</button>
+    <br>
+  </div>
+  <div *ngIf="online">
+    <app-act></app-act>
   </div>
 </div>
