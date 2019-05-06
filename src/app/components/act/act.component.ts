@@ -9,6 +9,8 @@ export class ActComponent implements OnInit {
   public actInstalled = true
   public installLocation = "C:\\Users\\Munsy\\Cure\\ACT"
 
+  target: boolean = true;
+
   constructor() {
   	
   }

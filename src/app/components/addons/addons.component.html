@@ -13,38 +13,48 @@
     <div class="col">&nbsp;</div>
   </div>
 </div>
-<div *ngIf="actInstalled" class="bg-white">
-  <div class="row bg-white border border-light">
+<div *ngIf="actInstalled">
+  <div class="row bg-primary border border-primary rounded-top">
+    <div class="col">&nbsp;</div>
+  </div>
+  <div class="row bg-primary border border-primary">
     <div class="col">
-      <button type="submit" routerLink="/addons" class="btn btn-outline-primary">Refresh</button>
+      <button type="submit" routerLink="/addons" class="btn btn-outline-light p-1">Refresh</button>
       &nbsp;
-      <button type="submit" (click)="updateAll()" class="btn btn-outline-primary">Update All</button>
+      <button type="submit" (click)="updateAll()" class="btn btn-outline-light p-1">Update All</button>
       &nbsp;
-      <button type="submit" (click)="deleteAddon()" class="btn btn-outline-primary">Delete</button>
+      <button type="submit" (click)="deleteAddon()" class="btn btn-outline-light p-1">Delete</button>
+    </div>
+  </div>
+  <div class="row bg-primary border border-primary rounded-bottom">
+    <div class="col">
+      &nbsp;
     </div>
   </div>
   <div class="row bg-light border border-light">
     <div class="col">&nbsp;</div>
   </div>
-  <div class="row bg-white border border-light">
-    <div class="col-md-2 bg-white border border-light">&nbsp;</div>
-    <div class="col-md-2 bg-white border border-light">Addon</div>
+  <div class="row bg-white border border-light rounded-top">
+    <div class="col-md-1 bg-white border border-light">&nbsp;</div>
+    <div class="col-md-3 bg-white border border-light">Addon</div>
     <div class="col-md-2 bg-white border border-light">Status</div>
     <div class="col-md-2 bg-white border border-light">Latest Version</div>
     <div class="col-md-2 bg-white border border-light">Game Version</div>
     <div class="col-md-2 bg-white border border-light">Author</div>
   </div>
   <div *ngFor="let addon of addons">
-    <div class="row border border-light">
-      <div class="col-md-2 bg-white">{{ addon.icon }}</div>
-      <div class="col-md-2 bg-white">{{ addon.addonName }}</div>
-      <div class="col-md-2 bg-white" *ngIf="addon.needsUpdate && !addon.recentlyUpdated"><button type="submit" class="btn btn-outline-info p-1">Update</button></div>
-      <div class="col-md-2 bg-white" *ngIf="!addon.needsUpdate && addon.recentlyUpdated">Recently Updated</div>
-      <div class="col-md-2 bg-white" *ngIf="!addon.needsUpdate && !addon.recentlyUpdated">Up to Date</div>
-      <div class="col-md-2 bg-white" *ngIf="addon.needsUpdate && addon.recentlyUpdated">Error</div>
-      <div class="col-md-2 bg-white">{{ addon.latestVersion }}</div>
-      <div class="col-md-2 bg-white">{{ addon.gameVersion }}</div>
-      <div class="col-md-2 bg-white">{{ addon.author }}</div>
-    </div>
+    <div class="row border border-light addon">
+      <div class="col-md-1" align="center">
+          <img class="list-item__thumbnail" src="http://placekitten.com/g/40/40">
+      </div>
+      <div class="col-md-3">{{ addon.addonName }}</div>
+      <div class="col-md-2" *ngIf="addon.needsUpdate && !addon.recentlyUpdated"><button type="submit" class="btn btn-outline-info p-1">Update</button></div>
+      <div class="col-md-2" *ngIf="!addon.needsUpdate && addon.recentlyUpdated">Recently Updated</div>
+      <div class="col-md-2" *ngIf="!addon.needsUpdate && !addon.recentlyUpdated">Up to Date</div>
+      <div class="col-md-2" *ngIf="addon.needsUpdate && addon.recentlyUpdated">Error</div>
+      <div class="col-md-2">{{ addon.latestVersion }}</div>
+      <div class="col-md-2">{{ addon.gameVersion }}</div>
+      <div class="col-md-2">{{ addon.author }}</div>
+    </div> 
   </div>
 </div>

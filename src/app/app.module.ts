@@ -3,10 +3,14 @@ import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'; 
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
+
+import { OnsenModule } from 'ngx-onsenui';
 
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -41,6 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    OnsenModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -52,7 +57,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
+  schemas: [
+      CUSTOM_ELEMENTS_SCHEMA,
+  ],
   providers: [ElectronService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

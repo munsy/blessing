@@ -14,5 +14,10 @@
   </div>
 </div>
 <div *ngIf="actInstalled" class="bg-white">
-  act component (not implemented yet)
+  (act component not implemented yet)<br>
+  https://stackoverflow.com/questions/46102851/electron-download-a-file-to-a-specific-location<br>
+  <br>
+  <div>
+    <ons-switch [value]="target" (change)="target = $event.target.checked"></ons-switch> {{target ? 'On' : 'Off'}}
+  </div>
 </div>
