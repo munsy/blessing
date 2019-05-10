@@ -1,0 +1,8 @@
+<div *ngIf="!overlay">
+  <h1>Overlay disabled.</h1>
+  <button type="submit" (click)="enableOverlay()" class="btn btn-outline-primary">Enable Overlay</button>
+</div>
+<div *ngIf="overlay">
+  <h1>Overlay enabled.</h1>
+  <button type="submit" (click)="disableOverlay()" class="btn btn-outline-primary">Disable Overlay</button>
+</div>

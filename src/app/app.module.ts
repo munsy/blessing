@@ -27,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
 
 import { ActComponent } from './components/act/act.component';
 import { AddonsComponent } from './components/addons/addons.component';
+import { OverlayComponent } from './components/overlay/overlay.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HeaderComponent,
     FooterComponent,
     ActComponent,
+    OverlayComponent,
     AddonsComponent,
     WebviewDirective
   ],

@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-let win, serve;
+let win, overlay, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -17,8 +17,6 @@ function createWindow() {
     y: 0,
     width: 1024, 
     height: 720,
-    //width: size.width,
-    //height: size.height,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -49,6 +47,45 @@ function createWindow() {
     win = null;
   });
 
+
+  // OVERLAY
+  overlay = new BrowserWindow({
+    x: 0,
+    y: 0,
+    width: size.width,
+    height: size.height,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
+
+  if (serve) {
+    overlay.loadURL(url.format({
+      pathname: path.join(__dirname, 'src/overlay.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  } else {
+    overlay.loadURL(url.format({
+      pathname: path.join(__dirname, 'src/overlay.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  }
+
+  overlay.setIgnoreMouseEvents(true);
+
+  // Emitted when the window is closed.
+  overlay.on('closed', () => {
+    // Dereference the window object, usually you would store window
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    overlay = null;
+  });
+  // /OVERLAY
 }
 
 try {
