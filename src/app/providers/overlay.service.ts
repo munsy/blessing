@@ -4,7 +4,7 @@ import { IpcRenderer } from 'electron'
 @Injectable({
   providedIn: 'root',
 })
-class FileService {
+export class OverlayService {
   private ipc: IpcRenderer
 
   constructor() {
@@ -19,12 +19,20 @@ class FileService {
     }
   }
 
-  async getFiles() {
-    return new Promise<string[]>((resolve, reject) => {
-      this.ipc.once("getFilesResponse", (event, arg) => {
+  async overlayOn() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.once("overlayOnResponse", (event, arg) => {
         resolve(arg);
       });
-      this.ipc.send("getFiles");
+      this.ipc.send("overlayOn");
+    });
+  }
+  async overlayOff() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.once("overlayOffResponse", (event, arg) => {
+        resolve(arg);
+      });
+      this.ipc.send("overlayOff");
     });
   }
 }

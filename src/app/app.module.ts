@@ -18,6 +18,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { ElectronService } from './providers/electron.service';
 
+import { OverlayService } from './providers/overlay.service';
+
 import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
@@ -62,7 +64,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   schemas: [
       CUSTOM_ELEMENTS_SCHEMA,
   ],
-  providers: [ElectronService],
+  providers: [ElectronService, OverlayService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

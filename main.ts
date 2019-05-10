@@ -1,6 +1,8 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+
+var fs = require('fs');
 
 let win, overlay, serve;
 const args = process.argv.slice(1);
@@ -15,8 +17,8 @@ function createWindow() {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: 1024, 
-    height: 720,
+    width: size.width,
+    height: size.height,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -46,46 +48,48 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+}
 
+function createOverlay() {
+  var electronScreen = screen;
+  var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
-  // OVERLAY
   overlay = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    webPreferences: {
-      nodeIntegration: true,
-    },
+      x: 0,
+      y: 0,
+      width: size.width,
+      height: size.height,
+      transparent: true,
+      frame: false,
+      alwaysOnTop: true,
+      webPreferences: {
+          nodeIntegration: true,
+      },
   });
-
   if (serve) {
-    overlay.loadURL(url.format({
-      pathname: path.join(__dirname, 'src/overlay.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-  } else {
-    overlay.loadURL(url.format({
-      pathname: path.join(__dirname, 'src/overlay.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
+      overlay.loadURL(url.format({
+          pathname: path.join(__dirname, 'src/overlay.html'),
+          protocol: 'file:',
+          slashes: true
+      }));
+  }
+  else {
+      overlay.loadURL(url.format({
+          pathname: path.join(__dirname, 'src/overlay.html'),
+          protocol: 'file:',
+          slashes: true
+      }));
   }
 
   overlay.setIgnoreMouseEvents(true);
 
   // Emitted when the window is closed.
-  overlay.on('closed', () => {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    overlay = null;
+  overlay.on('closed', function () {
+      // Dereference the window object, usually you would store window
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      overlay = null;
   });
-  // /OVERLAY
 }
 
 try {
@@ -94,6 +98,7 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
+  app.on('ready', createOverlay);
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -112,6 +117,28 @@ try {
     }
   });
 
+  ipcMain.on('getFiles', (event, arg) => {
+    const files = fs.readdirSync(__dirname);
+    win.webContents.send('getFilesResponse', files);
+  });
+
+  ipcMain.on('overlayOn', (event, arg) => {
+    if(overlay === null) {
+        createOverlay();
+        win.webContents.send('overlayOnResponse', true);          
+    } else {
+        win.webContents.send('overlayOnResponse', false);
+    }
+  });
+
+  ipcMain.on('overlayOff', (event, arg) => {
+    if(overlay !== null) {
+        overlay.close();
+        win.webContents.send('overlayOffResponse', true);          
+    } else {
+        win.webContents.send('overlayOffResponse', false);
+    }
+  });
 } catch (e) {
   // Catch Error
   // throw e;
