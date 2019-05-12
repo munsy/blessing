@@ -47,6 +47,9 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
+    if(overlay !== null) {
+      overlay.close();
+    }
   });
 }
 
@@ -66,14 +69,14 @@ function createOverlay() {
           nodeIntegration: true,
       },
   });
+
   if (serve) {
       overlay.loadURL(url.format({
           pathname: path.join(__dirname, 'src/overlay.html'),
           protocol: 'file:',
           slashes: true
       }));
-  }
-  else {
+  } else {
       overlay.loadURL(url.format({
           pathname: path.join(__dirname, 'src/overlay.html'),
           protocol: 'file:',
@@ -83,13 +86,14 @@ function createOverlay() {
 
   overlay.setIgnoreMouseEvents(true);
 
-  // Emitted when the window is closed.
   overlay.on('closed', function () {
-      // Dereference the window object, usually you would store window
-      // in an array if your app supports multi windows, this is the time
-      // when you should delete the corresponding element.
       overlay = null;
   });
+}
+
+function overlayStartup() {
+  createOverlay();
+  overlay.close();
 }
 
 try {
@@ -98,7 +102,8 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
-  app.on('ready', createOverlay);
+  app.on('ready', overlayStartup);
+  //app.on('ready', createOverlay);
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

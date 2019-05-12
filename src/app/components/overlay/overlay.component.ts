@@ -8,7 +8,7 @@ import { OverlayService } from '../../providers/overlay.service';
   styleUrls: ['./overlay.component.scss']
 })
 export class OverlayComponent implements OnInit {
-  overlay = true;
+  overlay = false;
 
   constructor(private overlayService: OverlayService) { }
 
