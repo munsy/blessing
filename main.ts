@@ -9,7 +9,6 @@ const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
 function createWindow() {
-
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -58,36 +57,36 @@ function createOverlay() {
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
   overlay = new BrowserWindow({
-      x: 0,
-      y: 0,
-      width: size.width,
-      height: size.height,
-      transparent: true,
-      frame: false,
-      alwaysOnTop: true,
-      webPreferences: {
-          nodeIntegration: true,
-      },
+    x: 0,
+    y: 0,
+    width: size.width,
+    height: size.height,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   if (serve) {
-      overlay.loadURL(url.format({
-          pathname: path.join(__dirname, 'src/overlay.html'),
-          protocol: 'file:',
-          slashes: true
-      }));
+    overlay.loadURL(url.format({
+      pathname: path.join(__dirname, 'src/overlay.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   } else {
-      overlay.loadURL(url.format({
-          pathname: path.join(__dirname, 'src/overlay.html'),
-          protocol: 'file:',
-          slashes: true
-      }));
+    overlay.loadURL(url.format({
+      pathname: path.join(__dirname, 'dist/overlay.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   }
 
   overlay.setIgnoreMouseEvents(true);
 
   overlay.on('closed', function () {
-      overlay = null;
+    overlay = null;
   });
 }
 
@@ -129,19 +128,19 @@ try {
 
   ipcMain.on('overlayOn', (event, arg) => {
     if(overlay === null) {
-        createOverlay();
-        win.webContents.send('overlayOnResponse', true);          
+      createOverlay();
+      win.webContents.send('overlayOnResponse', true);          
     } else {
-        win.webContents.send('overlayOnResponse', false);
+      win.webContents.send('overlayOnResponse', false);
     }
   });
 
   ipcMain.on('overlayOff', (event, arg) => {
     if(overlay !== null) {
-        overlay.close();
-        win.webContents.send('overlayOffResponse', true);          
+      overlay.close();
+      win.webContents.send('overlayOffResponse', true);          
     } else {
-        win.webContents.send('overlayOffResponse', false);
+      win.webContents.send('overlayOffResponse', false);
     }
   });
 } catch (e) {
