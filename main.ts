@@ -3,6 +3,9 @@ import * as path from 'path';
 import * as url from 'url';
 
 var fs = require('fs');
+var Cap = require('cap').Cap;
+
+console.dir(Cap.deviceList());
 
 let win, overlay, serve;
 const args = process.argv.slice(1);
@@ -148,6 +151,7 @@ try {
   // throw e;
 }
 
+/*
 var Cap = require('cap').Cap;
 var decoders = require('cap').decoders;
 var PROTOCOL = decoders.PROTOCOL;
@@ -198,3 +202,4 @@ c.on('packet', function(nbytes, trunc) {
       console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
   }
 });
+*/
