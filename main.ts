@@ -151,13 +151,16 @@ try {
   // throw e;
 }
 
-/*
+
 var Cap = require('cap').Cap;
 var decoders = require('cap').decoders;
 var PROTOCOL = decoders.PROTOCOL;
 
 var c = new Cap();
-var device = Cap.findDevice('192.168.0.10');
+var device = Cap.findDevice('192.168.1.9');
+
+console.dir(device);
+
 var filter = 'tcp and dst port 80';
 var bufSize = 10 * 1024 * 1024;
 var buffer = Buffer.alloc(65535);
@@ -202,4 +205,3 @@ c.on('packet', function(nbytes, trunc) {
       console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
   }
 });
-*/
