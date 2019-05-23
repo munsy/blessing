@@ -83,6 +83,7 @@
     "zone.js": "0.8.29"
   },
   "dependencies": {
+    "cap": "^0.2.0",
     "find-process": "^1.4.1",
     "ngx-onsenui": "^7.0.0",
     "onsenui": "^2.10.8"
