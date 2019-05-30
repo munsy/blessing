@@ -12,7 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { OnsenModule } from 'ngx-onsenui';
 
-// NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -27,11 +26,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 
-import { ActComponent } from './components/act/act.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { AddonsComponent } from './components/addons/addons.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
 
-// AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -42,7 +40,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    ActComponent,
+    SettingsComponent,
     OverlayComponent,
     AddonsComponent,
     WebviewDirective
