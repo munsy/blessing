@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './components/home/home.component';
-import { ActComponent } from './components/act/act.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { AddonsComponent } from './components/addons/addons.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
 
@@ -12,8 +12,8 @@ const routes: Routes = [
         component: HomeComponent
     },
     {
-        path: 'act',
-        component: ActComponent
+        path: 'settings',
+        component: SettingsComponent
     },
     {
         path: 'addons',

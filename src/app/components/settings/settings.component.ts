@@ -11,7 +11,7 @@ export class SettingsComponent implements OnInit {
 
   constructor() {
     this.title = "Settings";
-  	this.installLocation =  = "C:\\Users\\Munsy\\Cure";
+  	this.installLocation = "C:\\Users\\Munsy\\Cure";
   }
 
   ngOnInit() { }
