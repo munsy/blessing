@@ -2,6 +2,8 @@
 
 Addon and dependency manager for Final Fantasy XIV: A Realm Reborn.
 
+This application is a work in progress with no planned deadline. It's ready when it's ready.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
