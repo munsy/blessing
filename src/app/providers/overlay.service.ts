@@ -27,6 +27,7 @@ export class OverlayService {
       this.ipc.send("overlayOn");
     });
   }
+  
   async overlayOff() {
     return new Promise<boolean>((resolve, reject) => {
       this.ipc.once("overlayOffResponse", (event, arg) => {

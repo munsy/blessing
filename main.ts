@@ -4,8 +4,9 @@ import * as url from 'url';
 
 var fs = require('fs');
 
-const cureAppIcon = './src/assets/images/cure-mini.jpg';
+const cureAppIcon = './src/assets/images/cure-mini.png';
 const cureAppName = 'Cure';
+const cureWebsite = 'https://github.com/nomaddevs/cure'
 
 let isQuitting = false;
 let win, tray, overlay, serve;
@@ -35,6 +36,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    titleBarStyle: 'hidden'
   });
 
   win.setMenu(null);
@@ -57,6 +59,8 @@ function createWindow() {
   // if (serve) {
   //   win.webContents.openDevTools();
   // }
+     win.webContents.openDevTools();
+  
 
   // Emitted when the window is closed.
   win.on('closed', (event) => {
@@ -133,6 +137,11 @@ function buildTray() {
     { label: 'Show App', click:  function(){
         win.show();
     } },
+    { label: 'Launch website', click: async () => {
+          const { shell } = require('electron');
+          await shell.openExternal(cureWebsite);
+        }
+    },
     { label: 'Quit', click:  function(){
         isQuitting = true;
         app.quit();
@@ -167,6 +176,11 @@ try {
     if (win === null) {
       createWindow();
     }
+  });
+
+  ipcMain.on('launchBrowser', async () => {
+    const { shell } = require('electron')
+    await shell.openExternal(cureWebsite)
   });
 
   ipcMain.on('getFiles', (event, arg) => {

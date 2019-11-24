@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ElectronService } from '../../providers/electron.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -9,14 +11,18 @@ export class HomeComponent implements OnInit {
   private option: number;
 
   online = true;
-  imgLogo = "../../../assets/images/cure-mini.jpg";
+  imgLogo = "../../../assets/images/cure-mini.png";
 
-  constructor() {
+  constructor(private es: ElectronService) {
   	this.option = 0;
   }
 
   ngOnInit() {
   	this.option = 0;
+  }
+
+  website() {
+    this.es.launchBrowser();
   }
 
   main() {
