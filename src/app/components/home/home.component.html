@@ -1,4 +1,28 @@
 <div>
+  <nav class="navbar navbar-expand-sm">
+    <a class="navbar-brand" href="#">
+      <img src="{{ imgLogo }}" id="cure-logo"/>
+      &nbsp;
+      <span class="text-white">C U R E</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link text-white" (click)="settings()" href="#">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" (click)="addons()" href="#">Addons</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" (click)="overlay()" href="#">Overlay</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div *ngIf="!online">
     <h1>Unable to connect.</h1>
     <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
@@ -7,6 +31,11 @@
     <br>
   </div>
   <div *ngIf="online">
-    <app-settings></app-settings>
+    <!--router-outlet></router-outlet-->
+    <app-main *ngIf="option == 0"></app-main>
+    <app-settings *ngIf="option == 1"></app-settings>
+    <app-addons *ngIf="option == 2"></app-addons>
+    <app-overlay *ngIf="option == 3"></app-overlay>
   </div>
+  <app-footer></app-footer>
 </div>

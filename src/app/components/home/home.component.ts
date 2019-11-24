@@ -6,7 +6,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  online = true
-  constructor() { }
-  ngOnInit() { }
+  private option: number;
+
+  online = true;
+  imgLogo = "../../../assets/images/cure-mini.jpg";
+
+  constructor() {
+  	this.option = 0;
+  }
+
+  ngOnInit() {
+  	this.option = 0;
+  }
+
+  main() {
+  	this.option = 0;
+  }
+
+  settings() {
+  	this.option = 1;
+  }
+  
+  addons() {
+  	this.option = 2;
+  }
+  
+  overlay() {
+  	this.option = 3;
+  }
 }

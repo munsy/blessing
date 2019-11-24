@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-sm">
   <a class="navbar-brand" href="#">
   	<img src="{{ imgLogo }}" />
   </a>
@@ -8,14 +8,14 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/settings">Settings</a>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="settings()">Settings</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/addons">Addons</a>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="addons()">Addons</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/overlay">Overlay</a>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="overlay()">Overlay</a>
       </li>
     </ul>
   </div>

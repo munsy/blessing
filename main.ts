@@ -1,27 +1,45 @@
-import { app, BrowserWindow, screen, ipcMain } from 'electron';
+import { app, BrowserWindow, Menu, Tray, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
 var fs = require('fs');
 
-let win, overlay, serve;
+const cureAppIcon = './src/assets/images/cure-mini.jpg';
+const cureAppName = 'Cure';
+
+let isQuitting = false;
+let win, tray, overlay, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
-function createWindow() {
+function maximize() {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
+  win.width = size.width;
+  win.height = size.height;
+}
 
+function defaultScreenSize() {
+  win.setSize(850, 450);
+}
+
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
+    width: 850,
+    height: 450,
+    resizable: false,
+    icon: cureAppIcon,
     webPreferences: {
       nodeIntegration: true,
     },
   });
+
+  win.setMenu(null);
+  
+  defaultScreenSize();
 
   if (serve) {
     require('electron-reload')(__dirname, {
@@ -36,19 +54,32 @@ function createWindow() {
     }));
   }
 
-  if (serve) {
-    win.webContents.openDevTools();
-  }
+  // if (serve) {
+  //   win.webContents.openDevTools();
+  // }
 
   // Emitted when the window is closed.
-  win.on('closed', () => {
+  win.on('closed', (event) => {
+    if(!isQuitting) {
+      event.preventDefault();
+      win.hide();
+    } else {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null;
-    if(overlay !== null) {
-      overlay.close();
+      win = null;
+      if(overlay !== null) {
+        overlay.close();
+      }
     }
+  });
+
+  win.on('close', function (event) {
+    if(!isQuitting){
+        event.preventDefault();
+        win.hide();
+    }
+    return false;
   });
 }
 
@@ -95,15 +126,32 @@ function overlayStartup() {
   overlay.close();
 }
 
-try {
+function buildTray() {
+  tray = new Tray(cureAppIcon);
 
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Show App', click:  function(){
+        win.show();
+    } },
+    { label: 'Quit', click:  function(){
+        isQuitting = true;
+        app.quit();
+    } }
+  ]);
+
+  tray.setToolTip(cureAppName);
+  tray.setContextMenu(contextMenu);
+}
+
+try {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
   app.on('ready', overlayStartup);
+  app.on('ready', buildTray);
   //app.on('ready', createOverlay);
-
+  
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
