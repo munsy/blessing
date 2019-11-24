@@ -34,4 +34,12 @@ export class ElectronService {
   launchBrowser() {
     this.ipcRenderer.send("launchBrowser");
   }
+
+  minimize() {
+    this.ipcRenderer.send("minimizeMain");
+  }
+
+  quit() {
+    this.ipcRenderer.send("quitProgram");
+  }
 }

@@ -1,29 +1,29 @@
-<div>
-  <nav class="navbar navbar-expand-sm">
-    <a class="navbar-brand" (click)="website()" href="#">
-      <img src="{{ imgLogo }}" id="cure-logo"/>
-      &nbsp;
-      <span class="text-white">C U R E</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link text-white" (click)="settings()" href="#">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" (click)="addons()" href="#">Addons</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" (click)="overlay()" href="#">Overlay</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <div *ngIf="!online">
+<app-header></app-header>
+<nav class="navbar navbar-expand-sm py-0 my-0">
+  <a class="navbar-brand pl-0 py-0 my-0" (click)="website()" href="#">
+    <img src="{{ imgLogo }}" id="cure-logo"/>
+    &nbsp;
+    <span class="text-white">C U R E</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="settings()" href="#">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="addons()" href="#">Addons</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="overlay()" href="#">Overlay</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="main-app overflow-auto">
+  <div class="mt-1 mx-2" *ngIf="!online">
     <h1>Unable to connect.</h1>
     <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
     &nbsp;&nbsp;
@@ -37,5 +37,5 @@
     <app-addons *ngIf="option == 2"></app-addons>
     <app-overlay *ngIf="option == 3"></app-overlay>
   </div>
-  <app-footer></app-footer>
 </div>
+<app-footer></app-footer>

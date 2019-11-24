@@ -33,10 +33,10 @@ function createWindow() {
     height: 450,
     resizable: false,
     icon: cureAppIcon,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
     },
-    titleBarStyle: 'hidden'
   });
 
   win.setMenu(null);
@@ -181,6 +181,14 @@ try {
   ipcMain.on('launchBrowser', async () => {
     const { shell } = require('electron')
     await shell.openExternal(cureWebsite)
+  });
+
+  ipcMain.on('minimizeMain', () => {
+    win.hide();
+  });
+
+  ipcMain.on('quitProgram', () => {
+    win.hide();
   });
 
   ipcMain.on('getFiles', (event, arg) => {

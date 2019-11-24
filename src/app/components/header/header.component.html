@@ -1,28 +1,15 @@
-<nav class="navbar navbar-expand-sm">
-  <a class="navbar-brand" (click)="website()">
-  	<img src="{{ imgLogo }}" />
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link text-white" (click)="settings()">Settings</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" (click)="addons()">Addons</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" (click)="overlay()">Overlay</a>
-      </li>
-    </ul>
+<div class="row py-0 my-0">
+  <div class="col-sm-10 draggable app-bar py-0 my-0 text-white-50">
+    &nbsp;C U R E
   </div>
-</nav>
-
-<!--
-<li class="nav-item" routerLinkActive="active">
-  <a class="nav-link" routerLink="/act">ACT</a>
-</li>
--->
+  <div class="col-sm-2 draggable app-bar float-right text-right py-0 my-0">
+    <a class="text-muted no-drag" (click)="minimize()" href="">
+      <i class="far fa-window-minimize"></i>
+    </a>
+    &nbsp;
+    <a class="text-muted no-drag py-0 my-0" (click)="quit()" href="">
+      <i class="far fa-window-close"></i>
+    </a>
+    &nbsp;
+  </div>
+</div>
