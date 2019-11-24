@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../providers/electron.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  selector: 'app-dash',
+  templateUrl: './dash.component.html',
+  styleUrls: ['./dash.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class DashComponent implements OnInit {
   imgLogo = "../../../assets/images/cure-mini.jpg"
   constructor(private es: ElectronService) { }
   ngOnInit() { }

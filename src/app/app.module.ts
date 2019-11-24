@@ -26,6 +26,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 
+import { DashComponent } from './components/dash/dash.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AddonsComponent } from './components/addons/addons.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HomeComponent,
     HeaderComponent,
     FooterComponent,
+    DashComponent,
     SettingsComponent,
     OverlayComponent,
     AddonsComponent,

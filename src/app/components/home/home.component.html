@@ -11,7 +11,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link text-white" (click)="settings()" href="#">Settings</a>
+        <a class="nav-link text-white" (click)="dash()" href="#">Dash</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" (click)="settings()" href="#">Configuration</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-white" (click)="addons()" href="#">Addons</a>
@@ -32,7 +35,7 @@
   </div>
   <div *ngIf="online">
     <!--router-outlet></router-outlet-->
-    <app-main *ngIf="option == 0"></app-main>
+    <app-dash *ngIf="option == 0"></app-dash>
     <app-settings *ngIf="option == 1"></app-settings>
     <app-addons *ngIf="option == 2"></app-addons>
     <app-overlay *ngIf="option == 3"></app-overlay>

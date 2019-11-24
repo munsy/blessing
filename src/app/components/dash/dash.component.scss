@@ -1,0 +1,14 @@
+.draggable {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.app-bar {
+  color: #fff;
+  text-decoration: none !important;
+  background-color: #000;
+  background-color: rgba(0,0,0,0.7);
+}

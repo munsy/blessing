@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
     this.es.launchBrowser();
   }
 
-  main() {
+  dash() {
   	this.option = 0;
   }
 
