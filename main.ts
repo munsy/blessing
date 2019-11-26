@@ -9,6 +9,8 @@ const cureAppName = 'Cure';
 const cureWebsite = 'https://github.com/nomaddevs/cure'
 
 let isQuitting = false;
+let devModeEnabled = false;
+
 let win, tray, overlay, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -55,12 +57,6 @@ function createWindow() {
       slashes: true
     }));
   }
-
-  // if (serve) {
-  //   win.webContents.openDevTools();
-  // }
-     win.webContents.openDevTools();
-  
 
   // Emitted when the window is closed.
   win.on('closed', (event) => {
@@ -189,6 +185,20 @@ try {
 
   ipcMain.on('quitProgram', () => {
     win.hide();
+  });
+
+  ipcMain.on('devMode', () => {
+    if(devModeEnabled) {
+      console.log('opening developer tools...');
+      let electron = require("electron");
+      electron.remote.getCurrentWindow().webContents.openDevTools();
+    } else {
+      console.log('closing developer tools...');
+      let electron = require("electron");
+      electron.remote.getCurrentWindow().webContents.closeDevTools();
+    }
+    devModeEnabled = !devModeEnabled;
+    console.log('dev mode: ' + devModeEnabled);
   });
 
   ipcMain.on('getFiles', (event, arg) => {

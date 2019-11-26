@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { ElectronService } from '../../providers/electron.service';
+import { CureSettings } from '../../models/settings.model';
 
 @Component({
   selector: 'app-settings',
@@ -8,11 +11,25 @@ import { Component, OnInit } from '@angular/core';
 export class SettingsComponent implements OnInit {
   public installLocation: string;
   public title: string;
+  public devEnabled: boolean;
+  public settings: CureSettings;
 
-  constructor() {
-    this.title = "Settings";
-  	this.installLocation = "C:\\Users\\Munsy\\Cure";
+  constructor(private es: ElectronService) {
+    this.settings = new CureSettings();
+    this.settings.FFXIVFolder = "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game";
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.settings = new CureSettings();
+    this.settings.FFXIVFolder = "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game";
+  }
+
+  save() {
+    alert(this.settings.FFXIVFolder);
+  }
+
+  devMode() {
+    this.es.developer();
+    this.settings.DeveloperMode = !this.settings.DeveloperMode;
+  }
 }

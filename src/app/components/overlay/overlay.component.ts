@@ -14,13 +14,21 @@ export class OverlayComponent implements OnInit {
 
   ngOnInit() { }
 
-  public enableOverlay() {
+  private enableOverlay() {
     this.overlayService.overlayOn();
   	this.overlay = true;
   }
 
-  public disableOverlay() {
+  private disableOverlay() {
     this.overlayService.overlayOff();
   	this.overlay = false;
+  }
+
+  public switch() {
+    if(this.overlay) {
+      this.disableOverlay();
+    } else {
+      this.enableOverlay();
+    }
   }
 }

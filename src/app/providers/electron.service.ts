@@ -42,4 +42,8 @@ export class ElectronService {
   quit() {
     this.ipcRenderer.send("quitProgram");
   }
+
+  developer() {
+    this.ipcRenderer.send("devMode");
+  }
 }

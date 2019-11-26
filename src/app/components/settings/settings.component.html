@@ -1,10 +1,14 @@
 <div class="app-settings">
-  <form class="py-3 pl-2">
-  	<h4 class="text-white mx-2">Game Settings</h4>
+  <form class="py-3 pl-2" #f="ngForm" (ngSubmit)="save()">
+    <div class="float-right">
+      <button type="submit" class="btn btn-sm btn-outline-danger text-white text-decoration-none">Restore Defaults</button>
+      &nbsp;
+    </div>
+    <h4 class="text-white mx-2">Game Settings</h4>
   	<div class="form-group mx-4">
-  	  <label for="ffxiv-folder" class="text-white-50">Final Fantasy XIV Folder</label>
+  	  <label for="ffxiv-folder" class="text-white-50" [ngModel]="settings.FFXIVFolder" name="FFXIVFolder" required>Final Fantasy XIV Folder</label>
   	  <div class="form-inline">
-  	    <input type="text" class="form-control form-control-sm col-sm-6" id="ffxiv-folder" value="C:\path\to\ffxiv">
+  	    <input type="text" class="form-control form-control-sm col-sm-6" id="ffxiv-folder" value="{{ settings.FFXIVFolder }}">
         <button class="btn btn-outline-light btn-sm ml-3">Use a Different Folder</button>
       </div>
     </div>
@@ -14,13 +18,13 @@
       <div class="form-check">
 	    <input class="form-check-input" type="radio" id="addon-download-options-1" name="addon-download-options" value="option1">
 	    <label class="form-check-label" for="addon-download-options-1">
-	      Download data form all regions and factions
+	      Download data from all regions and factions
 	    </label>
 	  </div>
 	  <div class="form-check">
 	    <input class="form-check-input" type="radio" id="addon-download-options-2" name="addon-download-options" value="option2">
 	    <label class="form-check-label" for="addon-download-options-2">
-	      Download data form specific regions or factions
+	      Download data from specific regions or factions
 	    </label>
 	  </div>
     </div>
@@ -80,12 +84,17 @@
     <h4 class="text-white mx-2 py-4">Advanced Settings</h4>
     <div class="form-group mx-4">
       <label for="app-advanced-behavior" class="text-white-50">Advanced - Use With Caution!</label>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="app-advanced-behavior-1">
+      <div class="form-check" click="devMode()">
+        <input class="form-check-input" type="checkbox" value="" id="app-advanced-behavior-1" [checked]="devEnabled">
         <label class="form-check-label" for="app-advanced-behavior-1">
           Enable Developer Mode
+          <strong class="text-danger" *ngIf="!devEnabled">disabled</strong>
+   		  <strong class="text-success" *ngIf="devEnabled">enabled</strong>
         </label>
       </div>
+    </div>
+    <div class="px-4">
+      <button type="submit" class="btn btn-outline-light text-decoration-none">Save Changes</button>
     </div>
   </form>
 </div>

@@ -1,7 +1,7 @@
 <app-header></app-header>
 <nav class="navbar navbar-expand-sm py-0 my-0">
   <a class="navbar-brand pl-0 py-0 my-0" (click)="website()" href="#">
-    <img src="{{ imgLogo }}" id="cure-logo"/>
+    <img class="pb-1 px-0" src="{{ imgLogo }}" id="cure-logo"/>
     &nbsp;
     <span class="text-white">C U R E</span>
   </a>
@@ -11,16 +11,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link text-white" (click)="dash()" href="#">Dash</a>
+        <a class="nav-link text-white" (click)="dash()" href="#">Dashboard</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-white" (click)="settings()" href="#">Configuration</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-white" (click)="addons()" href="#">Addons</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" (click)="overlay()" href="#">Overlay</a>
+        <a class="nav-link text-white" (click)="addons()" href="#">Keybindings</a>
       </li>
     </ul>
   </div>
