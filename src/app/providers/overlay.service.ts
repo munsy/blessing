@@ -19,20 +19,32 @@ export class OverlayService {
     }
   }
 
+  async unlock() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.send("overlayUnlock");
+    });
+  }
+
+  async lock() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.send("overlayLock");
+    });
+  }
+
   async overlayOn() {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.once("overlayOnResponse", (event, arg) => {
-        resolve(arg);
-      });
+      //this.ipc.once("overlayOnResponse", (event, arg) => {
+      //  resolve(arg);
+      //});
       this.ipc.send("overlayOn");
     });
   }
   
   async overlayOff() {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.once("overlayOffResponse", (event, arg) => {
-        resolve(arg);
-      });
+      //this.ipc.once("overlayOffResponse", (event, arg) => {
+      //  resolve(arg);
+      //});
       this.ipc.send("overlayOff");
     });
   }

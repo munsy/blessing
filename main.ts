@@ -206,6 +206,18 @@ try {
     win.webContents.send('getFilesResponse', files);
   });
 
+  ipcMain.on('overlayLock', (event, arg) => {
+    if(overlay === null) {
+      console.log('null overlay');
+    }
+  });
+
+  ipcMain.on('overlayUnlock', (event, arg) => {
+    if(overlay === null) {
+      console.log('null overlay');
+    }
+  });
+
   ipcMain.on('overlayOn', (event, arg) => {
     if(overlay === null) {
       createOverlay();

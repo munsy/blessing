@@ -16,3 +16,21 @@
   	&nbsp;
   </div>
 </div>
+<div class="row">
+  <div class="col-sm-3">
+  	&nbsp;
+  </div>
+  <div class="col-sm-4">
+    Lock: <strong class="text-danger" *ngIf="!overlay">disabled</strong>
+    <strong class="text-success" *ngIf="overlay">enabled</strong>
+  </div>
+  <div class="col-sm-1">
+    <label class="switch">
+      <input type="checkbox" (click)="lock()" [checked]="overlay">
+      <span class="slider round"></span>
+    </label>
+  </div>
+  <div class="col-sm-4">
+  	&nbsp;
+  </div>
+</div>

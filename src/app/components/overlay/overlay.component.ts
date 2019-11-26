@@ -24,6 +24,16 @@ export class OverlayComponent implements OnInit {
   	this.overlay = false;
   }
 
+  public lock() {
+    if(this.locked) {
+      this.overlayService.unlock();
+      this.locked = false;
+    } else {
+      this.overlayService.lock();
+      this.locked = true;
+    }
+  }
+
   public switch() {
     if(this.overlay) {
       this.disableOverlay();
