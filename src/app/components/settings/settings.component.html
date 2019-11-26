@@ -6,9 +6,9 @@
     </div>
     <h4 class="text-white mx-2">Game Settings</h4>
   	<div class="form-group mx-4">
-  	  <label for="ffxiv-folder" class="text-white-50" [ngModel]="settings.FFXIVFolder" name="FFXIVFolder" required>Final Fantasy XIV Folder</label>
+  	  <label for="ffxiv-folder" class="text-white-50">Final Fantasy XIV Folder</label>
   	  <div class="form-inline">
-  	    <input type="text" class="form-control form-control-sm col-sm-6" id="ffxiv-folder" value="{{ settings.FFXIVFolder }}">
+  	    <input type="text" class="form-control form-control-sm col-sm-6" id="ffxiv-folder" [ngModel]="settings.FFXIVFolder" name="FFXIVFolder" required>
         <button class="btn btn-outline-light btn-sm ml-3">Use a Different Folder</button>
       </div>
     </div>
@@ -84,12 +84,12 @@
     <h4 class="text-white mx-2 py-4">Advanced Settings</h4>
     <div class="form-group mx-4">
       <label for="app-advanced-behavior" class="text-white-50">Advanced - Use With Caution!</label>
-      <div class="form-check" click="devMode()">
-        <input class="form-check-input" type="checkbox" value="" id="app-advanced-behavior-1" [checked]="devEnabled">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="app-advanced-behavior-1" [ngModel]="settings.DeveloperMode" name="DeveloperMode" [checked]="settings.DeveloperMode" (click)="devMode()">
         <label class="form-check-label" for="app-advanced-behavior-1">
           Enable Developer Mode
-          <strong class="text-danger" *ngIf="!devEnabled">disabled</strong>
-   		  <strong class="text-success" *ngIf="devEnabled">enabled</strong>
+          <strong class="text-danger" *ngIf="!settings.DeveloperMode">disabled</strong>
+   		  <strong class="text-success" *ngIf="settings.DeveloperMode">enabled</strong>
         </label>
       </div>
     </div>

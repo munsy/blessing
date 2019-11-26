@@ -9,6 +9,7 @@ import { OverlayService } from '../../providers/overlay.service';
 })
 export class OverlayComponent implements OnInit {
   overlay = false;
+  locked = true;
 
   constructor(private overlayService: OverlayService) { }
 

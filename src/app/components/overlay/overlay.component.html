@@ -21,12 +21,12 @@
   	&nbsp;
   </div>
   <div class="col-sm-4">
-    Lock: <strong class="text-danger" *ngIf="!overlay">disabled</strong>
-    <strong class="text-success" *ngIf="overlay">enabled</strong>
+    Lock: <strong class="text-danger" *ngIf="!locked">disabled</strong>
+    <strong class="text-success" *ngIf="locked">enabled</strong>
   </div>
   <div class="col-sm-1">
     <label class="switch">
-      <input type="checkbox" (click)="lock()" [checked]="overlay">
+      <input type="checkbox" (click)="lock()" [checked]="locked">
       <span class="slider round"></span>
     </label>
   </div>

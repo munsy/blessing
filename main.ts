@@ -188,17 +188,12 @@ try {
   });
 
   ipcMain.on('devMode', () => {
-    if(devModeEnabled) {
-      console.log('opening developer tools...');
-      let electron = require("electron");
-      electron.remote.getCurrentWindow().webContents.openDevTools();
+    if(!devModeEnabled) {
+      win.webContents.openDevTools();
     } else {
-      console.log('closing developer tools...');
-      let electron = require("electron");
-      electron.remote.getCurrentWindow().webContents.closeDevTools();
+      win.webContents.closeDevTools();
     }
     devModeEnabled = !devModeEnabled;
-    console.log('dev mode: ' + devModeEnabled);
   });
 
   ipcMain.on('getFiles', (event, arg) => {

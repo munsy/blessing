@@ -11,21 +11,19 @@ import { CureSettings } from '../../models/settings.model';
 export class SettingsComponent implements OnInit {
   public installLocation: string;
   public title: string;
-  public devEnabled: boolean;
   public settings: CureSettings;
 
   constructor(private es: ElectronService) {
     this.settings = new CureSettings();
-    this.settings.FFXIVFolder = "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game";
   }
 
   ngOnInit() {
     this.settings = new CureSettings();
-    this.settings.FFXIVFolder = "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game";
   }
 
   save() {
     alert(this.settings.FFXIVFolder);
+    alert(this.settings.DeveloperMode);
   }
 
   devMode() {
