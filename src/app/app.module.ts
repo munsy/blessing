@@ -30,6 +30,7 @@ import { DashComponent } from './components/dash/dash.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AddonsComponent } from './components/addons/addons.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
+import { OverlayWindowComponent } from './components/overlay/overlay.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -44,6 +45,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashComponent,
     SettingsComponent,
     OverlayComponent,
+    OverlayWindowComponent,
     AddonsComponent,
     WebviewDirective
   ],

@@ -114,6 +114,7 @@ function createOverlay() {
     }));
   }
 
+  overlay.setSkipTaskbar(true);
   overlay.setIgnoreMouseEvents(true);
 
   overlay.on('closed', function () {
@@ -204,13 +205,17 @@ try {
   ipcMain.on('overlayLock', (event, arg) => {
     if(overlay === null) {
       console.log('null overlay');
+      return;
     }
+    overlay.transparent = true;
   });
 
   ipcMain.on('overlayUnlock', (event, arg) => {
     if(overlay === null) {
       console.log('null overlay');
+      return;
     }
+    overlay.transparent = false;
   });
 
   ipcMain.on('overlayOn', (event, arg) => {
