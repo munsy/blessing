@@ -3,55 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { OverlayService } from '../../providers/overlay.service';
 
 @Component({
-  selector: 'overlay-window',
-  templateUrl: './overlay.component.html',
-  styleUrls: ['./overlay.component.scss']
-})
-export class OverlayWindowComponent implements OnInit {
-  overlay = false;
-  locked = true;
-
-  constructor(private overlayService: OverlayService) { }
-
-  ngOnInit() { }
-
-  private enableOverlay() {
-    this.overlayService.overlayOn();
-    this.overlay = true;
-  }
-
-  private disableOverlay() {
-    this.overlayService.overlayOff();
-    this.overlay = false;
-  }
-
-  public lock() {
-    if(this.locked) {
-      this.overlayService.unlock();
-      this.locked = false;
-    } else {
-      this.overlayService.lock();
-      this.locked = true;
-    }
-  }
-
-  public switch() {
-    if(this.overlay) {
-      this.disableOverlay();
-    } else {
-      this.enableOverlay();
-    }
-  }
-}
-
-@Component({
   selector: 'app-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss']
 })
 export class OverlayComponent implements OnInit {
-  overlay = false;
-  locked = true;
+  public overlay: boolean = false;
+  public locked: boolean = true;
 
   constructor(private overlayService: OverlayService) { }
 

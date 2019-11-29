@@ -4,12 +4,11 @@ import * as url from 'url';
 
 var fs = require('fs');
 
-const cureAppIcon = './src/assets/images/cure-mini.png';
-const cureAppName = 'Cure';
-const cureWebsite = 'https://github.com/nomaddevs/cure'
-
 let isQuitting = false;
 let devModeEnabled = false;
+
+const cureAppName = 'Cure';
+const cureWebsite = 'https://github.com/nomaddevs/cure'
 
 let win, tray, overlay, serve;
 const args = process.argv.slice(1);
@@ -27,6 +26,15 @@ function defaultScreenSize() {
 }
 
 function createWindow() {
+  let cureAppIcon = devModeEnabled ? url.format({
+      pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
+      protocol: 'file:',
+      slashes: true
+    }) : url.format({
+      pathname: path.join(__dirname, 'dist/assets/images/cure-mini.png'),
+      protocol: 'file:',
+      slashes: true
+    });
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
@@ -34,7 +42,7 @@ function createWindow() {
     width: 850,
     height: 450,
     resizable: false,
-    icon: cureAppIcon,
+    //icon: cureAppIcon,
     frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -84,6 +92,7 @@ function createWindow() {
 }
 
 function createOverlay() {
+  console.log('createOverlay() called');
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -97,38 +106,65 @@ function createOverlay() {
     alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: true,
+      webSecurity: false
     },
   });
 
   if (serve) {
     overlay.loadURL(url.format({
-      pathname: path.join(__dirname, 'src/overlay.html'),
+      pathname: path.join(__dirname, 'src/index.html'),
       protocol: 'file:',
-      slashes: true
+      slashes: true,
+      hash: '/overlay'
     }));
+    //overlay.loadURL('http://localhost:4200/#/overlay')
+    //overlay.loadURL(ovUrl);
   } else {
     overlay.loadURL(url.format({
-      pathname: path.join(__dirname, 'dist/overlay.html'),
+      pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
-      slashes: true
+      slashes: true,
+      hash: '/overlay'
     }));
   }
 
   overlay.setSkipTaskbar(true);
   overlay.setIgnoreMouseEvents(true);
 
+  overlay.webContents.send('load-overlay');
+  
   overlay.on('closed', function () {
     overlay = null;
   });
 }
 
 function overlayStartup() {
-  createOverlay();
-  overlay.close();
+  if(overlay == null || overlay === null) {
+    createOverlay();
+    if(devModeEnabled) {
+      overlay.webContents.openDevTools();
+    }
+    overlay.close();
+  }
 }
 
 function buildTray() {
-  tray = new Tray(cureAppIcon);
+  alert('building tray');
+  const nativeImage = require('electron').nativeImage;
+  let cureAppIcon = serve ? url.format({
+    pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
+    protocol: 'file:',
+    slashes: true
+  }) : url.format({
+    pathname: path.join(__dirname, 'dist/assets/images/cure-mini.png'),
+    protocol: 'file:',
+    slashes: true
+  });
+
+  let trayIcon = nativeImage.createFromPath(cureAppIcon);
+  trayIcon = trayIcon.resize({ width: 16, height: 16 });
+
+  tray = new Tray(trayIcon);
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show App', click:  function(){
@@ -155,7 +191,7 @@ try {
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
   app.on('ready', overlayStartup);
-  app.on('ready', buildTray);
+  //app.on('ready', buildTray);
   //app.on('ready', createOverlay);
   
   // Quit when all windows are closed.
@@ -191,8 +227,24 @@ try {
   ipcMain.on('devMode', () => {
     if(!devModeEnabled) {
       win.webContents.openDevTools();
+      if(overlay === null) {
+        if(devModeEnabled) {
+          console.log('null overlay');
+        }
+        return;
+      }
+      overlay.webContents.openDevTools();
+      overlay.setIgnoreMouseEvents(false);
     } else {
       win.webContents.closeDevTools();
+      if(overlay === null) {
+        if(devModeEnabled) {
+          console.log('null overlay');
+        }
+        return;
+      }
+      overlay.webContents.closeDevTools();
+      overlay.setIgnoreMouseEvents(true);
     }
     devModeEnabled = !devModeEnabled;
   });
@@ -204,7 +256,9 @@ try {
 
   ipcMain.on('overlayLock', (event, arg) => {
     if(overlay === null) {
-      console.log('null overlay');
+      if(devModeEnabled) {
+        console.log('null overlay');
+      }
       return;
     }
     overlay.transparent = true;
@@ -212,7 +266,9 @@ try {
 
   ipcMain.on('overlayUnlock', (event, arg) => {
     if(overlay === null) {
-      console.log('null overlay');
+      if(devModeEnabled) {
+        console.log('null overlay');
+      }
       return;
     }
     overlay.transparent = false;
@@ -235,10 +291,7 @@ try {
       win.webContents.send('overlayOffResponse', false);
     }
   });
-} catch (e) {
-  // Catch Error
-  // throw e;
-}
+
 
 
 var Cap = require('cap').Cap;
@@ -261,36 +314,68 @@ var linkType = c.open(device, filter, bufSize, buffer);
 c.setMinBytes && c.setMinBytes(0);
 
 c.on('packet', function(nbytes, trunc) {
-  console.log('packet: length ' + nbytes + ' bytes, truncated? '
+  if(devModeEnabled) {
+    console.log('packet: length ' + nbytes + ' bytes, truncated? '
               + (trunc ? 'yes' : 'no'));
+  }
 
   // raw packet data === buffer.slice(0, nbytes)
 
   if (linkType === 'ETHERNET') {
-    console.log(buffer.toString('binary'));
+    if(devModeEnabled) {
+      console.log(buffer.toString('binary'));
+    }
     var ret = decoders.Ethernet(buffer);
-    console.log(ret);
-    if (ret.info.type === PROTOCOL.ETHERNET.IPV4) {
-      console.log('DECODING IPV4 ...');
-      ret = decoders.IPV4(buffer, ret.offset);
+    if(devModeEnabled) {
       console.log(ret);
+    }
+    if (ret.info.type === PROTOCOL.ETHERNET.IPV4) {
+      if(devModeEnabled) {
+        console.log('DECODING IPV4 ...');
+      }
+      ret = decoders.IPV4(buffer, ret.offset);
+      if(devModeEnabled) {
+        console.log(ret);
+      }
       if (ret.info.protocol === PROTOCOL.IP.TCP) {
         var datalen = ret.info.totallen - ret.hdrlen;
-        console.log('DECODING TCP ...');
+        if(devModeEnabled) {
+          console.log('DECODING TCP ...');
+        }
         ret = decoders.TCP(buffer, ret.offset);
-        console.log(ret);
+        if(devModeEnabled) {
+          console.log(ret);
+        }
         datalen -= ret.hdrlen;
-        console.log(buffer.toString('binary', ret.offset, ret.offset + datalen));
+        if(devModeEnabled) {
+          console.log(buffer.toString('binary', ret.offset, ret.offset + datalen));
+        }
       } else if (ret.info.protocol === PROTOCOL.IP.UDP) {
-        console.log('DECODING UDP ...');
+        if(devModeEnabled) {
+          console.log('DECODING UDP ...');
+        }
         ret = decoders.UDP(buffer, ret.offset);
-        console.log(ret);
-        console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
+        if(devModeEnabled) {
+          console.log(ret);
+        }
+        if(devModeEnabled) {
+          console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
+        }
       } else {
-        console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
+        if(devModeEnabled) {
+          console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
+        }
       }
     } else {
-      console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
+      if(devModeEnabled) {
+        console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
+      }
     }
   }
 });
+
+} catch (e) {
+  alert(e);
+  // Catch Error
+  // throw e;
+}

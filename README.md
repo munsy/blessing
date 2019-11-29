@@ -5,3 +5,10 @@ Cure
 Addon and dependency manager for Final Fantasy XIV: A Realm Reborn.
 
 This application is a work in progress with no planned deadline. It's ready when it's ready.
+
+# Development
+```
+$ git pull git@github.com:nomaddevs/cure.git
+$ npm install
+$ npm start
+```

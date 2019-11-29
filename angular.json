@@ -100,7 +100,9 @@
               "src/styles.scss"
             ],
             "assets": [
-              "src/assets",
+              "src/assets/images/bg.jpg",
+              "src/assets/images/cure-mini.jpg",
+              "src/assets/images/cure-mini.png",
               "src/favicon.ico",
               "src/favicon.png",
               "src/favicon.icns",

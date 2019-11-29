@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core'
-import { IpcRenderer } from 'electron'
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { IpcRenderer } from 'electron';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { IpcRenderer } from 'electron'
 export class OverlayService {
   private ipc: IpcRenderer
 
-  constructor() {
+  constructor(private router: Router) {
     if ((<any>window).require) {
       try {
         this.ipc = (<any>window).require('electron').ipcRenderer
@@ -18,6 +19,12 @@ export class OverlayService {
       console.warn('Could not load electron ipc')
     }
   }
+
+  async on(event: string, callback: any) {
+    this.ipc.on(event, () => {
+      return callback;
+    });
+  } 
 
   async unlock() {
     return new Promise<boolean>((resolve, reject) => {

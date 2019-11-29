@@ -4,11 +4,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AddonsComponent } from './components/addons/addons.component';
-import { OverlayComponent } from './components/overlay/overlay.component';
+import { OverlayWindowComponent } from './components/overlay/window.component';
 
 const routes: Routes = [
     {
         path: '',
+        component: HomeComponent
+    },
+    {
+        path: 'home',
         component: HomeComponent
     },
     {
@@ -21,7 +25,7 @@ const routes: Routes = [
     },
     {
         path: 'overlay',
-        component: OverlayComponent
+        component: OverlayWindowComponent
     }
 ];
 
