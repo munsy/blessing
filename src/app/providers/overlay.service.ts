@@ -7,11 +7,37 @@ import { IpcRenderer } from 'electron';
 })
 export class OverlayService {
   private ipc: IpcRenderer
+  private locked: boolean;
+  private enabled: boolean;
 
   constructor(private router: Router) {
     if ((<any>window).require) {
       try {
-        this.ipc = (<any>window).require('electron').ipcRenderer
+        this.ipc = (<any>window).require('electron').ipcRenderer;
+      } catch (error) {
+        throw error
+      }
+    } else {
+      console.warn('Could not load electron ipc')
+    }
+    this.locked = true;
+    this.enabled = false;
+    this.ipc.on('unlock-overlay', () => {
+      this.locked = false;
+    });
+    this.ipc.on('lock-overlay', () => {
+      this.locked = true;
+    });
+  }
+
+  //async on(event: string, callback: Function) {
+  //  this.ipc.on(event, callback);
+  //} 
+
+  getWindowId(): any {
+    if ((<any>window).require) {
+      try {
+        return (<any>window).require('electron').remote.getCurrentWindow().id;
       } catch (error) {
         throw error
       }
@@ -20,38 +46,38 @@ export class OverlayService {
     }
   }
 
-  async on(event: string, callback: any) {
-    this.ipc.on(event, () => {
-      return callback;
-    });
-  } 
+  isEnabled(): boolean {
+    return this.enabled;
+  }
+
+  isLocked(): boolean {
+    return this.locked;
+  }
 
   async unlock() {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.send("overlayUnlock");
+      this.locked = false;
+      this.ipc.send("unlock-overlay");
     });
   }
 
   async lock() {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.send("overlayLock");
+      this.locked = true;
+      this.ipc.send("lock-overlay");
     });
   }
 
   async overlayOn() {
     return new Promise<boolean>((resolve, reject) => {
-      //this.ipc.once("overlayOnResponse", (event, arg) => {
-      //  resolve(arg);
-      //});
+      this.enabled = true;
       this.ipc.send("overlayOn");
     });
   }
   
   async overlayOff() {
     return new Promise<boolean>((resolve, reject) => {
-      //this.ipc.once("overlayOffResponse", (event, arg) => {
-      //  resolve(arg);
-      //});
+      this.enabled = false;
       this.ipc.send("overlayOff");
     });
   }

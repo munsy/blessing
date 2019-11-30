@@ -3,12 +3,11 @@
   	&nbsp;
   </div>
   <div class="col-sm-4">
-    Overlay Status: <strong class="text-danger" *ngIf="!overlay">disabled</strong>
-    <strong class="text-success" *ngIf="overlay">enabled</strong>
+    Overlay Status: <strong [ngClass]="isEnabled() ? 'text-success' : 'text-danger'"><ng-container *ngIf="isEnabled()">En</ng-container><ng-container *ngIf="!isEnabled()">Dis</ng-container>abled</strong>
   </div>
   <div class="col-sm-1">
     <label class="switch">
-      <input type="checkbox" (click)="switch()" [checked]="overlay">
+      <input type="checkbox" (click)="switch()" [checked]="isEnabled()">
       <span class="slider round"></span>
     </label>
   </div>
@@ -21,12 +20,11 @@
   	&nbsp;
   </div>
   <div class="col-sm-4">
-    Lock: <strong class="text-danger" *ngIf="!locked">disabled</strong>
-    <strong class="text-success" *ngIf="locked">enabled</strong>
+    Overlay Lock: <strong [ngClass]="isLocked() ? 'text-success' : 'text-danger'"><ng-container *ngIf="isLocked()">On</ng-container><ng-container *ngIf="!isLocked()">Off</ng-container></strong>
   </div>
   <div class="col-sm-1">
     <label class="switch">
-      <input type="checkbox" (click)="lock()" [checked]="locked">
+      <input type="checkbox" (click)="lock()" [checked]="isLocked()">
       <span class="slider round"></span>
     </label>
   </div>

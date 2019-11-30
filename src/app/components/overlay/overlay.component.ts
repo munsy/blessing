@@ -13,30 +13,49 @@ export class OverlayComponent implements OnInit {
 
   constructor(private overlayService: OverlayService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    if(this.overlayService.isEnabled()) {
+      this.overlayService.overlayOn();
+      if(this.overlayService.isLocked()) {
+        this.overlayService.lock();
+      } else {
+        this.overlayService.unlock();
+      }
+    } else {
+      this.overlayService.overlayOff();
+    }
+  }
 
   private enableOverlay() {
     this.overlayService.overlayOn();
-  	this.overlay = true;
   }
 
   private disableOverlay() {
     this.overlayService.overlayOff();
-  	this.overlay = false;
+  }
+
+  public id(): any {
+    return this.overlayService.getWindowId();
+  }
+
+  public isLocked(): boolean {
+    return this.overlayService.isLocked();
+  }
+
+  public isEnabled(): boolean {
+    return this.overlayService.isEnabled();
   }
 
   public lock() {
-    if(this.locked) {
+    if(this.overlayService.isLocked()) {
       this.overlayService.unlock();
-      this.locked = false;
     } else {
       this.overlayService.lock();
-      this.locked = true;
     }
   }
 
   public switch() {
-    if(this.overlay) {
+    if(this.overlayService.isEnabled()) {
       this.disableOverlay();
     } else {
       this.enableOverlay();

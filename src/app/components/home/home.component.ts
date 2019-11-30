@@ -11,6 +11,8 @@ import { OverlayService } from '../../providers/overlay.service';
 })
 export class HomeComponent implements OnInit {
   private option: number;
+  private statusMessage: string;
+  private statusIcon: number; // 0 = loading, 1 - up to date, 2 = update available, 3 = error
 
   online = true;
   imgLogo = "../../../assets/images/cure-mini.png";
@@ -19,24 +21,28 @@ export class HomeComponent implements OnInit {
     private overlayService: OverlayService,
     private router: Router) {
   	this.option = 0;
-    
-    this.overlayService.on('load-overlay', () => {
-      alert('test');
-      this.router.navigate(['overlay']);
-    });
+    this.statusIcon = 1;
   }
 
   currentRoute(): string {
     return window.location.href;
-    //return this.router.url;
+  }
+
+  status(): string {
+    switch(this.statusIcon) {
+      case 0:
+        return 'Checking for updates...';
+      case 1:
+        return 'Everything is up-to-date!';
+      case 2:
+        return 'An update is available!';
+      case 3:
+        return 'An error occurred while checking for updates...';
+    }
   }
 
   ngOnInit() {
   	this.option = 0;
-    this.overlayService.on('load-overlay', () => {
-      alert('test');
-      this.router.navigate(['overlay']);
-    });
   }
 
   website() {

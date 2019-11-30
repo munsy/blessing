@@ -92,7 +92,6 @@ function createWindow() {
 }
 
 function createOverlay() {
-  console.log('createOverlay() called');
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -111,14 +110,18 @@ function createOverlay() {
   });
 
   if (serve) {
-    overlay.loadURL(url.format({
-      pathname: path.join(__dirname, 'src/index.html'),
-      protocol: 'file:',
-      slashes: true,
-      hash: '/overlay'
-    }));
+    //overlay.loadURL(url.format({
+    //  pathname: path.join(__dirname, 'src/index.html'),
+    //  protocol: 'file:',
+    //  slashes: true,
+    //  hash: '/overlay'
+    //}));
     //overlay.loadURL('http://localhost:4200/#/overlay')
     //overlay.loadURL(ovUrl);
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    overlay.loadURL('http://localhost:4200/#/overlay');
   } else {
     overlay.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
@@ -131,7 +134,7 @@ function createOverlay() {
   overlay.setSkipTaskbar(true);
   overlay.setIgnoreMouseEvents(true);
 
-  overlay.webContents.send('load-overlay');
+  //overlay.webContents.send('load-overlay');
   
   overlay.on('closed', function () {
     overlay = null;
@@ -141,10 +144,7 @@ function createOverlay() {
 function overlayStartup() {
   if(overlay == null || overlay === null) {
     createOverlay();
-    if(devModeEnabled) {
-      overlay.webContents.openDevTools();
-    }
-    overlay.close();
+    overlay.hide();
   }
 }
 
@@ -249,133 +249,142 @@ try {
     devModeEnabled = !devModeEnabled;
   });
 
-  ipcMain.on('getFiles', (event, arg) => {
-    const files = fs.readdirSync(__dirname);
-    win.webContents.send('getFilesResponse', files);
-  });
-
-  ipcMain.on('overlayLock', (event, arg) => {
+  ipcMain.on('lock-overlay', (event, arg) => {
+    console.log('lock-overlay called');
     if(overlay === null) {
       if(devModeEnabled) {
         console.log('null overlay');
       }
       return;
     }
-    overlay.transparent = true;
+    console.log('sending lock-overlay response back...');
+    overlay.webContents.send('lock-overlay');
   });
 
-  ipcMain.on('overlayUnlock', (event, arg) => {
+  ipcMain.on('unlock-overlay', (event, arg) => {
+    console.log('unlock-overlay called');
     if(overlay === null) {
       if(devModeEnabled) {
         console.log('null overlay');
       }
       return;
     }
-    overlay.transparent = false;
+    console.log('sending unlock-overlay response back...');
+    overlay.webContents.on('did-finish-load', () => {
+      overlay.webContents.send('unlock-overlay');
+    })
   });
 
   ipcMain.on('overlayOn', (event, arg) => {
     if(overlay === null) {
       createOverlay();
-      win.webContents.send('overlayOnResponse', true);          
+      overlay.show();
+      //win.webContents.send('overlayOnResponse', true);          
     } else {
-      win.webContents.send('overlayOnResponse', false);
+      overlay.show();
+      //win.webContents.send('overlayOnResponse', false);
     }
   });
 
   ipcMain.on('overlayOff', (event, arg) => {
     if(overlay !== null) {
-      overlay.close();
-      win.webContents.send('overlayOffResponse', true);          
+      //overlay.close();
+      //overlay = null;
+      overlay.hide();
+      //win.webContents.send('overlayOffResponse', true);          
     } else {
-      win.webContents.send('overlayOffResponse', false);
+      //win.webContents.send('overlayOffResponse', false);
     }
   });
-
-
-
-var Cap = require('cap').Cap;
-var c = new Cap();
-
-var decoders = require('cap').decoders;
-var PROTOCOL = decoders.PROTOCOL;
-
-var device = Cap.findDevice();
-
-console.dir(Cap.deviceList());
-console.dir(device);
-
-var filter = 'tcp and dst port 80';
-var bufSize = 10 * 1024 * 1024;
-var buffer = Buffer.alloc(65535);
-
-var linkType = c.open(device, filter, bufSize, buffer);
-
-c.setMinBytes && c.setMinBytes(0);
-
-c.on('packet', function(nbytes, trunc) {
-  if(devModeEnabled) {
-    console.log('packet: length ' + nbytes + ' bytes, truncated? '
-              + (trunc ? 'yes' : 'no'));
-  }
-
-  // raw packet data === buffer.slice(0, nbytes)
-
-  if (linkType === 'ETHERNET') {
-    if(devModeEnabled) {
-      console.log(buffer.toString('binary'));
-    }
-    var ret = decoders.Ethernet(buffer);
-    if(devModeEnabled) {
-      console.log(ret);
-    }
-    if (ret.info.type === PROTOCOL.ETHERNET.IPV4) {
-      if(devModeEnabled) {
-        console.log('DECODING IPV4 ...');
-      }
-      ret = decoders.IPV4(buffer, ret.offset);
-      if(devModeEnabled) {
-        console.log(ret);
-      }
-      if (ret.info.protocol === PROTOCOL.IP.TCP) {
-        var datalen = ret.info.totallen - ret.hdrlen;
-        if(devModeEnabled) {
-          console.log('DECODING TCP ...');
-        }
-        ret = decoders.TCP(buffer, ret.offset);
-        if(devModeEnabled) {
-          console.log(ret);
-        }
-        datalen -= ret.hdrlen;
-        if(devModeEnabled) {
-          console.log(buffer.toString('binary', ret.offset, ret.offset + datalen));
-        }
-      } else if (ret.info.protocol === PROTOCOL.IP.UDP) {
-        if(devModeEnabled) {
-          console.log('DECODING UDP ...');
-        }
-        ret = decoders.UDP(buffer, ret.offset);
-        if(devModeEnabled) {
-          console.log(ret);
-        }
-        if(devModeEnabled) {
-          console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
-        }
-      } else {
-        if(devModeEnabled) {
-          console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
-        }
-      }
-    } else {
-      if(devModeEnabled) {
-        console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
-      }
-    }
-  }
-});
-
+/*
+  ipcMain.on('getFiles', (event, arg) => {
+    const files = fs.readdirSync(__dirname);
+    win.webContents.send('getFilesResponse', files);
+  });
+*/
 } catch (e) {
   alert(e);
   // Catch Error
   // throw e;
 }
+//
+//
+//var Cap = require('cap').Cap;
+//var c = new Cap();
+//
+//var decoders = require('cap').decoders;
+//var PROTOCOL = decoders.PROTOCOL;
+//
+//var device = Cap.findDevice();
+//
+//console.dir(Cap.deviceList());
+//console.dir(device);
+//
+//var filter = 'tcp and dst port 80';
+//var bufSize = 10 * 1024 * 1024;
+//var buffer = Buffer.alloc(65535);
+//
+//var linkType = c.open(device, filter, bufSize, buffer);
+//
+//c.setMinBytes && c.setMinBytes(0);
+//
+//c.on('packet', function(nbytes, trunc) {
+//  if(devModeEnabled) {
+//    console.log('packet: length ' + nbytes + ' bytes, truncated? '
+//              + (trunc ? 'yes' : 'no'));
+//  }
+//
+//  // raw packet data === buffer.slice(0, nbytes)
+//
+//  if (linkType === 'ETHERNET') {
+//    if(devModeEnabled) {
+//      console.log(buffer.toString('binary'));
+//    }
+//    var ret = decoders.Ethernet(buffer);
+//    if(devModeEnabled) {
+//      console.log(ret);
+//    }
+//    if (ret.info.type === PROTOCOL.ETHERNET.IPV4) {
+//      if(devModeEnabled) {
+//        console.log('DECODING IPV4 ...');
+//      }
+//      ret = decoders.IPV4(buffer, ret.offset);
+//      if(devModeEnabled) {
+//        console.log(ret);
+//      }
+//      if (ret.info.protocol === PROTOCOL.IP.TCP) {
+//        var datalen = ret.info.totallen - ret.hdrlen;
+//        if(devModeEnabled) {
+//          console.log('DECODING TCP ...');
+//        }
+//        ret = decoders.TCP(buffer, ret.offset);
+//        if(devModeEnabled) {
+//          console.log(ret);
+//        }
+//        datalen -= ret.hdrlen;
+//        if(devModeEnabled) {
+//          console.log(buffer.toString('binary', ret.offset, ret.offset + datalen));
+//        }
+//      } else if (ret.info.protocol === PROTOCOL.IP.UDP) {
+//        if(devModeEnabled) {
+//          console.log('DECODING UDP ...');
+//        }
+//        ret = decoders.UDP(buffer, ret.offset);
+//        if(devModeEnabled) {
+//          console.log(ret);
+//        }
+//        if(devModeEnabled) {
+//          console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
+//        }
+//      } else {
+//        if(devModeEnabled) {
+//          console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
+//        }
+//      }
+//    } else {
+//      if(devModeEnabled) {
+//        console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
+//      }
+//    }
+//  }
+//});
