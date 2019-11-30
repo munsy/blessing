@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   private statusIcon: number; // 0 = loading, 1 - up to date, 2 = update available, 3 = error
 
   online = true;
-  imgLogo = "../../../assets/images/cure-mini.png";
+  imgLogo = "assets/images/cure-mini.png";
 
   constructor(private es: ElectronService,
     private overlayService: OverlayService,

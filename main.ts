@@ -270,9 +270,9 @@ try {
       return;
     }
     console.log('sending unlock-overlay response back...');
-    overlay.webContents.on('did-finish-load', () => {
-      overlay.webContents.send('unlock-overlay');
-    })
+    overlay.webContents.send('unlock-overlay');
+    //overlay.webContents.on('did-finish-load', () => {
+    //})
   });
 
   ipcMain.on('overlayOn', (event, arg) => {
@@ -288,15 +288,11 @@ try {
 
   ipcMain.on('overlayOff', (event, arg) => {
     if(overlay !== null) {
-      //overlay.close();
-      //overlay = null;
       overlay.hide();
-      //win.webContents.send('overlayOffResponse', true);          
     } else {
       //win.webContents.send('overlayOffResponse', false);
     }
   });
-
 
   ipcMain.on("overlay-test", (event, arg) => {
     console.log('got ' + arg + ' from dashboard. sending to overlay...');
