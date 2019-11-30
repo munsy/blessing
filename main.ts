@@ -249,54 +249,73 @@ try {
     devModeEnabled = !devModeEnabled;
   });
 
-  ipcMain.on('lock-overlay', (event, arg) => {
-    console.log('lock-overlay called');
-    if(overlay === null) {
-      if(devModeEnabled) {
-        console.log('null overlay');
-      }
-      return;
-    }
-    console.log('sending lock-overlay response back...');
-    overlay.webContents.send('lock-overlay');
-  });
+  //ipcMain.on('lock-overlay', (event, arg) => {
+  //  console.log('lock-overlay called');
+  //  if(overlay === null) {
+  //    if(devModeEnabled) {
+  //      console.log('null overlay');
+  //    }
+  //    return;
+  //  }
+  //  if(devModeEnabled){
+  //    console.log('sending lock-overlay response back...');
+  //  }
+  //  overlay.webContents.send('lock-overlay');
+  //});
+  //ipcMain.on('unlock-overlay', (event, arg) => {
+  //  console.log('unlock-overlay called');
+  //  if(overlay === null) {
+  //    if(devModeEnabled) {
+  //      console.log('null overlay');
+  //    }
+  //    return;
+  //  }
+  //  if(devModeEnabled){
+  //    console.log('sending unlock-overlay response back...');
+  //  }
+  //  overlay.webContents.send('unlock-overlay');
+  //});
+  //ipcMain.on('overlayOn', (event, arg) => {
+  //  if(overlay === null) {
+  //    createOverlay();
+  //    overlay.show();
+  //    //win.webContents.send('overlayOnResponse', true);          
+  //  } else {
+  //    overlay.show();
+  //    //win.webContents.send('overlayOnResponse', false);
+  //  }
+  //});
+  //ipcMain.on('overlayOff', (event, arg) => {
+  //  if(overlay !== null) {
+  //    overlay.hide();
+  //  } else {
+  //    //win.webContents.send('overlayOffResponse', false);
+  //  }
+  //});
 
-  ipcMain.on('unlock-overlay', (event, arg) => {
-    console.log('unlock-overlay called');
-    if(overlay === null) {
-      if(devModeEnabled) {
-        console.log('null overlay');
-      }
-      return;
+  ipcMain.on("overlay", (event, arg) => {
+    console.log('\n'+arg);
+    switch(arg.case) {
+      case "on":
+        if(overlay === null) { createOverlay(); }
+        overlay.show();
+        break;
+      case "off":
+        if(overlay !== null) { overlay.hide(); }
+        break;
+      case "lock":
+        overlay.webContents.send("overlay", {"case": "lock", "arg": ""});
+        break;
+      case "unlock":
+        overlay.webContents.send("overlay", {"case": "unlock", "arg": ""});
+        break;
+      case "test":
+        overlay.webContents.send("overlay", {"case": "update", "arg": arg.arg});
+        break;
+      default:
+        overlay.webContents.send("overlay", "default");
+        return;
     }
-    console.log('sending unlock-overlay response back...');
-    overlay.webContents.send('unlock-overlay');
-    //overlay.webContents.on('did-finish-load', () => {
-    //})
-  });
-
-  ipcMain.on('overlayOn', (event, arg) => {
-    if(overlay === null) {
-      createOverlay();
-      overlay.show();
-      //win.webContents.send('overlayOnResponse', true);          
-    } else {
-      overlay.show();
-      //win.webContents.send('overlayOnResponse', false);
-    }
-  });
-
-  ipcMain.on('overlayOff', (event, arg) => {
-    if(overlay !== null) {
-      overlay.hide();
-    } else {
-      //win.webContents.send('overlayOffResponse', false);
-    }
-  });
-
-  ipcMain.on("overlay-test", (event, arg) => {
-    console.log('got ' + arg + ' from dashboard. sending to overlay...');
-    overlay.webContents.send("overlay-test", arg);
   });
 
   ipcMain.on('get-ffxiv-dir', (event, arg) => {
@@ -315,84 +334,3 @@ try {
   // Catch Error
   // throw e;
 }
-//
-//
-//var Cap = require('cap').Cap;
-//var c = new Cap();
-//
-//var decoders = require('cap').decoders;
-//var PROTOCOL = decoders.PROTOCOL;
-//
-//var device = Cap.findDevice();
-//
-//console.dir(Cap.deviceList());
-//console.dir(device);
-//
-//var filter = 'tcp and dst port 80';
-//var bufSize = 10 * 1024 * 1024;
-//var buffer = Buffer.alloc(65535);
-//
-//var linkType = c.open(device, filter, bufSize, buffer);
-//
-//c.setMinBytes && c.setMinBytes(0);
-//
-//c.on('packet', function(nbytes, trunc) {
-//  if(devModeEnabled) {
-//    console.log('packet: length ' + nbytes + ' bytes, truncated? '
-//              + (trunc ? 'yes' : 'no'));
-//  }
-//
-//  // raw packet data === buffer.slice(0, nbytes)
-//
-//  if (linkType === 'ETHERNET') {
-//    if(devModeEnabled) {
-//      console.log(buffer.toString('binary'));
-//    }
-//    var ret = decoders.Ethernet(buffer);
-//    if(devModeEnabled) {
-//      console.log(ret);
-//    }
-//    if (ret.info.type === PROTOCOL.ETHERNET.IPV4) {
-//      if(devModeEnabled) {
-//        console.log('DECODING IPV4 ...');
-//      }
-//      ret = decoders.IPV4(buffer, ret.offset);
-//      if(devModeEnabled) {
-//        console.log(ret);
-//      }
-//      if (ret.info.protocol === PROTOCOL.IP.TCP) {
-//        var datalen = ret.info.totallen - ret.hdrlen;
-//        if(devModeEnabled) {
-//          console.log('DECODING TCP ...');
-//        }
-//        ret = decoders.TCP(buffer, ret.offset);
-//        if(devModeEnabled) {
-//          console.log(ret);
-//        }
-//        datalen -= ret.hdrlen;
-//        if(devModeEnabled) {
-//          console.log(buffer.toString('binary', ret.offset, ret.offset + datalen));
-//        }
-//      } else if (ret.info.protocol === PROTOCOL.IP.UDP) {
-//        if(devModeEnabled) {
-//          console.log('DECODING UDP ...');
-//        }
-//        ret = decoders.UDP(buffer, ret.offset);
-//        if(devModeEnabled) {
-//          console.log(ret);
-//        }
-//        if(devModeEnabled) {
-//          console.log(buffer.toString('binary', ret.offset, ret.offset + ret.info.length));
-//        }
-//      } else {
-//        if(devModeEnabled) {
-//          console.log('Unsupported IPv4 protocol: ' + PROTOCOL.IP[ret.info.protocol]);
-//        }
-//      }
-//    } else {
-//      if(devModeEnabled) {
-//        console.log('Unsupported Ethertype: ' + PROTOCOL.ETHERNET[ret.info.type]);
-//      }
-//    }
-//  }
-//});

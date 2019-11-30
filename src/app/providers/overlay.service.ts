@@ -56,35 +56,39 @@ export class OverlayService {
 
   async sendTestMessage(msg: string) {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.send("overlay-test", msg);
+      this.ipc.send("overlay", {case: "test", arg: msg});
     });
   }
 
   async unlock() {
     return new Promise<boolean>((resolve, reject) => {
       this.locked = false;
-      this.ipc.send("unlock-overlay");
+      this.ipc.send("overlay", {case: "unlock", arg: ''});
+      //this.ipc.send("unlock-overlay");
     });
   }
 
   async lock() {
     return new Promise<boolean>((resolve, reject) => {
       this.locked = true;
-      this.ipc.send("lock-overlay");
+      this.ipc.send("overlay", {case: "lock", arg: ''});
+      //this.ipc.send("lock-overlay");
     });
   }
 
   async overlayOn() {
     return new Promise<boolean>((resolve, reject) => {
       this.enabled = true;
-      this.ipc.send("overlayOn");
+      this.ipc.send("overlay", {case: "on", arg: ''});
+      //this.ipc.send("overlayOn");
     });
   }
   
   async overlayOff() {
     return new Promise<boolean>((resolve, reject) => {
       this.enabled = false;
-      this.ipc.send("overlayOff");
+      this.ipc.send("overlay", {case: "off", arg: ''});
+      //this.ipc.send("overlayOff");
     });
   }
 }

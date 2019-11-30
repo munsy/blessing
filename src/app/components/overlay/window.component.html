@@ -4,7 +4,12 @@
   </div>
 </div>
 <div class="h-100 text-dark">
-	<h1>{{ testMsg }}</h1>
-	<h3>Overlay lock: {{ isLocked() }}</h3>
-	<h3>window id: {{ id() }}</h3>
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4 text-center text-light">
+			<h1>debug (window id: {{ id() }})</h1>
+			<input type="textbox" [(ngModel)]="debug" name="debug" />
+		</div>
+		<div class="col-md-4"></div>
+	</div>
 </div>
