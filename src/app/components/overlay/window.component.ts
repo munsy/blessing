@@ -13,12 +13,14 @@ import { ElectronService } from '../../providers/electron.service';
 })
 export class OverlayWindowComponent implements OnInit {
   public testMsg: string = "test message!";
-  private locked: boolean;
+  public locked: boolean;
+  private count: number;
 
   constructor(private readonly es: ElectronService,
               private router: Router,
               private ref: ChangeDetectorRef,
               @Inject(DOCUMENT) private document: any) {
+    this.count = 0;
     this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0);';
     
     this.es.on('unlock-overlay', () => {
@@ -38,10 +40,17 @@ export class OverlayWindowComponent implements OnInit {
       this.locked = true;
       this.ref.detectChanges();
     });
+
+    this.es.on('overlay-test', (event, args) => {
+      this.count++;
+      this.testMsg = args + this.count.toString();
+      this.ref.detectChanges();
+    });
   }
 
   ngOnInit() {
     //this.locked = true;
+    this.count = 0;
     this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0);';
   }
 

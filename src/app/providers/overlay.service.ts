@@ -54,6 +54,12 @@ export class OverlayService {
     return this.locked;
   }
 
+  async sendTestMessage(msg: string) {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.send("overlay-test", msg);
+    });
+  }
+
   async unlock() {
     return new Promise<boolean>((resolve, reject) => {
       this.locked = false;

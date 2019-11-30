@@ -9,7 +9,7 @@
   	  <label for="ffxiv-folder" class="text-white-50">Final Fantasy XIV Folder</label>
   	  <div class="form-inline">
   	    <input type="text" class="form-control form-control-sm col-sm-6" id="ffxiv-folder" [ngModel]="settings.FFXIVFolder" name="FFXIVFolder" required>
-        <button class="btn btn-outline-light btn-sm ml-3">Use a Different Folder</button>
+        <button type="button" id="ffxiv-folder-button" class="btn btn-outline-light btn-sm ml-3" (click)="selectFFXIVDir()">Use a Different Folder</button>
       </div>
     </div>
     <h4 class="text-white mx-2 py-4">Addon Settings</h4>

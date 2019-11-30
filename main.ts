@@ -296,12 +296,24 @@ try {
       //win.webContents.send('overlayOffResponse', false);
     }
   });
-/*
-  ipcMain.on('getFiles', (event, arg) => {
-    const files = fs.readdirSync(__dirname);
-    win.webContents.send('getFilesResponse', files);
+
+
+  ipcMain.on("overlay-test", (event, arg) => {
+    console.log('got ' + arg + ' from dashboard. sending to overlay...');
+    overlay.webContents.send("overlay-test", arg);
   });
-*/
+
+  ipcMain.on('get-ffxiv-dir', (event, arg) => {
+    const files = fs.readdirSync(__dirname);
+    const electron = require('electron');
+    const dialog = electron.dialog;
+
+    const dir = dialog.showOpenDialog(win, {
+      defaultPath: arg,
+      properties: ['openDirectory']
+    });
+    win.webContents.send('get-ffxiv-dir-response', dir);
+  });
 } catch (e) {
   alert(e);
   // Catch Error

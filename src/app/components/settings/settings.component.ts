@@ -13,12 +13,20 @@ export class SettingsComponent implements OnInit {
   public title: string;
   public settings: CureSettings;
 
-  constructor(private es: ElectronService) {
+  constructor(
+    private es: ElectronService
+  ) {
     this.settings = new CureSettings();
   }
 
   ngOnInit() {
     this.settings = new CureSettings();
+  }
+
+  async selectFFXIVDir() {        
+    return await this.es.getDir(this.settings.FFXIVFolder).then((path) => {
+      this.settings.FFXIVFolder = path.toString();
+    });
   }
 
   save() {

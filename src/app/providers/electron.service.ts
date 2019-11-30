@@ -63,6 +63,20 @@ export class ElectronService {
     }
   }
 
+  async testOverlay(msg?: string) {
+    msg = msg ? msg : "default string";
+    this._ipc.send("overlay-test", msg);
+  }
+
+  async getDir(path: string) {
+    return await new Promise<string>((resolve, reject) => {
+      this._ipc.once("get-ffxiv-dir-response", (event, arg) => {
+        resolve(arg);
+      }); 
+      this._ipc.send("get-ffxiv-dir", path);
+    });
+  }
+
   isElectron = () => {
     return window && window.process && window.process.type;
   }

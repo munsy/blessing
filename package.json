@@ -15,12 +15,15 @@
   "build": {
     "appId": "com.cure.desktop",
     "productName": "Cure",
-    "files": ["**/*", "dist/**/*"],
+    "files": [
+      "**/*",
+      "dist/**/*"
+    ],
     "directories": {
       "output": "release",
       "buildResources": "dist"
     },
-    "asar":false,
+    "asar": false,
     "win": {
       "target": [
         "nsis"
@@ -28,7 +31,7 @@
     },
     "nsis": {
       "runAfterFinish": true,
-      "license":"LICENSE.md"
+      "license": "LICENSE.md"
     }
   },
   "private": true,
@@ -99,6 +102,7 @@
     "zone.js": "0.8.29"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "ajv": "^6.10.0",
     "cap": "^0.2.0",
     "electron-packager": "^14.1.1",

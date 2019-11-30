@@ -10,6 +10,7 @@ import { OverlayService } from '../../providers/overlay.service';
 export class OverlayComponent implements OnInit {
   public overlay: boolean = false;
   public locked: boolean = true;
+  public testMessage: string;
 
   constructor(private overlayService: OverlayService) { }
 
@@ -32,6 +33,10 @@ export class OverlayComponent implements OnInit {
 
   private disableOverlay() {
     this.overlayService.overlayOff();
+  }
+
+  public sendTest() {
+    this.overlayService.sendTestMessage(this.testMessage);
   }
 
   public id(): any {
