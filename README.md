@@ -8,7 +8,7 @@ This application is a work in progress with no planned deadline. It's ready when
 
 # Development
 ```
-$ git pull git@github.com:nomaddevs/cure.git
+$ git clone git@github.com:nomaddevs/cure.git
 $ npm install
 $ npm start
 ```

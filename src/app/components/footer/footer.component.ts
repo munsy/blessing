@@ -7,18 +7,39 @@ import { ElectronService } from '../../providers/electron.service';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  private version: string;
+  private version: any;
   private status: number;
 
   constructor(private es: ElectronService) {
-  	this.version = '0.0.1';
-  	this.status = 0;
+  	this.version = {
+  		major: 0,
+  		minor: 1,
+  		patch: 0,
+  		prerelease: 'alpha',
+  		metadata: 'memtest.1'
+  	};
+  	this.status = 1;
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+  	this.status = 0;
+  }
   
   public getVersion(): string {
-  	return this.version;
+  	var v = this.version.major.toString() 
+  	+ '.' + this.version.minor.toString() 
+  	+ '.' + this.version.patch.toString();
+  	if(this.version.prerelease != '') {
+  		v += '-' + this.version.prerelease;
+  	}
+  	if(this.version.metadata != '') {
+  		v += '+' + this.version.metadata;
+  	}
+  	return v;
+  }
+
+  public getStatusIcon(): number {
+  	return this.status;
   }
 
   public getStatus(): string {
