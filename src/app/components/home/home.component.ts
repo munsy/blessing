@@ -24,23 +24,6 @@ export class HomeComponent implements OnInit {
     this.statusIcon = 1;
   }
 
-  currentRoute(): string {
-    return window.location.href;
-  }
-
-  status(): string {
-    switch(this.statusIcon) {
-      case 0:
-        return 'Checking for updates...';
-      case 1:
-        return 'Everything is up-to-date!';
-      case 2:
-        return 'An update is available!';
-      case 3:
-        return 'An error occurred while checking for updates...';
-    }
-  }
-
   ngOnInit() {
   	this.option = 0;
   }
