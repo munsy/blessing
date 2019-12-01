@@ -25,10 +25,15 @@ export class FooterComponent implements OnInit {
   	this.status = 0;
   }
   
-  public getVersion(): string {
-  	var v = this.version.major.toString() 
+  private getVersionCore(): string {
+  	return this.version.major.toString() 
   	+ '.' + this.version.minor.toString() 
   	+ '.' + this.version.patch.toString();
+  }
+
+  public getVersion(): string {
+  	var v = this.getVersionCore();
+
   	if(this.version.prerelease != '') {
   		v += '-' + this.version.prerelease;
   	}
