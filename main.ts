@@ -10,6 +10,8 @@ let devModeEnabled = false;
 const cureAppName = 'Cure';
 const cureWebsite = 'https://github.com/nomaddevs/cure'
 
+const log = require('electron-log');
+
 let win, tray, overlay, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -26,6 +28,7 @@ function defaultScreenSize() {
 }
 
 function createWindow() {
+  log.info('Creating the main window');
   let cureAppIcon = devModeEnabled ? url.format({
       pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
       protocol: 'file:',
@@ -72,9 +75,6 @@ function createWindow() {
       event.preventDefault();
       win.hide();
     } else {
-    // Dereference the window object, usually you would store window
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
       win = null;
       if(overlay !== null) {
         overlay.close();
@@ -82,6 +82,8 @@ function createWindow() {
     }
   });
 
+  // Intercepts the window close event before it 
+  // executes and minimizes the program instead.
   win.on('close', function (event) {
     if(!isQuitting){
         event.preventDefault();
@@ -92,6 +94,7 @@ function createWindow() {
 }
 
 function createOverlay() {
+  log.info('Creating the overlay');
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -110,14 +113,6 @@ function createOverlay() {
   });
 
   if (serve) {
-    //overlay.loadURL(url.format({
-    //  pathname: path.join(__dirname, 'src/index.html'),
-    //  protocol: 'file:',
-    //  slashes: true,
-    //  hash: '/overlay'
-    //}));
-    //overlay.loadURL('http://localhost:4200/#/overlay')
-    //overlay.loadURL(ovUrl);
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
@@ -133,8 +128,6 @@ function createOverlay() {
 
   overlay.setSkipTaskbar(true);
   overlay.setIgnoreMouseEvents(true);
-
-  //overlay.webContents.send('load-overlay');
   
   overlay.on('closed', function () {
     overlay = null;
@@ -186,9 +179,6 @@ function buildTray() {
 }
 
 try {
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow);
   app.on('ready', overlayStartup);
   //app.on('ready', buildTray);
@@ -249,52 +239,7 @@ try {
     devModeEnabled = !devModeEnabled;
   });
 
-  //ipcMain.on('lock-overlay', (event, arg) => {
-  //  console.log('lock-overlay called');
-  //  if(overlay === null) {
-  //    if(devModeEnabled) {
-  //      console.log('null overlay');
-  //    }
-  //    return;
-  //  }
-  //  if(devModeEnabled){
-  //    console.log('sending lock-overlay response back...');
-  //  }
-  //  overlay.webContents.send('lock-overlay');
-  //});
-  //ipcMain.on('unlock-overlay', (event, arg) => {
-  //  console.log('unlock-overlay called');
-  //  if(overlay === null) {
-  //    if(devModeEnabled) {
-  //      console.log('null overlay');
-  //    }
-  //    return;
-  //  }
-  //  if(devModeEnabled){
-  //    console.log('sending unlock-overlay response back...');
-  //  }
-  //  overlay.webContents.send('unlock-overlay');
-  //});
-  //ipcMain.on('overlayOn', (event, arg) => {
-  //  if(overlay === null) {
-  //    createOverlay();
-  //    overlay.show();
-  //    //win.webContents.send('overlayOnResponse', true);          
-  //  } else {
-  //    overlay.show();
-  //    //win.webContents.send('overlayOnResponse', false);
-  //  }
-  //});
-  //ipcMain.on('overlayOff', (event, arg) => {
-  //  if(overlay !== null) {
-  //    overlay.hide();
-  //  } else {
-  //    //win.webContents.send('overlayOffResponse', false);
-  //  }
-  //});
-
   ipcMain.on("overlay", (event, arg) => {
-    console.log('\n'+arg);
     switch(arg.case) {
       case "on":
         if(overlay === null) { createOverlay(); }
@@ -311,6 +256,9 @@ try {
         break;
       case "test":
         overlay.webContents.send("overlay", {"case": "update", "arg": arg.arg});
+        break;
+      case "development":
+        overlay.webContents.send("overlay", {"case": "development", "arg": arg.arg});
         break;
       default:
         overlay.webContents.send("overlay", "default");
@@ -330,7 +278,6 @@ try {
     win.webContents.send('get-ffxiv-dir-response', dir);
   });
 } catch (e) {
-  alert(e);
-  // Catch Error
-  // throw e;
+  console.log(e);
+  log.error(e);
 }

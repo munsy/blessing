@@ -15,6 +15,7 @@ export class OverlayWindowComponent implements OnInit {
   public locked: boolean;
   private count: number;
   public debug: string;
+  public development: boolean;
 
   constructor(private readonly es: ElectronService,
               private router: Router,
@@ -22,28 +23,12 @@ export class OverlayWindowComponent implements OnInit {
               @Inject(DOCUMENT) private document: any) {
     this.count = 0;
     this.locked = true;
+    this.development = true;
     this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0);';
-    
-    //this.es.on('unlock-overlay', () => {
-    //  this.testMsg = 'unlock-overlay';
-    //  if(this.locked === undefined) {
-    //    this.locked = false;
-    //  }
-    //  this.locked = false;
-    //  this.ref.detectChanges();
-    //});
-    //this.es.on('lock-overlay', () => {
-    //  this.testMsg = 'lock-overlay';
-    //  if(this.locked === undefined) {
-    //    this.locked = true;
-    //  }
-    //  this.locked = true;
-    //  this.ref.detectChanges();
-    //});
 
     this.es.on('overlay', (event, args) => {
       switch(args.case) {
-        case 'update':
+        case 'development':
           this.debug = args.arg;
           break;
         case 'lock':
@@ -59,6 +44,9 @@ export class OverlayWindowComponent implements OnInit {
           }
           this.locked = false;
           this.setBgTranslucent();
+          break;
+        case 'update':
+          this.debug = args.arg;
           break;
         default:
           this.debug = 'default on ui';
@@ -79,7 +67,7 @@ export class OverlayWindowComponent implements OnInit {
   }
 
   private setBgTranslucent() {
-    this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0.4);';
+    this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0.7);';
   }
 
   id(): any {
