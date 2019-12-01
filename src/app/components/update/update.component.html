@@ -1,0 +1,18 @@
+<app-header></app-header>
+<div class="mx-2 mt-2 main-app overflow-hidden">
+  <div class="py-5 text-center text-success up-to-date" *ngIf="!update">
+    <h1>Everything is up to date!</h1>
+    <br>
+    <button type="submit" (click)="back()" class="btn btn-outline-success">Back</button>
+  </div>
+  <div *ngIf="!update"><br></div>
+  <div class="mt-3 text-center text-info" *ngIf="update">
+    <h1>Install Latest Update</h1>
+    <div class="row">
+      <div class="col">
+	      <button type="submit" (click)="update()" class="btn btn-outline-info">Update</button>
+	    </div>
+	  </div>
+  </div>
+</div>
+<app-footer></app-footer>

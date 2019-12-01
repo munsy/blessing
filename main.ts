@@ -6,6 +6,7 @@ var fs = require('fs');
 
 let isQuitting = false;
 let devModeEnabled = false;
+let overlayHidden = true;
 
 const cureAppName = 'Cure';
 const cureWebsite = 'https://github.com/nomaddevs/cure'
@@ -45,7 +46,6 @@ function createWindow() {
     width: 850,
     height: 450,
     resizable: false,
-    //icon: cureAppIcon,
     frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -129,6 +129,20 @@ function createOverlay() {
   overlay.setSkipTaskbar(true);
   overlay.setIgnoreMouseEvents(true);
   
+  overlay.on('hide', function() {
+    if(!overlayHidden) {
+      overlayHidden = true;
+      overlay.hide();
+    }
+  });
+
+  overlay.on('show', function() {
+    if(overlayHidden) {
+      overlayHidden = false;
+      overlay.show();
+    }
+  });
+
   overlay.on('closed', function () {
     overlay = null;
   });
@@ -142,7 +156,6 @@ function overlayStartup() {
 }
 
 function buildTray() {
-  alert('building tray');
   const nativeImage = require('electron').nativeImage;
   let cureAppIcon = serve ? url.format({
     pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
@@ -159,29 +172,58 @@ function buildTray() {
 
   tray = new Tray(trayIcon);
 
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show App', click:  function(){
-        win.show();
-    } },
+  const enableOverlayContextMenu = Menu.buildFromTemplate([
     { label: 'Launch website', click: async () => {
           const { shell } = require('electron');
           await shell.openExternal(cureWebsite);
         }
     },
-    { label: 'Quit', click:  function(){
+    { label: 'Open Cure', click: function() {
+        win.show();
+    } },
+    { label: 'Enable Overlay', click: function(){
+        overlay.show();
+        tray.setContextMenu(disableOverlayContextMenu);
+        overlayHidden = false;
+    } },
+    { label: 'Quit', click:  function() {
+        isQuitting = true;
+        app.quit();
+    } }
+  ]);
+
+  const disableOverlayContextMenu = Menu.buildFromTemplate([
+    { label: 'Launch website', click: async () => {
+          const { shell } = require('electron');
+          await shell.openExternal(cureWebsite);
+        }
+    },
+    { label: 'Open Cure', click: function() {
+        win.show();
+    } },
+    { label: 'Disable Overlay', click: function() {
+        overlay.hide();
+        tray.setContextMenu(enableOverlayContextMenu);
+        overlayHidden = true;
+    } },
+    { label: 'Quit', click:  function() {
         isQuitting = true;
         app.quit();
     } }
   ]);
 
   tray.setToolTip(cureAppName);
-  tray.setContextMenu(contextMenu);
+  if(overlayHidden) {
+    tray.setContextMenu(enableOverlayContextMenu);
+  } else {
+    tray.setContextMenu(disableOverlayContextMenu);
+  }
 }
 
 try {
   app.on('ready', createWindow);
   app.on('ready', overlayStartup);
-  //app.on('ready', buildTray);
+  app.on('ready', buildTray);
   //app.on('ready', createOverlay);
   
   // Quit when all windows are closed.

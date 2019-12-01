@@ -3,7 +3,7 @@
   <a class="navbar-brand pl-0 py-0 my-0" (click)="website()" href="#">
     <img class="pb-1 px-0" src="{{ imgLogo }}" id="cure-logo"/>
     &nbsp;
-    <span class="text-white">C U R E</span>
+    <span class="text-white">C&nbsp;U&nbsp;R&nbsp;E</span>
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
   </div>
 </nav>
 <div class="main-app overflow-auto">
-  <div class="mt-1 mx-2" *ngIf="!online">
+  <div class="mt-1 mx-2 text-center" *ngIf="!online">
     <h1>Unable to connect.</h1>
     <button type="submit" (click)="''" class="btn btn-outline-primary">Retry</button>
     &nbsp;&nbsp;
@@ -31,7 +31,6 @@
     <br>
   </div>
   <div *ngIf="online">
-    <!--router-outlet></router-outlet-->
     <app-dash *ngIf="option == 0"></app-dash>
     <app-settings *ngIf="option == 1"></app-settings>
     <app-addons *ngIf="option == 2"></app-addons>
@@ -39,11 +38,3 @@
   </div>
 </div>
 <app-footer></app-footer>
-<!--footer role="footer" class="footer app-bar fixed-bottom">
-  <div class="text-left float-left">
-    <span class="text-white-50 small lead ml-1">{{ status() }}</span>
-  </div>
-  <div class="text-right float-right">
-    <span class="text-white-50 small lead mr-1">Cure v0.0.1</span>
-  </div>
-</footer-->

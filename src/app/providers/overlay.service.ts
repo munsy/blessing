@@ -29,11 +29,7 @@ export class OverlayService {
       this.locked = true;
     });
   }
-
-  //async on(event: string, callback: Function) {
-  //  this.ipc.on(event, callback);
-  //} 
-
+  
   getWindowId(): any {
     if ((<any>window).require) {
       try {

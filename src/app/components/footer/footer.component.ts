@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ElectronService } from '../../providers/electron.service';
 
 @Component({
@@ -10,7 +11,8 @@ export class FooterComponent implements OnInit {
   private version: any;
   private status: number;
 
-  constructor(private es: ElectronService) {
+  constructor(private es: ElectronService,
+  	private router: Router) {
   	this.version = {
   		major: 0,
   		minor: 1,
@@ -25,6 +27,10 @@ export class FooterComponent implements OnInit {
   	this.status = 0;
   }
   
+  public details() {
+  	this.router.navigate(['/update']);
+  }
+
   private getVersionCore(): string {
   	return this.version.major.toString() 
   	+ '.' + this.version.minor.toString() 
@@ -43,7 +49,7 @@ export class FooterComponent implements OnInit {
   	return v;
   }
 
-  public getStatusIcon(): number {
+  public getStatusId(): number {
   	return this.status;
   }
 
