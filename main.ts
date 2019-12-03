@@ -9,7 +9,10 @@ let devModeEnabled = false;
 let overlayHidden = true;
 
 const cureAppName = 'Cure';
-const cureWebsite = 'https://github.com/nomaddevs/cure'
+const cureWebsite = 'https://github.com/nomaddevs/cure';
+
+const mainX = 850;
+const mainY = 450;
 
 const log = require('electron-log');
 
@@ -25,7 +28,7 @@ function maximize() {
 }
 
 function defaultScreenSize() {
-  win.setSize(850, 450);
+  win.setSize(mainX, mainY);
 }
 
 function createWindow() {
@@ -43,8 +46,8 @@ function createWindow() {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: 850,
-    height: 450,
+    width: mainX,
+    height: mainY,
     resizable: false,
     frame: false,
     webPreferences: {
