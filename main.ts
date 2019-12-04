@@ -33,6 +33,9 @@ function defaultScreenSize() {
 
 function createWindow() {
   log.info('Creating the main window');
+  var electronScreen = screen;
+  var size = electronScreen.getPrimaryDisplay().workAreaSize;
+
   let cureAppIcon = devModeEnabled ? url.format({
       pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
       protocol: 'file:',
@@ -56,6 +59,7 @@ function createWindow() {
   });
 
   win.setMenu(null);
+  win.center();
   
   defaultScreenSize();
 
