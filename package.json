@@ -105,6 +105,7 @@
     "@types/electron": "^1.6.10",
     "ajv": "^6.10.0",
     "cap": "^0.2.0",
+    "d3": "^5.14.2",
     "electron-log": "^3.0.9",
     "electron-packager": "^14.1.1",
     "find-process": "^1.4.1",

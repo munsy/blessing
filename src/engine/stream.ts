@@ -5,7 +5,7 @@ if(version === 'core') version = 'coreapp';
 
 const baseNetAppPath = path.join(__dirname, '/src/'+ namespace +'/bin/Debug/net'+ version +'2.0');
 
-process.env.EDGE_USE_CORECLR = 1;
+process.env.EDGE_USE_CORECLR = '1';
 if(version !== 'standard')
     process.env.EDGE_APP_ROOT = baseNetAppPath;
 
@@ -42,7 +42,6 @@ var getPerson = edge.func({
 
 
 window.onload = function() {
-
     getAppDomainDirectory('', function(error, result) {
         if (error) throw error;
         document.getElementById("GetAppDomainDirectory").innerHTML = result;

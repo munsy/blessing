@@ -3,13 +3,9 @@
     &nbsp;C U R E
   </div>
 </div>
-<div class="h-100 text-dark">
-	<div class="row" *ngIf="development">
-		<div class="col-md-4"></div>
-		<div class="col-md-4 text-center text-light">
-			<h1>debug (window id: {{ id() }})</h1>
-			<input type="textbox" [(ngModel)]="debug" name="debug" />
-		</div>
-		<div class="col-md-4"></div>
-	</div>
+<div class="h-100 bg-locked" *ngIf="locked">
+	<combat-meters></combat-meters>
+</div>
+<div class="h-100 bg-unlocked" *ngIf="!locked">
+	<combat-meters></combat-meters>
 </div>

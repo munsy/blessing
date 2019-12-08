@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row py-1">
   <div class="col-sm-3">
   	&nbsp;
   </div>
@@ -15,7 +15,7 @@
   	&nbsp;
   </div>
 </div>
-<div class="row">
+<div class="row py-1">
   <div class="col-sm-3">
   	&nbsp;
   </div>
@@ -32,17 +32,36 @@
   	&nbsp;
   </div>
 </div>
-<div class="row" *ngIf="isEnabled()">
-  <div class="col-sm-3">
-    &nbsp;
+<ng-container *ngIf="isEnabled()">
+  <div class="row py-1">
+    <div class="col-sm-3">
+      &nbsp;
+    </div>
+    <div class="col-sm-4">
+      <input type="text" [(ngModel)]="testMessage" name="testMessage" />
+    </div>
+    <div class="col-sm-1">
+      <button type="button" class="btn btn-sm btn-success" (click)="sendTest()">Send</button>
+    </div>
+    <div class="col-sm-4">
+      &nbsp;
+    </div>
   </div>
-  <div class="col-sm-4">
-    <input type="text" [(ngModel)]="testMessage" name="testMessage" />
+  <div class="row py-1">
+    <div class="col-sm-3">
+      &nbsp;
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="noOp()">noOp</button>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="sleepyTest()">sleepyTest</button>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="sendTest()">3</button>
+    </div>
+    <div class="col-sm-4">
+      &nbsp;
+    </div>
   </div>
-  <div class="col-sm-1">
-    <button type="button" class="btn btn-sm btn-success" (click)="sendTest()">Send</button>
-  </div>
-  <div class="col-sm-4">
-    &nbsp;
-  </div>
-</div>
+</ng-container>

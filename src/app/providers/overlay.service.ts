@@ -50,9 +50,19 @@ export class OverlayService {
     return this.locked;
   }
 
+  async sleepyTest() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.ipc.send("combat", {case: "sleepyTest", arg: 0});
+    });
+  }
+
   async sendTestMessage(msg: string) {
     return new Promise<boolean>((resolve, reject) => {
-      this.ipc.send("overlay", {case: "test", arg: msg});
+      if(msg == '') {
+        this.ipc.send("combat", {case: "", arg: msg});
+      } else { 
+        this.ipc.send("combat", {case: "update", arg: msg});
+      }
     });
   }
 

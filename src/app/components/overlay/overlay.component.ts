@@ -27,16 +27,24 @@ export class OverlayComponent implements OnInit {
     }
   }
 
+  public sendTest() {
+    this.overlayService.sendTestMessage(this.testMessage);
+  }
+
+  public sleepyTest() {
+    this.overlayService.sleepyTest();
+  }
+
+  public noOp() {
+    this.overlayService.sendTestMessage('');
+  }
+
   private enableOverlay() {
     this.overlayService.overlayOn();
   }
 
   private disableOverlay() {
     this.overlayService.overlayOff();
-  }
-
-  public sendTest() {
-    this.overlayService.sendTestMessage(this.testMessage);
   }
 
   public id(): any {

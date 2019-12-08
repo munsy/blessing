@@ -12,3 +12,15 @@
   background-color: #000;
   background-color: rgba(0,0,0,0.7);
 }
+
+.bg-unlocked {
+  text-decoration: none !important;
+  background-color: #000;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.bg-locked {
+  text-decoration: none !important;
+  background-color: #000;
+  background-color: rgba(0,0,0,0);
+}

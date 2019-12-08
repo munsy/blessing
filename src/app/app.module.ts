@@ -14,6 +14,7 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { ElectronService } from './providers/electron.service';
 import { OverlayService } from './providers/overlay.service';
+import { CombatService } from './providers/combat.service';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -26,6 +27,7 @@ import { UpdateComponent } from './components/update/update.component';
 import { AddonsComponent } from './components/addons/addons.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
 import { OverlayWindowComponent } from './components/overlay/window.component';
+import { CombatMetersComponent } from './components/overlay/plugins/combat-meters.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -42,6 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UpdateComponent,
     OverlayComponent,
     OverlayWindowComponent,
+    CombatMetersComponent,
     AddonsComponent,
     WebviewDirective
   ],
@@ -61,7 +64,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   schemas: [
       CUSTOM_ELEMENTS_SCHEMA,
   ],
-  providers: [ElectronService, OverlayService],
+  providers: [CombatService, ElectronService, OverlayService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

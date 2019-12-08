@@ -1,6 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { OverlayService } from '../../providers/overlay.service';

@@ -227,24 +227,22 @@ function buildTray() {
   }
 }
 
+function timer(ms: number) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
 try {
   app.on('ready', createWindow);
   app.on('ready', overlayStartup);
   app.on('ready', buildTray);
-  //app.on('ready', createOverlay);
   
-  // Quit when all windows are closed.
   app.on('window-all-closed', () => {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
       app.quit();
     }
   });
 
   app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (win === null) {
       createWindow();
     }
@@ -311,6 +309,27 @@ try {
         break;
       default:
         overlay.webContents.send("overlay", "default");
+        return;
+    }
+  });
+
+  ipcMain.on("combat", async (event, arg) => {
+    console.log(arg);
+    switch(arg.case) {
+      case "update":
+        overlay.webContents.send("combat", {"case": "update", "arg": arg.arg});
+        break;
+      case "sleepyTest":
+        console.log('sleepyTest called');
+        console.log(arg);
+        for(var i = +arg.arg; i < (+arg.arg + 20); i++) {
+          await timer(1000);
+          console.log(i);
+          overlay.webContents.send("combat", {"case": "sleepy", "arg": i});
+        }
+        break;
+      default:
+        overlay.webContents.send("combat", {"case": "", "arg": ""});
         return;
     }
   });
