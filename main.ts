@@ -2,6 +2,8 @@ import { app, BrowserWindow, Menu, Tray, screen, ipcMain } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+import * as ffxivStream from './src/engine/stream';
+
 var fs = require('fs');
 
 let isQuitting = false;
@@ -16,7 +18,7 @@ const mainY = 450;
 
 const log = require('electron-log');
 
-let win, tray, overlay, serve;
+let win, tray, overlay, serve, ffxivEngine;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -101,6 +103,11 @@ function createWindow() {
 }
 
 function createOverlay() {
+  if(!ffxivEngine) {
+    log.info('Initializing FFXIV engine...');
+    ffxivEngine = new ffxivStream.FFXIVStream();
+    console.log(ffxivEngine);
+  }
   log.info('Creating the overlay');
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
