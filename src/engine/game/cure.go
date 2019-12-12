@@ -7,6 +7,7 @@ package main
 import "C"
 
 import (
+	//"encoding/base64"
 	"fmt"
 	"log"
 	"strings"
@@ -22,7 +23,7 @@ const PROCESS_ALL_ACCESS 		= 0x1F0FFF
 const START_LOOP_BASE_ADDRESS 	= 0x400000
 const END_LOOP_BASE_ADDRESS 	= 0x41DFFF//0xFFFFFF
 const FFXIV_EXE_NAME_DX11 		= "ffxiv_dx11.exe"
-const FFXIV_EXE_NAME_DX9 		= "ffxiv_dx9.exe"
+const FFXIV_EXE_NAME_DX9 		= "ffxiv.exe"
 
 func OpenProcessHandle(processId int) uintptr {
 	kernel32 := syscall.MustLoadDLL("kernel32.dll")
@@ -142,28 +143,17 @@ func main(){
 		return
 	}
 
-	var data [2]byte
+	//var data [2]byte
+	var data [END_LOOP_BASE_ADDRESS - START_LOOP_BASE_ADDRESS]byte
     var length uint32
-    var first = -1
-    var last = -1
 
-	for i := START_LOOP_BASE_ADDRESS; i < END_LOOP_BASE_ADDRESS; i += 2 {
-		ret1, _, err := procReadProcessMemory.Call(uintptr(handle), uintptr(i), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
+	//for i := START_LOOP_BASE_ADDRESS; i < END_LOOP_BASE_ADDRESS; i += 2 {
+		ret1, _, err := procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), /*2*/END_LOOP_BASE_ADDRESS - START_LOOP_BASE_ADDRESS, uintptr(unsafe.Pointer(&length)))
 		if err != syscall.Errno(0) {
-			fmt.Printf("First hit: 0x%X Last hit: 0x%X Current: 0x%X Last Error: %s\r", first, last, i, err.Error())
+			fmt.Printf("Error: %s\n", err.Error())
 		}
 		if ret1 != 0 {
-			// dubug stuff
-			if first == -1 {
-				first = i
-			}
-			if last == -1 || last < i {
-				last = i
-			}
-			// /debug 
-			fmt.Printf("0x%X Length: %v\n%v\n", i, length, data)
+			fmt.Printf("Length: %v\n%s\n", length, string(data[:]))
 		}
-	}
-
-	fmt.Printf("First address: 0x%X\nLast address: 0x%X\n", first, last)
+	//}
 }
