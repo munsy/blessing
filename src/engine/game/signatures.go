@@ -19,7 +19,7 @@ const(
 	ZoneInformationKey = "ZONEINFO"
 )
 
-const
+const(
 	MemCommit = 0x1000
     PageExecuteReadwrite = 0x40
     PageExecuteWritecopy = 0x80
@@ -29,11 +29,38 @@ const
     PageWritecopy = 0x08
     WildCardChar = 63
     Writable = PageReadwrite | PageWritecopy | PageExecuteReadwrite | PageExecuteWritecopy | PageGuard
-    
+)
+
+var(
+
     // List<UnsafeNativeMethods.MEMORY_BASIC_INFORMATION> _regions;
     // bool IsScanning { get; private set; }
     // Dictionary<string, Signature> Locations { get; } = new Dictionary<string, Signature>();
 )
+
+func LoadOffsets() {
+
+}
+
+func FindExtendedSignatures() {
+
+}
+
+func FindSuperSignature() int {
+	return 0
+}
+
+func LoadRegions() {
+
+}
+
+func ResolveLocations() {
+
+}
+
+func SignatureToByte() []byte {
+	return nil
+}
 
 /*
 public void LoadOffsets(IEnumerable<Signature> signatures, bool scanAllMemoryRegions = false) {
