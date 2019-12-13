@@ -1,5 +1,9 @@
 package main
 
+import(
+	"strings"
+)
+
 const(
 	AgroCountKey = "AGRO_COUNT"
 	AgroMapKey = "AGROMAP"
@@ -32,7 +36,7 @@ const(
 )
 
 var(
-
+    hexTable = []int{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}
     // List<UnsafeNativeMethods.MEMORY_BASIC_INFORMATION> _regions;
     // bool IsScanning { get; private set; }
     // Dictionary<string, Signature> Locations { get; } = new Dictionary<string, Signature>();
@@ -58,8 +62,22 @@ func ResolveLocations() {
 
 }
 
-func SignatureToByte() []byte {
-	return nil
+func SignatureToByte(signature string, wildcard byte) []byte {
+	pattern := make([]byte, len(signature) / 2)
+	//hexTable := []int{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}
+	x := 0
+    for i := 0; i < len(signature); i += 2 {
+        if signature[i] == wildcard {
+            pattern[x] = wildcard
+        } else {
+        	a := rune(strings.ToUpper(string(signature[i]))[0]) - '0'
+        	b := rune(strings.ToUpper(string(signature[i + 1]))[0]) - '0'
+            pattern[x] = (byte) ((hexTable[a] << 4) | hexTable[b])
+        }
+        x++
+    }
+
+    return pattern
 }
 
 /*
