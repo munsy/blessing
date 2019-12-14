@@ -24,6 +24,38 @@ type Signature struct {
 	ASMSignature bool
 	Key string
 	Value string
-	Offset func()int
-
+	SigScanAddress uintptr
 }
+
+func IntPtr(signature Signature) uintptr {
+	return signature.GetAddress()
+}
+
+func NewSignature() *Signature {
+	return &Signature{
+		regex: nil,
+		Key: "",
+		Value: "",
+		SigScanAddress: nil,
+		ASMSignature: false,
+	}
+}
+
+func (s *Signature) Offset() int {
+	var baseAddress uintptr
+	IsASMSignature := false
+
+	if s.SigScanAddress != nil {
+		baseAddress = s.SigScanAddress
+		if s.ASMSignature {
+			IsASMSignature = true
+		}
+	} else {
+		
+	}
+}
+
+func (s *Signature) Offset() int {
+	return len(s.Value) / 2
+}
+

@@ -2,6 +2,7 @@ package main
 
 import(
     "strings"
+    "time"
 )
 
 const(
@@ -36,10 +37,6 @@ func NewScanner() *Scanner {
     }
 } 
 
-func (s *Scanner) FindExtendedSignatures() {
-
-}
-
 func (s *Scanner) FindSuperSignature() int {
 	return 0
 }
@@ -73,8 +70,8 @@ func (s *Scanner) LoadOffsets(signatures []Signature, scanAllMemoryRegions bool)
 	s.IsScanning = true
 
     go func() bool {
-        // start stopwatch
-
+        start := time.Now()
+    
         if scanAllMemoryRegions {
             s.LoadRegions()
         }
@@ -93,89 +90,23 @@ func (s *Scanner) LoadOffsets(signatures []Signature, scanAllMemoryRegions bool)
             // signatures.RemoveAll(a => s.Locations.ContainsKey(a.Key))
             // s.FindExtendedSignatures(signatures, scanAllMemoryRegions)
         }
-        // stop stopwatch
 
+        elapsed := time.Since(start)
+        // MemoryHandler.Instance.RaiseSignaturesFound(Logger, s.Locations, elapsed)
         s.IsScanning = false
         return true
     }()
 }
 
+func (s *Scanner) FindExtendedSignatures(signatures []Signature, scanAllMemoryRegions bool) {
+    notFound := signatures
+
+    /* IntPtr */baseAddress := MemoryHandler.Instance.ProcessModel.Process.MainModule.BaseAddress
+    /* IntPtr */searchEnd := IntPtr.Add(baseAddress, MemoryHandler.Instance.ProcessModel.Process.MainModule.ModuleMemorySize)
+    /* IntPtr */searchStart := baseAddress
+}
+
 /*
-[StructLayout(LayoutKind.Sequential)]
-public struct MEMORY_BASIC_INFORMATION {
-    public IntPtr BaseAddress;
-
-    public IntPtr AllocationBase;
-
-    public uint AllocationProtect;
-
-    public IntPtr RegionSize;
-
-    public uint State;
-
-    public uint Protect;
-
-    public uint Type;
-
-    public override string ToString() {
-        var sb = new StringBuilder();
-
-        sb.AppendFormat($"BaseAddress:{this.BaseAddress}{Environment.NewLine}");
-        sb.AppendFormat($"AllocationBase:{this.AllocationBase}{Environment.NewLine}");
-        sb.AppendFormat($"AllocationProtect:{this.AllocationProtect}{Environment.NewLine}");
-        sb.AppendFormat($"RegionSize:{this.RegionSize}{Environment.NewLine}");
-        sb.AppendFormat($"State:{this.State}{Environment.NewLine}");
-        sb.AppendFormat($"Protect:{this.Protect}{Environment.NewLine}");
-        sb.AppendFormat($"Type:{this.Type}{Environment.NewLine}");
-
-        return sb.ToString();
-    }
-}
-
-
-public void LoadOffsets(IEnumerable<Signature> signatures, bool scanAllMemoryRegions = false) {
-    if (MemoryHandler.Instance.ProcessModel?.Process == null) {
-        return;
-    }
-
-    this.IsScanning = true;
-
-    Func<bool> scanningFunc = delegate {
-        var sw = new Stopwatch();
-        sw.Start();
-
-        if (scanAllMemoryRegions) {
-            this.LoadRegions();
-        }
-
-        List<Signature> scanable = signatures as List<Signature> ?? signatures.ToList();
-        if (scanable.Any()) {
-            foreach (Signature signature in scanable) {
-                if (signature.Value == string.Empty) {
-                    // doesn't need a signature scan
-                    this.Locations[signature.Key] = signature;
-                    continue;
-                }
-
-                signature.Value = signature.Value.Replace("*", "?"); // allows either ? or * to be used as wildcard
-            }
-
-            scanable.RemoveAll(a => this.Locations.ContainsKey(a.Key));
-
-            this.FindExtendedSignatures(scanable, scanAllMemoryRegions);
-        }
-
-        sw.Stop();
-
-        MemoryHandler.Instance.RaiseSignaturesFound(Logger, this.Locations, sw.ElapsedMilliseconds);
-
-        this.IsScanning = false;
-
-        return true;
-    };
-    scanningFunc.BeginInvoke(delegate { }, scanningFunc);
-}
-
 private void FindExtendedSignatures(IEnumerable<Signature> signatures, bool scanAllMemoryRegions = false) {
     List<Signature> notFound = new List<Signature>(signatures);
 
@@ -313,6 +244,49 @@ private void ResolveLocations(IntPtr baseAddress, IntPtr searchStart, IntPtr sea
             MemoryHandler.Instance.RaiseException(Logger, ex, true);
         }
     }
+}
+
+public void LoadOffsets(IEnumerable<Signature> signatures, bool scanAllMemoryRegions = false) {
+    if (MemoryHandler.Instance.ProcessModel?.Process == null) {
+        return;
+    }
+
+    this.IsScanning = true;
+
+    Func<bool> scanningFunc = delegate {
+        var sw = new Stopwatch();
+        sw.Start();
+
+        if (scanAllMemoryRegions) {
+            this.LoadRegions();
+        }
+
+        List<Signature> scanable = signatures as List<Signature> ?? signatures.ToList();
+        if (scanable.Any()) {
+            foreach (Signature signature in scanable) {
+                if (signature.Value == string.Empty) {
+                    // doesn't need a signature scan
+                    this.Locations[signature.Key] = signature;
+                    continue;
+                }
+
+                signature.Value = signature.Value.Replace("*", "?"); // allows either ? or * to be used as wildcard
+            }
+
+            scanable.RemoveAll(a => this.Locations.ContainsKey(a.Key));
+
+            this.FindExtendedSignatures(scanable, scanAllMemoryRegions);
+        }
+
+        sw.Stop();
+
+        MemoryHandler.Instance.RaiseSignaturesFound(Logger, this.Locations, sw.ElapsedMilliseconds);
+
+        this.IsScanning = false;
+
+        return true;
+    };
+    scanningFunc.BeginInvoke(delegate { }, scanningFunc);
 }
 
 private byte[] SignatureToByte(string signature, byte wildcard) {
