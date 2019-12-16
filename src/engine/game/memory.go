@@ -5,6 +5,11 @@ import(
 	"strings"
 )
 
+type Block struct {
+    Length int
+    Start int
+}
+
 type MEMORY_BASIC_INFORMATION struct {
     BaseAddress uintptr
     AllocationBase uintptr
@@ -27,6 +32,26 @@ func (m MEMORY_BASIC_INFORMATION) String() string {
     sb.WriteString(fmt.Sprintf("Type:%v\r\n", m.Type))
 
     return sb.String();
+}
+
+type MemoryHandler struct {
+    IsNewInstance bool
+    IsAttached bool
+    ScanCount int
+    GameLanguage string
+    ProcessHandle uintptr
+    ProcessModel ProcModel
+    UseLocalCache bool
+    
+    Structures []Structures
+    ExceptionEvent []ExceptionEvent
+    SignaturesFoundEvent []SignaturesFoundEvent
+
+    instance MemoryHandler
+}
+
+func (m MemoryHandler) GetInstance() MemoryHandler {
+    return m.instance
 }
 
 /*
