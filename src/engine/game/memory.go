@@ -3,6 +3,7 @@ package main
 import(
 	"fmt"
 	"strings"
+    "unsafe"
 )
 
 type Block struct {
@@ -52,6 +53,13 @@ type MemoryHandler struct {
 
 func (m MemoryHandler) GetInstance() MemoryHandler {
     return m.instance
+}
+
+func (m MemoryHandler) GetByte(address uintptr, offset int64) byte {
+    //var data []byte
+    var addr64 = (*uint64)(unsafe.Pointer(address)) + offset
+    return m.Peek(uintptr(addr64))[0] //, data)
+    //return data[0]
 }
 
 /*
