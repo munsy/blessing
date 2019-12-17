@@ -26,7 +26,7 @@ const FFXIV_EXE_NAME_DX11 		= "ffxiv_dx11.exe"
 const FFXIV_EXE_NAME_DX9 		= "ffxiv.exe"
 
 func OpenProcessHandle(processId int) uintptr {
-	kernel32 := syscall.MustLoadDLL("kernel32.dll")
+	//kernel32 := syscall.MustLoadDLL("kernel32.dll")
 	proc := kernel32.MustFindProc("OpenProcess")
 	handle, _, _ := proc.Call(ptr(PROCESS_ALL_ACCESS), ptr(true), ptr(processId))
 	return uintptr(handle)

@@ -58,11 +58,29 @@ func (m MemoryHandler) GetInstance() MemoryHandler {
 func (m MemoryHandler) GetByte(address uintptr, offset int64) byte {
     //var data []byte
     var addr64 = (*uint64)(unsafe.Pointer(address)) + offset
-    return m.Peek(uintptr(addr64))[0] //, data)
-    //return data[0]
+    if data, ok := m.Peek(uintptr(addr64)); ok {
+        return data[0] //, data)
+    }
+    return byte(0)
 }
 
+func (m MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
+    a := uintptr(m.instance.ProcessHandle)
+    b := uintptr(address)
+    c := uintptr(unsafe.Pointer(&buffer))
+    d := &int(len(buffer))
+    var e uint32
+    ReadProcessMemory.Call(a, b, c, d, e)
+    return c, (e > 0)
+}
+
+//procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
 /*
+public bool Peek(IntPtr address, byte[] buffer) {
+    IntPtr lpNumberOfBytesRead;
+    return UnsafeNativeMethods.ReadProcessMemory(Instance.ProcessHandle, address, buffer, new IntPtr(buffer.Length), out lpNumberOfBytesRead);
+}
+
     public class MemoryHandler {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
