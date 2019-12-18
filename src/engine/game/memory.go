@@ -1,8 +1,9 @@
 package main
 
 import(
-	"fmt"
-	"strings"
+    "errors"
+    "fmt"
+    "strings"
     "unsafe"
 )
 
@@ -41,41 +42,69 @@ type MemoryHandler struct {
     ScanCount int
     GameLanguage string
     ProcessHandle uintptr
-    ProcessModel ProcModel
+    ProcessModel ProcessModel
     UseLocalCache bool
     
-    Structures []Structures
+    Structures []Structure
     ExceptionEvent []ExceptionEvent
     SignaturesFoundEvent []SignaturesFoundEvent
 
-    instance MemoryHandler
+    instance *MemoryHandler
 }
 
-func (m MemoryHandler) GetInstance() MemoryHandler {
+func (m *MemoryHandler) GetInstance() *MemoryHandler {
     return m.instance
 }
 
-func (m MemoryHandler) GetByte(address uintptr, offset int64) byte {
-    //var data []byte
-    var addr64 = (*uint64)(unsafe.Pointer(address)) + offset
-    if data, ok := m.Peek(uintptr(addr64)); ok {
-        return data[0] //, data)
-    }
-    return byte(0)
-}
-
-func (m MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
+func (m *MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
     a := uintptr(m.instance.ProcessHandle)
     b := uintptr(address)
     c := uintptr(unsafe.Pointer(&buffer))
-    d := &int(len(buffer))
-    var e uint32
+    d := len(buffer)
+    var e uintptr
     ReadProcessMemory.Call(a, b, c, d, e)
     return c, (e > 0)
 }
 
-//procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
+func (m *MemoryHandler) GetByte(address uintptr, offset int64) byte {
+    data := make([]byte, 1)
+    var addr64 = (*uint64)(unsafe.Pointer(address) + unsafe.Sizeof(int(0)*uintptr(offset)))
+    if data, ok := m.Peek(uintptr(addr64, data)); ok {
+        return data[0] //, data)
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetByteArray(address uintptr, length int) []byte {
+    data := make([]byte, length)
+    if data, ok := m.Peek(address, data); ok {
+        return data
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetInt16(address uintptr, offset int) (int16, bool) {
+    var data [2]byte
+    if data, ok := m.Peek(address, data); ok {
+        return int16(data)
+    }
+    panic(errors.New("peek failure"))
+}
+
 /*
+public short GetInt16(IntPtr address, long offset = 0) {
+    byte[] value = new byte[2];
+    this.Peek(new IntPtr(address.ToInt64() + offset), value);
+    return BitConverter.TryToInt16(value, 0);
+}
+
+public byte[] GetByteArray(IntPtr address, int length) {
+    byte[] data = new byte[length];
+    this.Peek(address, data);
+    return data;
+}
+
+//procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
 public bool Peek(IntPtr address, byte[] buffer) {
     IntPtr lpNumberOfBytesRead;
     return UnsafeNativeMethods.ReadProcessMemory(Instance.ProcessHandle, address, buffer, new IntPtr(buffer.Length), out lpNumberOfBytesRead);
