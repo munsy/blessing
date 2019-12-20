@@ -69,9 +69,9 @@ func (m *MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
     return (*[unsafe.Sizeof(uintptr(0))]byte)(unsafe.Pointer(c))[:], (e > 0)
 }
 
-func (m *MemoryHandler) GetByte(address uintptr, offset int64) byte {
+func (m *MemoryHandler) GetByte(address uintptr, offset int) byte {
     data := make([]byte, 1)
-    var addr64 = (*uint64)(unsafe.Pointer(address) + unsafe.Sizeof(int(0)*uintptr(offset)))
+    var addr64 = (*uint64)(unsafe.Pointer(uintptr(address) + offset))
     if data, ok := m.Peek(uintptr(addr64, data)); ok {
         return data[0] //, data)
     }
