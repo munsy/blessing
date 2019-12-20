@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { CombatService } from '../../../providers/combat.service';
 
+
 @Component({
   selector: 'combat-meters',
   templateUrl: './combat-meters.component.html',
@@ -12,6 +13,8 @@ export class CombatMetersComponent implements OnInit {
   public fromMain: string;
   public noOp: number;
   public sleepy: number;
+  
+  //private center = $(window).scrollTop() + $(window).height() / 2;
   
   constructor(private cs: CombatService,
               private ref: ChangeDetectorRef) {

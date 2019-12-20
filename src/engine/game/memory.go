@@ -7,6 +7,8 @@ import(
     "unsafe"
 )
 
+const UINTPTR_SIZE = unsafe.Sizeof(uintptr(0))
+
 type Block struct {
     Length int
     Start int
@@ -60,10 +62,11 @@ func (m *MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
     a := uintptr(m.instance.ProcessHandle)
     b := uintptr(address)
     c := uintptr(unsafe.Pointer(&buffer))
-    d := len(buffer)
+    d := uintptr(len(buffer))
     var e uintptr
     ReadProcessMemory.Call(a, b, c, d, e)
-    return c, (e > 0)
+    
+    return (*[unsafe.Sizeof(uintptr(0))]byte)(unsafe.Pointer(c))[:], (e > 0)
 }
 
 func (m *MemoryHandler) GetByte(address uintptr, offset int64) byte {

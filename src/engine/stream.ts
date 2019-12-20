@@ -1,5 +1,5 @@
 const path = require('path');
-const edge = require('electron-edge-js');
+//const edge = require('electron-edge-js');
     
 export class FFXIVStream {
     private baseNetAppPath: string;
@@ -13,14 +13,14 @@ export class FFXIVStream {
         //     process.env.EDGE_APP_ROOT = baseNetAppPath;
         // }
         
-        this.baseNetAppPath = path.join(__dirname, '/lib/');
-        this.namespace = 'FFXIVAPP.Memory';
-        this.baseDll = path.join(this.baseNetAppPath, this.namespace + '.dll');
-        
-        console.log(this.baseNetAppPath);
-        console.log(this.baseDll);
+        // this.baseGoPath = path.join(__dirname, '/lib/');
+        // this.namespace = 'FFXIVAPP.Memory';
+        // this.baseDll = path.join(this.baseNetAppPath, this.namespace + '.dll');
+        // 
+        // console.log(this.baseNetAppPath);
+        // console.log(this.baseDll);
 
-        var getFFXIVProc = edge.func(this.baseDll);
+        // var getFFXIVProc = edge.func(this.baseDll);
     }
 }
     
