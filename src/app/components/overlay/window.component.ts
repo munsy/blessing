@@ -73,6 +73,11 @@ export class OverlayWindowComponent implements OnInit {
     return this.es.getWindowId();
   }
 
+  lock() {
+    this.locked = true;
+    this.es.send("overlay", {case: "lock", arg: ''});
+  }
+
   isLocked(): boolean {
     return this.locked;
   }

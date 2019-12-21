@@ -1,14 +1,7 @@
-<div class="cure-combat-meters">
-	<h3 class="text-white text-center">
-		<div class="row">
-			<div class="col-md-4"></div>
-			<div class="col-md-4 text-center text-light">
-				<h1>Combat Meters</h1>
-				<h3 *ngIf="fromMain != ''">{{ fromMain }}</h3>
-				<h3 *ngIf="noOp > 0">{{ noOp }}</h3>
-				<h3 *ngIf="sleepy > 0">{{ sleepy }}</h3>
-			</div>
-			<div class="col-md-4"></div>
-		</div>
-	</h3>
+<div id="cure-combat-meters">
+  <div id="cure-combat-meters-header">Click here to move</div>
+  <h1>Combat Meters</h1>
+  <h3 *ngIf="fromMain != ''">{{ fromMain }}</h3>
+  <h3 *ngIf="noOp > 0">{{ noOp }}</h3>
+  <h3 *ngIf="sleepy > 0">{{ sleepy }}</h3>
 </div>

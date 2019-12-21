@@ -47,6 +47,7 @@ function createWindow() {
       protocol: 'file:',
       slashes: true
     });
+
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
@@ -303,9 +304,11 @@ try {
         if(overlay !== null) { overlay.hide(); }
         break;
       case "lock":
+        overlay.setIgnoreMouseEvents(true);
         overlay.webContents.send("overlay", {"case": "lock", "arg": ""});
         break;
       case "unlock":
+        overlay.setIgnoreMouseEvents(false);
         overlay.webContents.send("overlay", {"case": "unlock", "arg": ""});
         break;
       case "test":
