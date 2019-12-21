@@ -106,6 +106,15 @@ func findProcessByName(processes []WindowsProcess, name string) *WindowsProcess 
 	return nil
 }
 
+func findProcessByID(processes []WindowsProcess, pid int) *WindowsProcess {
+	for _, p := range processes {
+		if p.ProcessID == pid {
+			return &p
+		}
+	}
+	return nil
+}
+
 func newWindowsProcess(e *windows.ProcessEntry32) WindowsProcess {
 	// Find when the string ends for decoding
 	end := 0

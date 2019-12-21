@@ -12,3 +12,7 @@ $ git clone git@github.com:nomaddevs/cure.git
 $ npm install
 $ npm start
 ```
+
+# Requirements
+- Go v1.12 or later
+- Node.js 10.15.3 or later

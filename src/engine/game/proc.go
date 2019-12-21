@@ -14,20 +14,25 @@ func (p *ProcessModel) IsWin64() bool {
 }
 
 func (p *ProcessModel) ProcessID() int {
-	if p.proc == nil {
+	if p.process == nil {
 		return -1
 	}
 	return int(p.process.Pid)
 }
 
 func (p *ProcessModel) ProcessName() string {
-	if p.proc == nil {
+	if p.process == nil {
 		return ""
 	}
-	name, err := p.proc.Name()
+	return p.getProcessNameById()
+}
 
-	if nil != err {
+func (p *ProcessModel) getProcessNameById() string {
+	procs, err := processes()
+	if err != nil {
 		panic(err)
 	}
-	return name
+
+	return findProcessByID(procs, p.ProcessID()).Exe
 }
+

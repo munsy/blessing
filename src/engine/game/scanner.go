@@ -93,17 +93,20 @@ func (s *Scanner) LoadOffsets(signatures []Signature, scanAllMemoryRegions bool)
 
         elapsed := time.Since(start)
         // MemoryHandler.Instance.RaiseSignaturesFound(Logger, s.Locations, elapsed)
+        println(elapsed)
         s.IsScanning = false
         return true
     }()
 }
 
 func (s *Scanner) FindExtendedSignatures(signatures []Signature, scanAllMemoryRegions bool) {
+    /*
     notFound := signatures
 
-    /* IntPtr */baseAddress := MemoryHandler.Instance.ProcessModel.Process.MainModule.BaseAddress
-    /* IntPtr */searchEnd := IntPtr.Add(baseAddress, MemoryHandler.Instance.ProcessModel.Process.MainModule.ModuleMemorySize)
-    /* IntPtr */searchStart := baseAddress
+    IntPtr baseAddress := MemoryHandler.Instance.ProcessModel.Process.MainModule.BaseAddress
+    IntPtr searchEnd := IntPtr.Add(baseAddress, MemoryHandler.Instance.ProcessModel.Process.MainModule.ModuleMemorySize)
+    IntPtr searchStart := baseAddress
+    */
 }
 
 /*

@@ -1,5 +1,9 @@
 package main
 
+import(
+	"unsafe"
+)
+
 const(
 	AgroCountKey = "AGRO_COUNT"
 	AgroMapKey = "AGROMAP"
@@ -24,7 +28,7 @@ type Signature struct {
 	ASMSignature bool
 	Key string
 	Value string
-	SigScanAddress uintptr
+	SigScanAddress unsafe.Pointer
 }
 
 func IntPtr(signature Signature) uintptr {
@@ -33,29 +37,33 @@ func IntPtr(signature Signature) uintptr {
 
 func NewSignature() *Signature {
 	return &Signature{
-		regex: nil,
+		regex: "",
 		Key: "",
 		Value: "",
-		SigScanAddress: nil,
+		SigScanAddress: unsafe.Pointer(uintptr(0)),
 		ASMSignature: false,
 	}
 }
 
-func (s *Signature) Offset() int {
+func (s *Signature) SomeFunc() (uintptr, bool) {
 	var baseAddress uintptr
 	IsASMSignature := false
 
 	if s.SigScanAddress != nil {
-		baseAddress = s.SigScanAddress
+		baseAddress = uintptr(s.SigScanAddress)
 		if s.ASMSignature {
 			IsASMSignature = true
 		}
 	} else {
-		
+		baseAddress = uintptr(0)
 	}
+	return baseAddress, IsASMSignature
 }
 
 func (s *Signature) Offset() int {
 	return len(s.Value) / 2
 }
 
+func (s *Signature) GetAddress() uintptr {
+	return uintptr(s.SigScanAddress)
+}

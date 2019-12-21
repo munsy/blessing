@@ -1,6 +1,7 @@
 package main
 
 import(
+    "encoding/binary"
     "errors"
     "fmt"
     "strings"
@@ -87,10 +88,10 @@ func (m *MemoryHandler) GetByteArray(address uintptr, length int) []byte {
     panic(errors.New("peek failure"))
 }
 
-func (m *MemoryHandler) GetInt16(address uintptr, offset int) (int16, bool) {
+func (m *MemoryHandler) GetInt16(address uintptr, offset int) int16 {
     data := make([]byte, 2)
     if data, ok := m.Peek(address, data); ok {
-        return int16(data)
+        return int16(binary.BigEndian.Uint16(data))
     }
     panic(errors.New("peek failure"))
 }
