@@ -71,8 +71,9 @@ func (m *MemoryHandler) Peek(address uintptr, buffer []byte) ([]byte, bool) {
 
 func (m *MemoryHandler) GetByte(address uintptr, offset int) byte {
     data := make([]byte, 1)
-    var addr64 = (*uint64)(unsafe.Pointer(uintptr(address) + offset))
-    if data, ok := m.Peek(uintptr(addr64, data)); ok {
+    // var addr64 = (*uint64)(unsafe.Pointer(uintptr(address) + offset))
+    var addr64 = *(*int)(unsafe.Pointer(uintptr(address) + uintptr(offset)))
+    if data, ok := m.Peek(uintptr(addr64), data); ok {
         return data[0] //, data)
     }
     panic(errors.New("peek failure"))
@@ -87,7 +88,7 @@ func (m *MemoryHandler) GetByteArray(address uintptr, length int) []byte {
 }
 
 func (m *MemoryHandler) GetInt16(address uintptr, offset int) (int16, bool) {
-    var data [2]byte
+    data := make([]byte, 2)
     if data, ok := m.Peek(address, data); ok {
         return int16(data)
     }
