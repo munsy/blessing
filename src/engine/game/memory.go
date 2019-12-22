@@ -180,7 +180,52 @@ func (m *MemoryHandler) GetString(address uintptr, offset, size int) string {
     return string(data[realSize:size])
 }
 
+func (m *MemoryHandler) GetStructure(address uintptr, offset int) {
 /*
+    var lpNumberOfBytesRead uintptr
+    buffer := Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(T)));
+    UnsafeNativeMethods.ReadProcessMemory(this.ProcessModel.Process.Handle, address + offset, buffer, new IntPtr(Marshal.SizeOf(typeof(T))), out lpNumberOfBytesRead);
+    var retValue = (T) Marshal.PtrToStructure(buffer, typeof(T));
+    Marshal.FreeCoTaskMem(buffer);
+    return retValue;
+*/
+}
+
+
+func (m *MemoryHandler) GetUInt16(address uintptr, offset int) uint16 {
+    data := make([]byte, 2)
+    if data, ok := m.Peek(address, data); ok {
+        return binary.BigEndian.Uint16(data)
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetUInt32(address uintptr, offset int) uint32 {
+    data := make([]byte, 4)
+    if data, ok := m.Peek(address, data); ok {
+        return binary.BigEndian.Uint32(data)
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetUInt64(address uintptr, offset int) uint64 {
+    data := make([]byte, 8)
+    if data, ok := m.Peek(address, data); ok {
+        return binary.BigEndian.Uint64(data)
+    }
+    panic(errors.New("peek failure"))
+}
+
+
+/*
+public T GetStructure<T>(IntPtr address, int offset = 0) {
+    IntPtr lpNumberOfBytesRead;
+    IntPtr buffer = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(T)));
+    UnsafeNativeMethods.ReadProcessMemory(this.ProcessModel.Process.Handle, address + offset, buffer, new IntPtr(Marshal.SizeOf(typeof(T))), out lpNumberOfBytesRead);
+    var retValue = (T) Marshal.PtrToStructure(buffer, typeof(T));
+    Marshal.FreeCoTaskMem(buffer);
+    return retValue;
+}
 
 // procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
 
