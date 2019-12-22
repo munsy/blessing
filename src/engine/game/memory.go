@@ -96,20 +96,94 @@ func (m *MemoryHandler) GetInt16(address uintptr, offset int) int16 {
     panic(errors.New("peek failure"))
 }
 
+func (m *MemoryHandler) GetInt32(address uintptr, offset int) int32 {
+    data := make([]byte, 4)
+    if data, ok := m.Peek(address, data); ok {
+        return int32(binary.BigEndian.Uint32(data))
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetInt64(address uintptr, offset int) int64 {
+    data := make([]byte, 8)
+    if data, ok := m.Peek(address, data); ok {
+        return int64(binary.BigEndian.Uint64(data))
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetPlatformInt(address uintptr, offset int) int {
+    var data []byte 
+    if m.ProcessModel.IsWin64() {
+        data = make([]byte, 8)
+    } else {
+        data = make([]byte, 4)
+    }
+    if data, ok := m.Peek(address, data); ok {
+        //return int16(binary.BigEndian.Uint16(data))
+        if m.ProcessModel.IsWin64() {
+            return int(binary.BigEndian.Uint64(data))
+        }
+        return int(binary.BigEndian.Uint32(data))
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetPlatformIntFromBytes(source []byte/*, index int*/) int {
+    if(m.ProcessModel.IsWin64()) {
+        return int(binary.BigEndian.Uint64(source))
+    }
+    return int(binary.BigEndian.Uint32(source))
+}
+
+func (m *MemoryHandler) GetPlatformUInt(address uintptr, offset int) uint {
+    var data []byte 
+    if m.ProcessModel.IsWin64() {
+        data = make([]byte, 8)
+    } else {
+        data = make([]byte, 4)
+    }
+    if data, ok := m.Peek(address, data); ok {
+        //return int16(binary.BigEndian.Uint16(data))
+        if m.ProcessModel.IsWin64() {
+            return uint(binary.BigEndian.Uint64(data))
+        }
+        return uint(binary.BigEndian.Uint32(data))
+    }
+    panic(errors.New("peek failure"))
+}
+
+func (m *MemoryHandler) GetPlatformUIntFromBytes(source []byte/*, index int*/) uint {
+    if(m.ProcessModel.IsWin64()) {
+        return uint(binary.BigEndian.Uint64(source))
+    }
+    return uint(binary.BigEndian.Uint32(source))
+}
+
+func (m *MemoryHandler) GetStaticAddress(offset int) uintptr {
+    return uintptr(m.instance.ProcessModel.Process().Startstack + uint64(offset))
+}
+
+func (m *MemoryHandler) GetString(address uintptr, offset, size int) string {
+    bytes := make([]byte, size)
+    realSize := 0
+    data, ok := m.Peek(uintptr(int(address) + offset), bytes)
+    if ok {
+        for i := 0; i < size; i++ {
+            if data[i] != 0 {
+                continue
+            }
+            realSize = i
+            break
+        }
+    }
+    return string(data[realSize:size])
+}
+
 /*
-public short GetInt16(IntPtr address, long offset = 0) {
-    byte[] value = new byte[2];
-    this.Peek(new IntPtr(address.ToInt64() + offset), value);
-    return BitConverter.TryToInt16(value, 0);
-}
 
-public byte[] GetByteArray(IntPtr address, int length) {
-    byte[] data = new byte[length];
-    this.Peek(address, data);
-    return data;
-}
+// procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
 
-//procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), 2, uintptr(unsafe.Pointer(&length)))
 public bool Peek(IntPtr address, byte[] buffer) {
     IntPtr lpNumberOfBytesRead;
     return UnsafeNativeMethods.ReadProcessMemory(Instance.ProcessHandle, address, buffer, new IntPtr(buffer.Length), out lpNumberOfBytesRead);
