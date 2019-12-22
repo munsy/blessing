@@ -216,8 +216,113 @@ func (m *MemoryHandler) GetUInt64(address uintptr, offset int) uint64 {
     panic(errors.New("peek failure"))
 }
 
+func (m *MemoryHandler) ReadPointer(address uintptr, offset int) uintptr {
+    if m.ProcessModel.IsWin64() {
+        win64 := make([]byte, 8)
+        if data, ok := m.Peek(uintptr(int(address) + offset), win64); ok {
+            return uintptr(binary.BigEndian.Uint64(data))
+        }
+    }
+    win32 := make([]byte, 4)
+    if data, ok := m.Peek(uintptr(int(address) + offset), win32); ok {
+        return uintptr(binary.BigEndian.Uint32(data))
+    }
+    return uintptr(0)
+}
+
+func (m *MemoryHandler) ResolvePointerPath(path []int, baseAddress uintptr, IsASMSignature bool) uintptr {
+    nextAddress := baseAddress
+    for i := 0; i < len(path); i++ {
+        baseAddress = uintptr(int(nextAddress) + path[i])
+        if baseAddress == uintptr(0) {
+            return uintptr(0)
+        }
+        if IsASMSignature {
+            nextAddress = baseAddress + m.GetInstance().GetInt32(baseAddress, 0) + 4
+            IsASMSignature = false
+        } else {
+            nextAddress = m.GetInstance().ReadPointer(baseAddress, 0)
+        }
+    }
+    return baseAddress
+}
 
 /*
+public void SetProcess(ProcessModel processModel, string gameLanguage = "English", string patchVersion = "latest", bool useLocalCache = true, bool scanAllMemoryRegions = false) {
+    this.ProcessModel = processModel;
+    this.GameLanguage = gameLanguage;
+    this.UseLocalCache = useLocalCache;
+
+    this.UnsetProcess();
+
+    try {
+        this.ProcessHandle = UnsafeNativeMethods.OpenProcess(UnsafeNativeMethods.ProcessAccessFlags.PROCESS_VM_ALL, false, (uint) this.ProcessModel.ProcessID);
+    }
+    catch (Exception) {
+        this.ProcessHandle = processModel.Process.Handle;
+    }
+    finally {
+        Constants.ProcessHandle = this.ProcessHandle;
+        this.IsAttached = true;
+    }
+
+    if (this.IsNewInstance) {
+        this.IsNewInstance = false;
+
+        ActionLookup.Resolve();
+        StatusEffectLookup.Resolve();
+        ZoneLookup.Resolve();
+
+        this.ResolveMemoryStructures(processModel, patchVersion);
+    }
+
+    this.AttachmentWorker = new AttachmentWorker();
+    this.AttachmentWorker.StartScanning(processModel);
+
+    this.SystemModules.Clear();
+    this.GetProcessModules();
+
+    Scanner.Instance.Locations.Clear();
+    Scanner.Instance.LoadOffsets(Signatures.Resolve(processModel, patchVersion), scanAllMemoryRegions);
+}
+
+public IntPtr ResolvePointerPath(IEnumerable<long> path, IntPtr baseAddress, bool IsASMSignature = false) {
+    IntPtr nextAddress = baseAddress;
+    foreach (var offset in path) {
+        try {
+            baseAddress = new IntPtr(nextAddress.ToInt64() + offset);
+            if (baseAddress == IntPtr.Zero) {
+                return IntPtr.Zero;
+            }
+
+            if (IsASMSignature) {
+                nextAddress = baseAddress + Instance.GetInt32(new IntPtr(baseAddress.ToInt64())) + 4;
+                IsASMSignature = false;
+            }
+            else {
+                nextAddress = Instance.ReadPointer(baseAddress);
+            }
+        }
+        catch {
+            return IntPtr.Zero;
+        }
+    }
+
+    return baseAddress;
+}
+
+public IntPtr ReadPointer(IntPtr address, long offset = 0) {
+    if (this.ProcessModel.IsWin64) {
+        byte[] win64 = new byte[8];
+        this.Peek(new IntPtr(address.ToInt64() + offset), win64);
+        return new IntPtr(BitConverter.TryToInt64(win64, 0));
+    }
+
+    byte[] win32 = new byte[4];
+    this.Peek(new IntPtr(address.ToInt64() + offset), win32);
+    return IntPtr.Add(IntPtr.Zero, BitConverter.TryToInt32(win32, 0));
+}
+
 public T GetStructure<T>(IntPtr address, int offset = 0) {
     IntPtr lpNumberOfBytesRead;
     IntPtr buffer = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(T)));
