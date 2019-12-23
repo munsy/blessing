@@ -238,13 +238,49 @@ func (m *MemoryHandler) ResolvePointerPath(path []int, baseAddress uintptr, IsAS
             return uintptr(0)
         }
         if IsASMSignature {
-            nextAddress = baseAddress + m.GetInstance().GetInt32(baseAddress, 0) + 4
+            nextAddress = uintptr(int(baseAddress) + int(m.GetInstance().GetInt32(baseAddress, 0)) + 4)
             IsASMSignature = false
         } else {
             nextAddress = m.GetInstance().ReadPointer(baseAddress, 0)
         }
     }
     return baseAddress
+}
+
+func (m *MemoryHandler) SetProcess(model ProcessModel, gameLanguage, patchVersion string, useLocalCache, scannAllMemoryRegions bool) {
+    m.ProcessModel = model
+    m.GameLanguage = gameLanguage
+    m.UseLocalCache = useLocalCache
+
+    m.UnsetProcess()
+
+    m.ProcessHandle = OpenProcessHandle(m.ProcessModel.ProcessID())
+
+    ProcessHandle = m.ProcessHandle
+    m.IsAttached = true
+
+    if m.IsNewInstance {
+        m.IsNewInstance = false
+
+        ActionLookup.Resolve()
+        StatusEffectLookup.Resolve()
+        ZoneLookup.Resolve()
+
+        m.ResolveMemoryStructures(model, patchVersion)
+    }
+
+    m.AttachmentWorker = NewAttachmentWorker()
+    m.AttachmentWorker.StartScanning(model)
+
+    m.SystemModules.Clear()
+    m.GetProcessModules()
+
+    Scanner.Instance.Locations.Clear()
+    Scanner.Instance.LoadOffsets(Signatures.Resolve(model, patchVersion), scanAllMemoryRegions)
+}
+
+func (m *MemoryHandler) UnsetProcess() {
+
 }
 
 /*

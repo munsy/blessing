@@ -19,18 +19,11 @@ import (
 
 // TH32CS_SNAPPROCESS is described in https://msdn.microsoft.com/de-de/library/windows/desktop/ms682489(v=vs.85).aspx
 const TH32CS_SNAPPROCESS		= 0x00000002 // Includes all processes in the system in the snapshot.
-const PROCESS_ALL_ACCESS 		= 0x1F0FFF
+
 const START_LOOP_BASE_ADDRESS 	= 0x400000
-const END_LOOP_BASE_ADDRESS 	= 0x41DFFF//0xFFFFFF
+const END_LOOP_BASE_ADDRESS 	= 0x41DFFF //0xFFFFFF
 const FFXIV_EXE_NAME_DX11 		= "ffxiv_dx11.exe"
 const FFXIV_EXE_NAME_DX9 		= "ffxiv.exe"
-
-func OpenProcessHandle(processId int) uintptr {
-	//kernel32 := syscall.MustLoadDLL("kernel32.dll")
-	proc := kernel32.MustFindProc("OpenProcess")
-	handle, _, _ := proc.Call(ptr(PROCESS_ALL_ACCESS), ptr(true), ptr(processId))
-	return uintptr(handle)
-}
 
 func ptr(val interface{}) uintptr {
 	switch val.(type) {
