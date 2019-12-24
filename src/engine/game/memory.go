@@ -23,6 +23,8 @@ type MEMORY_BASIC_INFORMATION struct {
     State uint
     Protect uint
     Type uint
+
+    AttachmentWorker *AttachmentWorker
 }
 
 func (m MEMORY_BASIC_INFORMATION) String() string {
@@ -280,10 +282,40 @@ func (m *MemoryHandler) SetProcess(model ProcessModel, gameLanguage, patchVersio
 }
 
 func (m *MemoryHandler) UnsetProcess() {
+    if m.AttachmentWorker != nil {
+        m.AttachmentWorker.StopScanning()
+        m.AttachmentWorker.Dispose()
+    }
 
+    if m.IsAttached {
+        CloseHandle(m.instance.ProcessHandle)
+    }
+
+    m.ProcessHandle = uintptr(0)
+    ProcessHandle = uintptr(0)
 }
 
 /*
+public void UnsetProcess() {
+    if (this.AttachmentWorker != null) {
+        this.AttachmentWorker.StopScanning();
+        this.AttachmentWorker.Dispose();
+    }
+
+    try {
+        if (this.IsAttached) {
+            UnsafeNativeMethods.CloseHandle(Instance.ProcessHandle);
+        }
+    }
+    catch (Exception) {
+        // IGNORED
+    }
+    finally {
+        Constants.ProcessHandle = this.ProcessHandle = IntPtr.Zero;
+        this.IsAttached = false;
+    }
+}
+
 public void SetProcess(ProcessModel processModel, string gameLanguage = "English", string patchVersion = "latest", bool useLocalCache = true, bool scanAllMemoryRegions = false) {
     this.ProcessModel = processModel;
     this.GameLanguage = gameLanguage;

@@ -41,15 +41,20 @@ func (w *AttachmentWorker) ScanTimerElapsed() {
 
 	go func() {
 		procs := processes()
-
+		found := false
 		for i := 0; i < len(procs); i++ {
 			if procs[i].ProcessID == w.processModel.ProcessID() && 
 			procs[i].Exe == w.processModel.ProcessName() {
-				
+				found = true
 			}
 		}
-
-		}()
+		if !found {
+			MemoryHandler.Instance.IsAttached = false;
+			MemoryHandler.Instance.UnsetProcess();
+		}
+		w.isScanning = false
+		return true
+	}()
 }
 /*
 namespace Sharlayan {

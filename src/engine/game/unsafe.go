@@ -20,3 +20,8 @@ func OpenProcessHandle(processId int) uintptr {
 	handle, _, _ := proc.Call(ptr(PROCESS_ALL_ACCESS), ptr(true), ptr(processId))
 	return uintptr(handle)
 }
+
+func CloseHandle(handle uintptr) {
+	proc := kernel32.MustFindProc("CloseHandle")
+	proc.Call(handle)
+}
