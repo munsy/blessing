@@ -1,6 +1,6 @@
 Cure
 ====
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![dependencies Status](https://david-dm.org/nomaddevs/cure/status.svg)](https://david-dm.org/nomaddevs/cure)
 
 Addon and dependency manager for Final Fantasy XIV: A Realm Reborn.
 
