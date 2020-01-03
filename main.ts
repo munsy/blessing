@@ -4,6 +4,8 @@ import * as url from 'url';
 
 import * as ffxivStream from './src/engine/stream';
 
+import { Settings }from './src/engine/settings';
+
 var fs = require('fs');
 
 let isQuitting = false;
@@ -11,7 +13,7 @@ let devModeEnabled = false;
 let overlayHidden = true;
 
 const cureAppName = 'Cure';
-const cureWebsite = 'https://github.com/nomaddevs/cure';
+const cureWebsite = 'https://www.munsy.io/cure/';
 
 const mainX = 850;
 const mainY = 450;
@@ -118,9 +120,11 @@ function createOverlay() {
     y: 0,
     width: size.width,
     height: size.height,
+    type: 'toolbar',
     transparent: true,
     frame: false,
     alwaysOnTop: true,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
@@ -308,8 +312,8 @@ try {
         overlay.webContents.send("overlay", {"case": "lock", "arg": ""});
         break;
       case "unlock":
-        overlay.setIgnoreMouseEvents(false);
         overlay.maximize();
+        overlay.setIgnoreMouseEvents(false);
         overlay.webContents.send("overlay", {"case": "unlock", "arg": ""});
         break;
       case "test":
