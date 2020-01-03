@@ -309,6 +309,7 @@ try {
         break;
       case "unlock":
         overlay.setIgnoreMouseEvents(false);
+        overlay.maximize();
         overlay.webContents.send("overlay", {"case": "unlock", "arg": ""});
         break;
       case "test":

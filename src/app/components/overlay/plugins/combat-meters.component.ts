@@ -61,7 +61,6 @@ export class CombatMetersComponent implements OnInit {
     window.addEventListener("mousedown", this.mouseDown);
     window.addEventListener("mouseup", this.mouseUp);
 
-
     this.cs.on('combat', (event, args) => {
       switch(args.case) {
         case 'update':
@@ -91,6 +90,8 @@ export class CombatMetersComponent implements OnInit {
     this.pos3 = 0;
     this.pos4 = 0;
     this.anchor = document.getElementById("cure-combat-meters") as HTMLElement;
+    this.anchor.style.left = 380 + "px";
+    this.anchor.style.top = 910 + "px";
     this.draggable = false;
   }
 }

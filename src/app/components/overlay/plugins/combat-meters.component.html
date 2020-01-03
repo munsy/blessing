@@ -1,6 +1,9 @@
 <div id="cure-combat-meters">
   <div id="cure-combat-meters-header">Click here to move</div>
   <h1>Combat Meters</h1>
+  <h3>anchor.style.top: {{ anchor.style.top }}</h3>
+  <h3>anchor.style.left: {{ anchor.style.left }}</h3>
+
   <h3 *ngIf="fromMain != ''">{{ fromMain }}</h3>
   <h3 *ngIf="noOp > 0">{{ noOp }}</h3>
   <h3 *ngIf="sleepy > 0">{{ sleepy }}</h3>
