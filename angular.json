@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cure": {
+    "blessing": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -71,21 +71,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cure:build"
+            "browserTarget": "blessing:build"
           },
           "configurations": {
             "dev": {
-              "browserTarget": "cure:build:dev"
+              "browserTarget": "blessing:build:dev"
             },
             "production": {
-              "browserTarget": "cure:build:production"
+              "browserTarget": "blessing:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cure:build"
+            "browserTarget": "blessing:build"
           }
         },
         "test": {
@@ -101,8 +101,8 @@
             ],
             "assets": [
               "src/assets/images/bg.jpg",
-              "src/assets/images/cure-mini.jpg",
-              "src/assets/images/cure-mini.png",
+              "src/assets/images/blessing-mini.jpg",
+              "src/assets/images/blessing-mini.png",
               "src/favicon.ico",
               "src/favicon.png",
               "src/favicon.icns",
@@ -125,7 +125,7 @@
         }
       }
     },
-    "cure-e2e": {
+    "blessing-e2e": {
       "root": "e2e",
       "projectType": "application",
       "architect": {
@@ -143,7 +143,7 @@
       }
     }
   },
-  "defaultProject": "cure",
+  "defaultProject": "blessing",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

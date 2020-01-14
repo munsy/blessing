@@ -1,14 +1,14 @@
-Cure
-====
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![dependencies Status](https://david-dm.org/nomaddevs/cure/status.svg)](https://david-dm.org/nomaddevs/cure)
+Blessing
+========
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![dependencies Status](https://david-dm.org/munsy/blessing/status.svg)](https://david-dm.org/munsy/blessing)
 
-Addon and dependency manager for Final Fantasy XIV: A Realm Reborn.
+Overlay system for Final Fantasy XIV: A Realm Reborn.
 
 This application is a work in progress with no planned deadline. It's ready when it's ready.
 
 # Development
 ```
-$ git clone git@github.com:nomaddevs/cure.git
+$ git clone git@github.com:munsy/blessing.git
 $ npm install
 $ npm start
 ```
