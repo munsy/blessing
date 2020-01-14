@@ -1,6 +1,6 @@
 /*
 	Compile with:
-		go build -o cure.so -buildmode=c-shared cure.go
+		go build -o blessing.so -buildmode=c-shared main.go
 */
 package main
 

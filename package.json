@@ -1,20 +1,20 @@
 {
-  "name": "cure",
+  "name": "blessing",
   "version": "1.0.0",
   "description": "Addon and dependency manager for Final Fantasy: A Realm Reborn.",
-  "homepage": "https://github.com/nomaddevs/cure",
+  "homepage": "https://github.com/munsy/blessing",
   "author": {
     "name": "Munsy",
     "email": "bigheinousanus@gmail.com"
   },
   "keywords": [
-    "cure",
+    "blessing",
     "ffxiv"
   ],
   "main": "main.js",
   "build": {
-    "appId": "com.cure.desktop",
-    "productName": "Cure",
+    "appId": "com.blessing.desktop",
+    "productName": "Blessing",
     "files": [
       "**/*",
       "dist/**/*"

@@ -12,8 +12,8 @@ let isQuitting = false;
 let devModeEnabled = false;
 let overlayHidden = true;
 
-const cureAppName = 'Cure';
-const cureWebsite = 'https://www.munsy.io/cure/';
+const blessingAppName = 'Cure';
+const blessingWebsite = 'https://www.munsy.io/blessing/';
 
 const mainX = 850;
 const mainY = 450;
@@ -40,12 +40,12 @@ function createWindow() {
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
-  let cureAppIcon = devModeEnabled ? url.format({
-      pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
+  let blessingAppIcon = devModeEnabled ? url.format({
+      pathname: path.join(__dirname, 'src/assets/images/blessing-mini.png'),
       protocol: 'file:',
       slashes: true
     }) : url.format({
-      pathname: path.join(__dirname, 'dist/assets/images/cure-mini.png'),
+      pathname: path.join(__dirname, 'dist/assets/images/blessing-mini.png'),
       protocol: 'file:',
       slashes: true
     });
@@ -175,17 +175,17 @@ function overlayStartup() {
 
 function buildTray() {
   const nativeImage = require('electron').nativeImage;
-  let cureAppIcon = serve ? url.format({
-    pathname: path.join(__dirname, 'src/assets/images/cure-mini.png'),
+  let blessingAppIcon = serve ? url.format({
+    pathname: path.join(__dirname, 'src/assets/images/blessing-mini.png'),
     protocol: 'file:',
     slashes: true
   }) : url.format({
-    pathname: path.join(__dirname, 'dist/assets/images/cure-mini.png'),
+    pathname: path.join(__dirname, 'dist/assets/images/blessing-mini.png'),
     protocol: 'file:',
     slashes: true
   });
 
-  let trayIcon = nativeImage.createFromPath(cureAppIcon);
+  let trayIcon = nativeImage.createFromPath(blessingAppIcon);
   trayIcon = trayIcon.resize({ width: 16, height: 16 });
 
   tray = new Tray(trayIcon);
@@ -193,7 +193,7 @@ function buildTray() {
   const enableOverlayContextMenu = Menu.buildFromTemplate([
     { label: 'Launch website', click: async () => {
           const { shell } = require('electron');
-          await shell.openExternal(cureWebsite);
+          await shell.openExternal(blessingWebsite);
         }
     },
     { label: 'Open Cure', click: function() {
@@ -213,7 +213,7 @@ function buildTray() {
   const disableOverlayContextMenu = Menu.buildFromTemplate([
     { label: 'Launch website', click: async () => {
           const { shell } = require('electron');
-          await shell.openExternal(cureWebsite);
+          await shell.openExternal(blessingWebsite);
         }
     },
     { label: 'Open Cure', click: function() {
@@ -230,7 +230,7 @@ function buildTray() {
     } }
   ]);
 
-  tray.setToolTip(cureAppName);
+  tray.setToolTip(blessingAppName);
   if(overlayHidden) {
     tray.setContextMenu(enableOverlayContextMenu);
   } else {
@@ -261,7 +261,7 @@ try {
 
   ipcMain.on('launchBrowser', async () => {
     const { shell } = require('electron')
-    await shell.openExternal(cureWebsite)
+    await shell.openExternal(blessingWebsite)
   });
 
   ipcMain.on('minimizeMain', () => {

@@ -1,4 +1,4 @@
-// https://api.github.com/repos/nomaddevs/cure/releases/latest
+// https://api.github.com/repos/munsy/blessing/releases/latest
 export var Settings = {
     FFXIVFolder: "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game",
     DeveloperMode: true,

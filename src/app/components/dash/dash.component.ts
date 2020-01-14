@@ -8,7 +8,7 @@ import { ElectronService } from '../../providers/electron.service';
   styleUrls: ['./dash.component.scss']
 })
 export class DashComponent implements OnInit {
-  imgLogo = "../../../assets/images/cure-mini.jpg"
+  imgLogo = "../../../assets/images/blessing-mini.jpg"
   constructor(private es: ElectronService) { }
   ngOnInit() { }
   quit() {
