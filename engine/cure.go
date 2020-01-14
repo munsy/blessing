@@ -8,7 +8,7 @@ import "C"
 
 import (
 	//"encoding/base64"
-	"fmt"
+	//"fmt"
 	"log"
 	"strings"
 	"syscall"
@@ -36,7 +36,7 @@ func ptr(val interface{}) uintptr {
 	}
 }
 
-//export GetProc
+// GetProc returns FFXIV process by ID number.
 func GetProc() int {
 	procs, err := processes()
 	if err != nil {
@@ -126,22 +126,22 @@ func newWindowsProcess(e *windows.ProcessEntry32) WindowsProcess {
 }
 
 func main(){
-	fmt.Println("Getting FFXIV PID...")
+	log.Println("Getting FFXIV PID...")
 	pid := GetProc()
 	if pid < 0 {
-		fmt.Printf("Couldn't get FFXIV PID.")
+		log.Printf("Couldn't get FFXIV PID.")
 		return
 	}
 
-	fmt.Printf("Found PID %d\n", pid)
+	log.Printf("Found PID %d\n", pid)
 	handle := OpenProcessHandle(pid)
-	fmt.Printf("Handle: %d\n", handle)
-	fmt.Printf("Reading process memory...\n")
+	log.Printf("Handle: %d\n", handle)
+	log.Printf("Reading process memory...\n")
 
 	//buffer, numBytesRead, ok := w32.ReadProcessMemory(handle, lp, unsafe.Sizeof(poa))
 	procReadProcessMemory := windows.MustLoadDLL("kernel32.dll").MustFindProc("ReadProcessMemory")
 	if nil == procReadProcessMemory {
-		fmt.Printf("Nil procReadProcessMemory")
+		log.Printf("Nil procReadProcessMemory")
 		return
 	}
 
@@ -150,12 +150,12 @@ func main(){
     var length uint32
 
 	//for i := START_LOOP_BASE_ADDRESS; i < END_LOOP_BASE_ADDRESS; i += 2 {
-		ret1, _, err := procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), /*2*/END_LOOP_BASE_ADDRESS - START_LOOP_BASE_ADDRESS, uintptr(unsafe.Pointer(&length)))
-		if err != syscall.Errno(0) {
-			fmt.Printf("Error: %s\n", err.Error())
-		}
-		if ret1 != 0 {
-			fmt.Printf("Length: %v\n%s\n", length, string(data[:]))
-		}
+	ret1, _, err := procReadProcessMemory.Call(uintptr(handle), uintptr(START_LOOP_BASE_ADDRESS), uintptr(unsafe.Pointer(&data[0])), /*2*/END_LOOP_BASE_ADDRESS - START_LOOP_BASE_ADDRESS, uintptr(unsafe.Pointer(&length)))
+	if err != syscall.Errno(0) {
+		log.Printf("Error: %s\n", err.Error())
+	}
+	if ret1 != 0 {
+		log.Printf("Length: %v\n%s\n", length, string(data[:]))
+	}
 	//}
 }
