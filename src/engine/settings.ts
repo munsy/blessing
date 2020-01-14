@@ -3,7 +3,7 @@ export var Settings = {
     FFXIVFolder: "C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game",
     DeveloperMode: true,
     Overlay: {
-        Enabled: false,
+        Enabled: true,
         Locked: true,
     },
     Addons: [{

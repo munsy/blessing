@@ -1,0 +1,60 @@
+{
+	"dps": [
+		{
+			"name": "player 1",
+			"value": 53,
+		},
+		{
+			"name": "player 2",
+			"value": 165,
+		},
+		{
+			"name": "player 3",
+			"value": 269,
+		},
+		{
+			"name": "player 4",
+			"value": 344,
+		},
+		{
+			"name": "player 5",
+			"value": 376,
+		},
+		{
+			"name": "player 6",
+			"value": 410,
+		},
+		{
+			"name": "player 7",
+			"value": 421,
+		},
+		{
+			"name": "player 8",
+			"value": 405,
+		},
+		{
+			"name": "player 9",
+			"value": 376,
+		},
+		{
+			"name": "player 0",
+			"value": 359,
+		},
+		{
+			"name": "player 1",
+			"value": 392,
+		},
+		{
+			"name": "player 2",
+			"value": 433,
+		},
+		{
+			"name": "player 1",
+			"value": 455,
+		},
+		{
+			"name": "player 2",
+			"value": 478,
+		},
+	]
+}

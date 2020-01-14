@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { OverlayService } from '../../providers/overlay.service';
 import { ElectronService } from '../../providers/electron.service';
 
+import { Settings } from '../../../engine/settings';
+
 @Component({
   selector: 'overlay-window',
   templateUrl: './window.component.html',
@@ -56,7 +58,7 @@ export class OverlayWindowComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.locked = true;
+    this.locked = Settings.Overlay.Locked;
     this.count = 0;
     this.document.body.style = 'background-image: none !important;background: none !important;background-color: rgba(0,0,0,0);';
   }

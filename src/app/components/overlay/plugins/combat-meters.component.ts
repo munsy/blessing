@@ -93,7 +93,7 @@ export class CombatMetersComponent implements OnInit {
     this.pos4 = 0;
     this.anchor = document.getElementById("cure-combat-meters") as HTMLElement;
     this.anchor.style.left = 380 + "px";
-    this.anchor.style.top = 910 + "px";
+    this.anchor.style.top = 510 + "px";
     this.draggable = false;
     this.graph();
   }
@@ -127,14 +127,14 @@ export class CombatMetersComponent implements OnInit {
         .attr("transform", 
               "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("bar-data.csv", function(error, data) {
+    d3.json("assets/data.json", function(error, data) {
 
         data.forEach(function(d) {
-            d.date = parseDate(d.date);
+            d.player = parseDate(d.player);
             d.value = +d.value;
         });
       
-      x.domain(data.map(function(d) { return d.date; }));
+      x.domain(data.map(function(d) { return d.player; }));
       y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
     svg.append("g")
@@ -161,103 +161,10 @@ export class CombatMetersComponent implements OnInit {
         .data(data)
       .enter().append("rect")
         .style("fill", "steelblue")
-        .attr("x", function(d) { return x(d.date); })
+        .attr("x", function(d) { return x(d.player); })
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); });
     });
   }
 }
-/*
-  setDraggable() {
-    this.draggable = true;
-    //this.anchor.setAttribute("style", "-webkit-app-region: drag");
-    this.dragElement();
-  }
-
-  dragElement() {
-    if (document.getElementById(this.anchor.id + "-header")) {
-      // if present, the header is where you move the DIV from:
-      document.getElementById(this.anchor.id + "-header").onmousedown = this.dragMouseDown;
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      this.anchor.onmousedown = this.dragMouseDown;
-    }
-  }
-
-  dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    this.pos3 = e.clientX;
-    this.pos4 = e.clientY;
-    document.onmouseup = this.closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = this.elementDrag;
-  }
-
-  elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    this.pos1 = this.pos3 - e.clientX;
-    this.pos2 = this.pos4 - e.clientY;
-    this.pos3 = e.clientX;
-    this.pos4 = e.clientY;
-    // set the element's new position:
-    this.anchor.style.top = (this.anchor.offsetTop - this.pos2) + "px";
-    this.anchor.style.left = (this.anchor.offsetLeft - this.pos1) + "px";
-  }
-
-  closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-*/
-
-/*
-dragElement(document.getElementById("mydiv"));
-
-function dragElement(this.anchor) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(this.anchor.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(this.anchor.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    this.anchor.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    this.anchor.style.top = (this.anchor.offsetTop - pos2) + "px";
-    this.anchor.style.left = (this.anchor.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-*/

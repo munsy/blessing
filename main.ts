@@ -4,7 +4,7 @@ import * as url from 'url';
 
 import * as ffxivStream from './src/engine/stream';
 
-import { Settings }from './src/engine/settings';
+import { Settings } from './src/engine/settings';
 
 var fs = require('fs');
 
@@ -111,7 +111,6 @@ function createOverlay() {
     ffxivEngine = new ffxivStream.FFXIVStream();
     console.log(ffxivEngine);
   }
-  log.info('Creating the overlay');
   var electronScreen = screen;
   var size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -303,27 +302,30 @@ try {
       case "on":
         if(overlay === null) { createOverlay(); }
         overlay.show();
+        log.info('overlay on');
         break;
       case "off":
         if(overlay !== null) { overlay.hide(); }
+        log.info('overlay off');
         break;
       case "lock":
         overlay.setIgnoreMouseEvents(true);
         overlay.webContents.send("overlay", {"case": "lock", "arg": ""});
+        log.info('overlay lock');
         break;
       case "unlock":
         overlay.maximize();
         overlay.setIgnoreMouseEvents(false);
         overlay.webContents.send("overlay", {"case": "unlock", "arg": ""});
+        log.info('unlock');
         break;
       case "test":
         overlay.webContents.send("overlay", {"case": "update", "arg": arg.arg});
-        break;
-      case "development":
-        overlay.webContents.send("overlay", {"case": "development", "arg": arg.arg});
+        log.info('overlay test');
         break;
       default:
         overlay.webContents.send("overlay", "default");
+        log.info('overlay default');
         return;
     }
   });
