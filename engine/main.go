@@ -1,7 +1,6 @@
-/*
-	Compile with:
-		go build -o blessing.so -buildmode=c-shared main.go
-*/
+//	Compile with:
+//		go build -o blessing.so -buildmode=c-shared main.go
+
 package main
 
 import "C"
