@@ -32,8 +32,8 @@ func (r *ChatLogReader) ResolveEntries(offset, length int) [][]byte {
     return entries
 }
 
-func (r *ChatLogReader) ResolveEntry(int offset, int length) []byte {
-    return []]byte(MemoryHandler.Instance.GetByteArray(uintptr(ChatLogPointers.LogStart + offset), length - offset))
+func (r *ChatLogReader) ResolveEntry(offset, length int) []byte {
+    return [][]byte(MemoryHandler.Instance.GetByteArray(uintptr(ChatLogPointers.LogStart + offset), length - offset))
 }
 
 var ChatReader *ChatLogReader
