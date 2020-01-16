@@ -1,5 +1,43 @@
 package main
 
+type ChatLogReader struct {
+    Indexes []int
+    ChatLogFirstRun bool
+    ChatLogPointers ChatLogPointers
+    PreviousArrayIndex int
+    PreviousOffset int
+}
+/*
+    public static readonly List<int> Indexes = new List<int>();
+    public static ChatLogFirstRun bool  = true;
+    public static ChatLogPointers ChatLogPointers ;
+    public static PreviousArrayIndex int ;
+    public static PreviousOffset int ;
+*/
+func (r *ChatLogReader) EnsureArrayIndexes() {
+    r.Indexes = nil
+    for i := 0; i < 1000; i++ {
+        r.Indexes = append(r.Indexes, int(MemoryHandler.Instance.GetPlatformUInt(uintptr(ChatLogPointers.OffsetArrayStart + i * 4))))
+    }
+}
+
+func (r *ChatLogReader) ResolveEntries(offset, length int) [][]byte {
+    entries := make([][]byte, length)
+    for i := offset; i < length; i++ {
+        r.EnsureArrayIndexes()
+        currentOffset := r.Indexes[i]
+        entries = append(entries, r.ResolveEntry(r.PreviousOffset, currentOffset))
+        r.PreviousOffset = currentOffset
+    }
+    return entries
+}
+
+func (r *ChatLogReader) ResolveEntry(int offset, int length) []byte {
+    return []]byte(MemoryHandler.Instance.GetByteArray(uintptr(ChatLogPointers.LogStart + offset), length - offset))
+}
+
+var ChatReader *ChatLogReader
+
 func CanGetChatLog() bool {
     return Scanner.Instance.Locations.ContainsKey(Signatures.ChatLogKey)
 }
@@ -10,29 +48,26 @@ func GetChatLog(previousArrayIndex, previousOffset int) *ChatLogResult {
     if !CanGetChatLog() || !MemoryHandler.Instance.IsAttached {
         return result
     }
+
+    ChatReader.PreviousArrayIndex = previousArrayIndex
+    ChatReader.PreviousOffset = previousOffset
+
+    chatPointerMap := uintptr(Scanner.Instance.Locations[ChatLogKey])
+
+    if uint64(chatPointerMap) <= 20 {
+        return result
+    }
+
+    buffered = make([][]byte, 0)
 }
 
 /*
 namespace Sharlayan {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-
     using Sharlayan.Core;
     using Sharlayan.Models;
     using Sharlayan.Models.ReadResults;
 
     public static partial class Reader {
-        public static bool CanGetChatLog() {
-            var canRead = Scanner.Instance.Locations.ContainsKey(Signatures.ChatLogKey);
-            if (canRead) {
-                // OTHER STUFF?
-            }
-
-            return canRead;
-        }
-
         public static ChatLogResult GetChatLog(int previousArrayIndex = 0, int previousOffset = 0) {
             var result = new ChatLogResult();
 
@@ -106,53 +141,7 @@ namespace Sharlayan {
 
             return result;
         }
-
-        private static class ChatLogReader {
-            public static readonly List<int> Indexes = new List<int>();
-            public static ChatLogFirstRun bool  = true;
-            public static ChatLogPointers ChatLogPointers ;
-            public static PreviousArrayIndex int ;
-            public static PreviousOffset int ;
-
-            public static void EnsureArrayIndexes() {
-                Indexes.Clear();
-                for (var i = 0; i < 1000; i++) {
-                    Indexes.Add((int) MemoryHandler.Instance.GetPlatformUInt(new IntPtr(ChatLogPointers.OffsetArrayStart + i * 4)));
-                }
-            }
-
-            public static IEnumerable<List<byte>> ResolveEntries(int offset, int length) {
-                List<List<byte>> entries = new List<List<byte>>();
-                for (var i = offset; i < length; i++) {
-                    EnsureArrayIndexes();
-                    var currentOffset = Indexes[i];
-                    entries.Add(ResolveEntry(PreviousOffset, currentOffset));
-                    PreviousOffset = currentOffset;
-                }
-
-                return entries;
-            }
-
-            private static List<byte> ResolveEntry(int offset, int length) {
-                return new List<byte>(MemoryHandler.Instance.GetByteArray(new IntPtr(ChatLogPointers.LogStart + offset), length - offset));
-            }
-        }
     }
 }
 
 */
-
-type ChatLogReader struct {
-    Indexes []int
-    ChatLogFirstRun bool
-    ChatLogPointers ChatLogPointers
-    PreviousArrayIndex int
-    PreviousOffset int
-}
-
-func (r *ChatLogReader) EnsureArrayIndexes() {
-    r.Indexes = nil
-    for (var i = 0; i < 1000; i++) {
-        r.Indexes.Append(int(MemoryHandler.Instance.GetPlatformUInt(uintptr(ChatLogPointers.OffsetArrayStart + i * 4))));
-    }
-}
