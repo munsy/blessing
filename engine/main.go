@@ -80,7 +80,6 @@ func processes() ([]WindowsProcess, error) {
 
 		err = windows.Process32Next(handle, &entry)
 		if err != nil {
-			// windows sends ERROR_NO_MORE_FILES on last process
 			if err == syscall.ERROR_NO_MORE_FILES {
 				return results, nil
 			}
