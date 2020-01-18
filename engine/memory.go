@@ -293,6 +293,7 @@ func (m *MemoryHandler) UnsetProcess() {
 
     m.ProcessHandle = uintptr(0)
     ProcessHandle = uintptr(0)
+    m.IsAttached = false
 }
 
 /*

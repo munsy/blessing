@@ -61,9 +61,19 @@ type ActionItem struct {
 
 type ActionLookup struct {
 	Actions cmap.ConcurrentMap
-	DefaultActionInfo struct {
-		Name Localization
-		Loading bool
+	Loading bool
+}
+
+func (a *ActionLookup) DefaultActionInfo() ActionItem {
+	return ActionItem{
+		Name: Localization{
+			Chinese: "???",
+            English: "???",
+            French: "???",
+            German: "???",
+            Japanese: "???",
+            Korean: "???",
+		},
 	}
 }
 
@@ -74,7 +84,7 @@ func (a *ActionLookup) DamageOverTimeActions(patchVersion string) []ActionItem {
 
     results := make([]ActionItem, 0)
 
-    if a.DefaultActionInfo.Loading {
+    if a.Loading {
         return results
     }
 
@@ -95,20 +105,20 @@ func (a *ActionLookup) GetActionInfo(name, patchVersion string) ActionItem {
 		patchVersion = "latest"
 	}
 
-    if a.DefaultActionInfo.Loading {
-        return a.DefaultActionInfo
+    if a.Loading {
+        return a.DefaultActionInfo()
     }
 
 	if !a.Actions.IsEmpty() {
 	   	for _, v := range(a.Actions.Items()) {
 			if item, ok := v.(ActionItem); ok && item.Name.Matches(name) {
-				return item.Name
+				return item
 			}
 		}
 	}
 
    a.Resolve(patchVersion)
-   return a.DefaultActionInfo
+   return a.DefaultActionInfo()
 }
 
 func (a *ActionLookup) GetActionInfoByID(id uint, patchVersion string) ActionItem {
@@ -116,22 +126,22 @@ func (a *ActionLookup) GetActionInfoByID(id uint, patchVersion string) ActionIte
 		patchVersion = "latest"
 	}
 
-    if a.DefaultActionInfo.Loading {
-        return a.DefaultActionInfo
+    if a.Loading {
+        return a.DefaultActionInfo()
     }
 
     if !a.Actions.IsEmpty() {
     	if a.Actions.Has(string(id)) {
     		action, ok := a.Actions.Get(string(id))
-    		if ok {
-    			return action
+    		if a, ok := action.(ActionItem); ok {
+    			return a
     		}
     	}
-    	return a.DefaultActionInfo
+    	return a.DefaultActionInfo()
 	}
 
 	a.Resolve(patchVersion)
-	return DefaultActionInfo
+	return a.DefaultActionInfo()
 }
 
 func (a *ActionLookup) HealingOverTimeActions(patchVersion string) []ActionItem {
@@ -141,7 +151,7 @@ func (a *ActionLookup) HealingOverTimeActions(patchVersion string) []ActionItem 
 
     results := make([]ActionItem, 0)
 
-    if a.DefaultActionInfo.Loading {
+    if a.Loading {
         return results
     }
 
@@ -163,11 +173,12 @@ func (a *ActionLookup) Resolve(patchVersion string) {
 		patchVersion = "latest"
 	}
 
-	if a.DefaultActionInfo.Loading {
+	if a.Loading {
         return
     }
 
-    a.DefaultActionInfo.Loading = true
-    APIHelper.GetActions(a.Actions, patchVersion)
-    a.DefaultActionInfo.Loading = false
+    a.Loading = true
+    api := NewApi()
+    api.GetActions(a.Actions, patchVersion)
+    a.Loading = false
 }
