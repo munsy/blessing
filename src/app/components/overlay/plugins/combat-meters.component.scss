@@ -1,19 +1,22 @@
 #blessing-combat-meters {
   position: absolute;
-  z-index: 9;
-  background-color: #ffffff;
   border: 1px solid #ffffff;
-  text-align: center;
+  width: 200px;
+  background-color: rgba(0,0,0,0);
 }
 
 #blessing-combat-meters-header {
+  text-align: center;
   padding: 10px;
   cursor: move;
-  z-index: 10;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: rgba(0,0,0,0);
 }
 
+.progress {
+  background-color: rgba(0,0,0,0);
+}
+
+/*
 .axis {
     font: 10px sans-serif;
   }
@@ -24,3 +27,4 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+*/

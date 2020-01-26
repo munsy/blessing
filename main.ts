@@ -124,6 +124,7 @@ function createOverlay() {
     frame: false,
     alwaysOnTop: true,
     resizable: false,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
