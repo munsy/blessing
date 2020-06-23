@@ -124,6 +124,7 @@ function createOverlay() {
     frame: false,
     alwaysOnTop: true,
     resizable: false,
+    fullscreen: true,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
@@ -337,11 +338,10 @@ try {
         overlay.webContents.send("combat", {"case": "update", "arg": arg.arg});
         break;
       case "sleepyTest":
-        console.log('sleepyTest called');
+        console.log('DPS/Healing meter test called');
         console.log(arg);
         for(var i = +arg.arg; i < (+arg.arg + 20); i++) {
           await timer(1000);
-          console.log(i);
           overlay.webContents.send("combat", {"case": "sleepy", "arg": i});
         }
         break;

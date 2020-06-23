@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { CombatService } from '../../../providers/combat.service';
 
+import { PartyMember } from '../../../models/party.model';
+
 import * as d3 from "d3";
 
 @Component({
@@ -21,6 +23,8 @@ export class CombatMetersComponent implements OnInit {
   public pos4: number;
 
   public anchor: HTMLElement;
+
+  public members: Array<PartyMember>;
 
   //private center = $(window).scrollTop() + $(window).height() / 2;
   mouseDown = (ev: MouseEvent) => {
@@ -49,6 +53,17 @@ export class CombatMetersComponent implements OnInit {
   }
   
   constructor(private cs: CombatService, private ref: ChangeDetectorRef) {
+    this.members = [
+      new PartyMember("Player 1", 2500, 23),
+      new PartyMember("Player 2", 2500, 23),
+      new PartyMember("Player 3", 2500, 22),
+      new PartyMember("Player 4", 2500, 21),
+      new PartyMember("Player 5", 2500, 15),
+      new PartyMember("Player 6", 2500, 13),
+      new PartyMember("Player 7", 2500, 3),
+      new PartyMember("Player 8", 2500, 2),
+    ];
+
     this.draggable = false;
     this.noOp = 0;
     this.sleepy = 0;
